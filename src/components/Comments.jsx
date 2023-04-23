@@ -1,0 +1,190 @@
+import React from 'react'
+import styled from 'styled-components'
+import Comment from './Comment';
+import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import axios from 'axios';
+import AlertModal from './modal/AlertModal';
+import Loader from './loader/Loader';
+import { addComment,fetchComment,deleteComment } from '../redux/commentSlice';
+const Container=styled.div`
+
+`;
+const NewComment=styled.div`
+display:flex;
+align=items:center;
+gap:10px;
+`;
+const Avatar=styled.img`
+width:4vw;
+height:7vh;
+margin-top:2vh;
+margin-left:1vw;
+background-color:${({theme})=>theme.soft}};
+border:1px solid ${({theme})=>theme.soft}};
+border-radius:50%;
+`;
+const Input=styled.input`
+border: none;
+border-bottom: 1px solid ${({ theme }) => theme.soft};
+color: ${({ theme }) => theme.text};
+background-color: transparent;
+outline: none;
+padding: 5px;
+width: 100%;
+`;
+const C=styled.div`
+display:flex;
+align-items:center;
+justify-content:space-between;
+width:100%;
+`;
+const Button = styled.button`
+  display:flex;
+  align-items:center;
+  border-radius: 1.3rem;
+  border: none;
+  padding-left:1em;
+  padding-right:1em;
+  padding-top:0.2em;
+  padding-bottom:0.2em;
+  // font-weight: 500;
+  cursor: pointer;
+  background-color: transparent;;
+  color: ${({ theme }) => theme.text};
+  // box-shadow: 15px 15px 20px rgba(0,0,0,.6);
+  // margin-right:-4vw;
+`;
+const Comments = ({videoId,type,photoId}) => {
+  const [showAlertModal, setShowAlertModal] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertColor, setAlertColor] = useState('white');
+  const [loading,setLoading]=useState(false);
+  const handleOpenAlertModal = (message,color) => {
+    setAlertMessage(message);
+    setAlertColor(color);
+    setShowAlertModal(true);
+  };
+
+  const handleCloseAlertModal = () => {
+    setShowAlertModal(false);
+    setAlertMessage('');
+  };
+
+  const { currentUser } = useSelector((state) => state.user);
+  const dispatch=useDispatch();
+  const [comments, setComments] = useState([]);  //in start it is an empty array
+  useEffect(() => {
+    const fetchComments = async () => {
+      try { 
+        setLoading(true);
+        let res
+        if(type==="video"){
+          res = await axios.get(`/comments/videoComment/${videoId}`);
+          dispatch(fetchComment(res.data));
+        }
+        else if(type==="photo"){
+          res = await axios.get(`/comments/photoComment/${photoId}`);
+          dispatch(fetchComment(res.data));
+        }
+        setComments(res.data);
+        // console.log(comment.desc);
+        setLoading(false);
+      } catch (err) {handleOpenAlertModal(err.message,'red')}
+    };
+    fetchComments();  //calling the function
+  }, [videoId],[photoId]);
+
+
+  const [AddComment,setaddComment]=useState(" ");
+  const addComment=async(e)=>{
+    if (e.keyCode === 13 || e.which === 13) {
+      e.preventDefault();
+      console.log("key");
+      try {
+        var desc=AddComment;
+        let res;
+        if(type==="video"){
+          setLoading(true);
+          res = await axios.post(`/comments`,{desc,videoId});
+          setaddComment(res.data);
+          dispatch(addComment(res.data));
+          setLoading(false);
+          handleOpenAlertModal(desc + " added ",'green')
+        }
+        else if(type==="photo"){
+          setLoading(true);
+          res = await axios.post(`/comments`,{desc,photoId});
+          setaddComment(res.data);
+          setLoading(false);
+          dispatch(addComment(res.data));
+          handleOpenAlertModal(desc + " added ",'green')          
+        }
+      } catch (err) {handleOpenAlertModal(err.message,'red')}
+    };
+  }
+  const handleDelete=async(c,e)=>{
+    try {
+    const res = await axios.delete(`/comments/${c}`);
+    dispatch(deleteComment(res.data));
+    console.log(e);
+    handleOpenAlertModal(`Comment deleted`,'green')
+    } catch (error) {
+      handleOpenAlertModal(error.message,'red')
+    }
+  }
+  const { currentVideo } = useSelector((state) => state.video);
+  const { currentPhoto } = useSelector((state) => state.photo);
+
+  return (
+    <>
+            <AlertModal
+        isOpen={showAlertModal}
+        onClose={handleCloseAlertModal}
+        message={alertMessage}
+        color={alertColor}
+      />
+      {type==="video"?<>
+    <Container>
+      <NewComment>
+        <Avatar src={currentUser.img} />
+        <Input onKeyPress={addComment} placeholder="Add a comment..." onChange={e => setaddComment(e.target.value)}/>
+      </NewComment>
+      {comments.map(comment=>(
+        <C>
+        <Comment key={comment._id} comment={comment}/>
+         {comment.userId===currentUser._id?(<Button  onClick={()=>handleDelete(comment._id)}>Delete</Button>):" "}
+         
+         { currentUser._id===currentVideo.userId?comment.userId!==currentUser._id?(<Button onClick={()=>handleDelete(comment._id)}>Delete</Button>):" ":" "}
+        </C>
+      ))}
+    </Container>
+    </>
+    
+    :
+    
+    <>
+    <Container>
+      <NewComment>
+        <Avatar src={currentUser.img} />
+        <Input onKeyPress={addComment} placeholder="Add a comment..." onChange={e => setaddComment(e.target.value)}/>
+      </NewComment>
+      {comments.map(comment=>(
+        <C>
+        <Comment key={comment._id} comment={comment}/>
+         {comment.userId===currentUser._id?(<Button  onClick={()=>handleDelete(comment._id)}>Delete</Button>):" "}
+         
+         { <>
+         { currentUser._id===currentPhoto.userId?comment.userId!==currentUser._id?(<Button onClick={async()=>handleDelete(comment._id,comment.desc)}>Delete</Button>):" ":" "}
+         {/* {console.log(comment.desc)} */}
+         </>}
+        </C>
+      ))}
+    </Container> 
+    </>}
+    </>
+  );
+};
+
+export default Comments;
+

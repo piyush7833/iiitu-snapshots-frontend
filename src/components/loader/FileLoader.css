@@ -1,20 +1,25 @@
-.loader{
-    width: 315px;
-    height: 200px;
-    background:
-        linear-gradient(0.25turn, transparent, #FFF, transparent),
-        linear-gradient(#DDD, #DDD),
-        radial-gradient(38px circle at 19px 19px, #DDD 50%, transparent 51%),
-        linear-gradient(#DDD, #DDD);
-    background-color: #fff;
-    background-repeat: no-repeat;
-    background-size: 315px 200px, 315px 130px, 100px 100px, 225px 30px;
-    background-position: -315px 0, 0 0, 15px 140px, 65px 145px;
-    animation: loading 1.5s infinite;
+.loader {
+  position: relative;
+  width: 48px;
+  height: 48px;
 }
-
-@keyframes loading {
-  to {
-    background-position: 315px 0, 0 0, 15px 140px, 65px 145px;
-  }
+.loader:before,
+.loader:after {
+  content:"";
+  display: block;
+  border: 32px solid transparent;
+  border-top-color: #fff;
+  position: absolute;
+  left: 0;
+  top: 0;
+  animation: weld-rotate 2s infinite ease-in;
+}
+.loader:before {
+  border-color: transparent  transparent transparent #FF3D00;
+  animation-delay: 0.5s;
+}
+@keyframes weld-rotate {
+  0% , 25% {transform: rotate(0deg)}
+  50% , 75% {transform: rotate(180deg)}
+  100% {transform: rotate(360deg)}
 }

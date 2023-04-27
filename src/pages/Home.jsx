@@ -46,7 +46,7 @@ const Home=({type,show})=> {
   
     return (
       <>
-        <p style={{textAlign:"center"}}>Videos</p>
+        {<p style={{textAlign:"center"}}>Videos</p>}
       {loading===false?<Container>
         {videos.map((video) => (
         <VideoCard key={video._id} video={video}/>

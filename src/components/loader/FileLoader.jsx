@@ -3,7 +3,7 @@ import './FileLoader.css'
 const FileLoader = () => {
   return (
     <div>
-      <span className="loader"></span>
+      <span class="loader"></span>
     </div>
   )
 }

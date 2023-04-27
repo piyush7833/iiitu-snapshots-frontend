@@ -6,7 +6,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import AlertModal from './modal/AlertModal';
 import Loader from './loader/Loader';
-import { addComment,fetchComment,deleteComment } from '../redux/commentSlice';
+import { addComments,fetchComment,deleteComment } from '../redux/commentSlice';
+//import store from './store'
+//import { fetchComments } from '../redux/commentSlice';
 const Container=styled.div`
 
 `;
@@ -56,6 +58,8 @@ const Button = styled.button`
   // margin-right:-4vw;
 `;
 const Comments = ({videoId,type,photoId}) => {
+
+
   const [showAlertModal, setShowAlertModal] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [alertColor, setAlertColor] = useState('white');
@@ -73,27 +77,23 @@ const Comments = ({videoId,type,photoId}) => {
 
   const { currentUser } = useSelector((state) => state.user);
   const dispatch=useDispatch();
-  const [comments, setComments] = useState([]);  //in start it is an empty array
+  // const [comments, setComments] = useState([]);  //in start it is an empty array
+  
+  const {comments} = useSelector((state )=> state.comments);
+  // const loading = useSelector(state => state.comments.loading);
+  // const error = useSelector(state => state.comments.error);
   useEffect(() => {
-    const fetchComments = async () => {
-      try { 
-        setLoading(true);
-        let res
-        if(type==="video"){
-          res = await axios.get(`/comments/videoComment/${videoId}`);
-          dispatch(fetchComment(res.data));
-        }
-        else if(type==="photo"){
-          res = await axios.get(`/comments/photoComment/${photoId}`);
-          dispatch(fetchComment(res.data));
-        }
-        setComments(res.data);
-        // console.log(comment.desc);
-        setLoading(false);
-      } catch (err) {handleOpenAlertModal(err.message,'red')}
-    };
-    fetchComments();  //calling the function
-  }, [videoId],[photoId]);
+    try {
+      if (type === 'video') {
+        dispatch(fetchComment(`/comments/videoComment/${videoId}`));
+      } else if (type === 'photo') {
+        dispatch(fetchComment(`/comments/photoComment/${photoId}`));
+      }
+    } catch (error) {
+      handleOpenAlertModal(error.message,"red")
+    }
+
+  }, [dispatch, type, videoId, photoId]);
 
 
   const [AddComment,setaddComment]=useState(" ");
@@ -107,27 +107,25 @@ const Comments = ({videoId,type,photoId}) => {
         if(type==="video"){
           setLoading(true);
           res = await axios.post(`/comments`,{desc,videoId});
-          setaddComment(res.data);
-          dispatch(addComment(res.data));
+          // setaddComment(res.data);
+          dispatch(addComments(res.data));
           setLoading(false);
           handleOpenAlertModal(desc + " added ",'green')
         }
         else if(type==="photo"){
           setLoading(true);
           res = await axios.post(`/comments`,{desc,photoId});
-          setaddComment(res.data);
+          dispatch(addComments(res.data))
           setLoading(false);
-          dispatch(addComment(res.data));
           handleOpenAlertModal(desc + " added ",'green')          
         }
       } catch (err) {handleOpenAlertModal(err.message,'red')}
     };
   }
-  const handleDelete=async(c,e)=>{
+  const handleDelete=async(c)=>{
     try {
     const res = await axios.delete(`/comments/${c}`);
     dispatch(deleteComment(res.data));
-    console.log(e);
     handleOpenAlertModal(`Comment deleted`,'green')
     } catch (error) {
       handleOpenAlertModal(error.message,'red')
@@ -155,7 +153,10 @@ const Comments = ({videoId,type,photoId}) => {
         <Comment key={comment._id} comment={comment}/>
          {comment.userId===currentUser._id?(<Button  onClick={()=>handleDelete(comment._id)}>Delete</Button>):" "}
          
-         { currentUser._id===currentVideo.userId?comment.userId!==currentUser._id?(<Button onClick={()=>handleDelete(comment._id)}>Delete</Button>):" ":" "}
+         { <>
+         { currentUser._id===currentPhoto.userId?comment.userId!==currentUser._id?(<Button onClick={async()=>handleDelete(comment._id,comment.desc)}>Delete</Button>):" ":" "}
+         {/* {console.log(comment.desc)} */}
+         </>}
         </C>
       ))}
     </Container>

@@ -103,7 +103,7 @@ const PhotoUpload = ({ setOpen2 }) => {
   let k=0;
   let f=0;
   const [inputs, setInputs] = useState({}); 
-  const [title,setTitle]=useState(""); 
+  const [t,setT]=useState(""); 
   const [tags, setTags] = useState([]);
   const navigate = useNavigate()
 
@@ -181,6 +181,7 @@ const PhotoUpload = ({ setOpen2 }) => {
       for (let i = 0; i < imgURL.length; i++) {
         let imgUrl=await imgURL[i];
         let fileName=await filename[i];
+        let title= t+" "+i+1;
         // await changeTitle(i);
         // console.log(title);
         res = await axios.post("/photos", {...inputs,title,imgUrl, tags,uploaderemail,fileName})  //sending all inputs and tags
@@ -218,7 +219,7 @@ const PhotoUpload = ({ setOpen2 }) => {
           type="text"
           placeholder="Title"
           name="title"  //name is given to use handlechange
-          onChange={(e)=>setTitle(e.target.value)}  //on change handlechange
+          onChange={(e)=>setT(e.target.value)}  //on change handlechange
         />
         <Desc
           placeholder="Description"

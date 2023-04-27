@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
 import AlertModal from './modal/AlertModal';
+import RecommendationLoader from './loader/RecommendationLoader';
 import { useSelector } from 'react-redux';
 import Loader from './loader/Loader';
 import {
@@ -30,6 +31,17 @@ display:${(props)=>props.type==="small" && "flex"};
   height:${(props)=>props.type==="small" ? "15vh":"35vh"};
   width:${(props)=>props.type==="small" ? "22vw":"70vw"};
 }
+`;
+const LoaderContainer=styled.div`
+height:35vh;
+width:20vw;
+border:solid ${({theme})=>theme.soft}}
+display:flex;
+align-items:center;
+justify-content:center;
+border-radius:1.3rem;
+margin-top:2vh;
+margin-bottom:2vh;
 `;
 const Image=styled.img`
 width:100%;
@@ -113,7 +125,7 @@ const  PhotoCard = ({type,photo})=> {
               <Info>{photo.views} views - {format(photo.createdAt)} </Info>
           </Text>
         </Details>
-      </Container>:<Loader/>}
+      </Container>:type!=="small"?<LoaderContainer><Loader/></LoaderContainer>:<RecommendationLoader/>}
       </>
     )
   }

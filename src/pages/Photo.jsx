@@ -26,7 +26,7 @@ import ShareModal from '../components/modal/ShareModal';
 import { getStorage, ref, deleteObject } from "firebase/storage";
 import app from "../firebase"; //importing app
 import DownloadIcon from '@mui/icons-material/Download';
-
+import { saveAs } from 'file-saver';
 const Container = styled.div`
 display:flex;
 gap:24px;
@@ -234,7 +234,14 @@ export default function Photo() {
   const handlehistory=async()=>{
     await axios.put(`/users/photohistory/${currentPhoto._id}`);
   }
-
+  var FileSaver = require('file-saver');
+  const handleDownload = async() => {
+    try {
+      FileSaver.saveAs(currentPhoto.imgUrl, currentPhoto.title);
+    } catch (error) {
+      console.log(error);
+    }
+  }
   if(!currentPhoto || !currentUser){
     return null;
   }
@@ -273,7 +280,7 @@ export default function Photo() {
             {currentUser._id===currentPhoto.userId? 
            <Btn width="20%">
               <DeleteSweepOutlinedIcon onClick={()=>handleDelete(currentPhoto._id)}/> Delete
-            </Btn>:<Btn width="25%">
+            </Btn>:<Btn width="25%" onClick={()=>handleDownload()}>
               <DownloadIcon /> Download
             </Btn>}
           </Buttons>

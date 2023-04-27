@@ -27,6 +27,7 @@ import RecommendationLoader from '../components/loader/RecommendationLoader'
 import ShareModal from '../components/modal/ShareModal';
 import app from "../firebase"; //importing app
 import DownloadIcon from '@mui/icons-material/Download';
+import { saveAs } from 'file-saver';
 const Container = styled.div`
 display:flex;
 gap:24px;
@@ -141,7 +142,7 @@ export default function Video() {
   // const [confirmMessage, setConfirmMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const currentUrl = window.location.href;
-  const handleOpenAlertModal = (message,color) => {
+  const handleOpenAlertModal = (message, color) => {
     setAlertMessage(message);
     setAlertColor(color)
     setShowAlertModal(true);
@@ -256,7 +257,7 @@ export default function Video() {
     const desertRef2 = ref(storage, `video/${currentVideo.photofileName}`);
 
     deleteObject(desertRef).then(() => {
-    
+
     }).catch((error) => {
       handleOpenAlertModal(error.message, 'red')
       setLoading(false);
@@ -273,12 +274,13 @@ export default function Video() {
     setLoading(false);
     navigate('/')
   }
-
-  const handleDownload=async()=>{
-    // const storage = getStorage(app);
-    // const pathReference = ref(storage, `video/${currentVideo.videofileName}`);
-    window.location(`${currentVideo.videoUrl}`);
-
+  var FileSaver = require('file-saver');
+  const handleDownload = async() => {
+    try {
+      FileSaver.saveAs(currentVideo.videoUrl, currentVideo.title);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   if (!currentVideo || !currentUser) {
@@ -301,7 +303,7 @@ export default function Video() {
         <Content>
           {loading === false ? <>
             <VideoWrapper>
-              <VideoFrame src={currentVideo.videoUrl} controls autoPlay/>  {/* //creating videoframe */}
+              <VideoFrame src={currentVideo.videoUrl} controls autoPlay />  {/* //creating videoframe */}
             </VideoWrapper>
             <Title>{currentVideo.title}</Title>
             <Details>
@@ -322,7 +324,9 @@ export default function Video() {
                 {currentUser._id === currentVideo.userId ?
                   <Btn width="20%" onClick={() => handleDelete(currentVideo._id)}>
                     <DeleteSweepOutlinedIcon /> Delete
-                  </Btn> : <Btn width="25%" onClick={()=>handleDownload}>
+                  </Btn> : <Btn width="25%" onClick={() => {
+                    handleDownload()
+                  }}>
                     <DownloadIcon /> Download
                   </Btn>}
               </Buttons>

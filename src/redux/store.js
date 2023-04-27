@@ -1,4 +1,6 @@
-import { configureStore, combineReducers } from "@reduxjs/toolkit";
+import { configureStore, combineReducers, applyMiddleware } from "@reduxjs/toolkit";
+import thunkMiddleware from 'redux-thunk';
+
 import userReducer from "./userSlice";
 import videoReducer from "./videoSlice";
 import photoReducer from "./photoSlice"
@@ -15,14 +17,16 @@ import {
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { PersistGate } from "redux-persist/integration/react";
+const redux=require('redux');
+
+
 
 const persistConfig = {
   key: "root",
   version: 1,
   storage,
 };
-
-const rootReducer = combineReducers({ user: userReducer, video: videoReducer, photo: photoReducer,comment:commentReducer});
+const rootReducer = combineReducers({ user: userReducer, video: videoReducer, photo: photoReducer,comments:commentReducer});
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 

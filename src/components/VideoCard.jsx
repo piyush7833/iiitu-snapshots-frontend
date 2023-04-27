@@ -31,9 +31,20 @@ display:${(props)=>props.type==="small" && "flex"};
   width:${(props)=>props.type==="small" ? "22vw":"70vw"};
 }
 `;
+const LoaderContainer=styled.div`
+height:35vh;
+width:20vw;
+border:solid ${({theme})=>theme.soft}}
+display:flex;
+align-items:center;
+justify-content:center;
+border-radius:1.3rem;
+margin-top:2vh;
+margin-bottom:2vh;
+`;
 const Image=styled.img`
-width:100%;
-// width:${(props)=>props.type==="small" ? "40%":"100%"};
+//width:100%;
+width:${(props)=>props.type==="small" ? "10vw":"100%"};
 height:${(props)=>props.type==="small" ? "15vh":"25vh"};
 background-color:${({theme})=>theme.soft}};
 border:1px solid ${({theme})=>theme.soft}};
@@ -121,7 +132,7 @@ const  VideoCard = ({type,video})=> {
               <Info>{video.views} views - {format(video.createdAt)} </Info>
           </Text>
         </Details>
-      </Container>:type!=="small"?<Loader/>:<RecommendationLoader/>}
+      </Container>:type!=="small"?<LoaderContainer><Loader/></LoaderContainer>:<RecommendationLoader/>}
       {/* </Link> */}
       </>
     )

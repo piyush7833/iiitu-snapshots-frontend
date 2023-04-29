@@ -153,7 +153,7 @@ const Profile = () => {
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           setInputs((prev) => {
-            handleImgDelete();
+            // handleImgDelete();
             setImg("")
             return { ...prev, [urlType]: downloadURL };  //changing imgUrl and videourl in mongodb
           });

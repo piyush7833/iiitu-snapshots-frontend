@@ -5,7 +5,6 @@ import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import SendIcon from '@mui/icons-material/Send';
-import NotificationAddIcon from '@mui/icons-material/NotificationAdd';
 import Comments from '../components/Comments';
 import Recommendation from '../components/Recommendation';
 import { useDispatch, useSelector } from "react-redux";
@@ -20,14 +19,12 @@ import DeleteSweepOutlinedIcon from '@mui/icons-material/DeleteSweepOutlined';
 import AddTaskRoundedIcon from '@mui/icons-material/AddTaskRounded';
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import AlertModal from '../components/modal/AlertModal';
-import ConfirmModal from '../components/modal/ConfirmModal';
 import Loader from '../components/loader/Loader'
 import { getStorage, ref, deleteObject } from "firebase/storage";
 import RecommendationLoader from '../components/loader/RecommendationLoader'
 import ShareModal from '../components/modal/ShareModal';
 import app from "../firebase"; //importing app
 import DownloadIcon from '@mui/icons-material/Download';
-import { saveAs } from 'file-saver';
 const Container = styled.div`
 display:flex;
 gap:24px;
@@ -72,9 +69,6 @@ const Btn = styled.span(props => ({
   alignItems: "center",
   justifyContent: "space-evenly",
 }));
-const Recommendation2 = styled.div`
-flex:2;
-`;
 const Hr = styled.hr`
 margin:2vh 0vh;
   border: 0.5px solid ${({ theme }) => theme.soft}};
@@ -134,12 +128,8 @@ const VideoFrame = styled.video`
 export default function Video() {
   const [showAlertModal, setShowAlertModal] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
-  // const [showConfirmModal, setShowConfirmModal] = useState(false);
-  // const [showConfirmOpenModal, setShowConfirmOpenModal] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [alertColor, setAlertColor] = useState('white');
-  // const [confirmColor, setConfirmColor] = useState('white');
-  // const [confirmMessage, setConfirmMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const currentUrl = window.location.href;
   const handleOpenAlertModal = (message, color) => {
@@ -147,22 +137,13 @@ export default function Video() {
     setAlertColor(color)
     setShowAlertModal(true);
   };
-  // const handleOnConfirmOpenModal = (message,color) => {
-  //   setConfirmMessage(message);
-  //   setConfirmTitle(message);
-  //   setConfirmColor(color);
-  //   setShowConfirmModal(true);
-  // };
+
 
   const handleCloseAlertModal = () => {
     setShowAlertModal(false);
     setAlertMessage('');
   }
-  // const handleonCancelModal = () => {
-  //   setShowConfirmModal(false);
-  //   setConfirmMessage('');
-  //   setConfirmColor('white');
-  // }
+
 
 
   const handleOpenShareModal = () => {
@@ -175,21 +156,11 @@ export default function Video() {
   const { currentUser } = useSelector((state) => state.user);
   const { currentVideo } = useSelector((state) => state.video);
   console.log(currentVideo);
-  // console.log(currentUser);
   const dispatch = useDispatch();
   const path = useLocation().pathname.split("/")[2];
 
 
-  const addView = async () => {
-    axios.put(`/videos/view/${path}`);
-    handlehistory();
-    // const storage = getStorage();
-    // console.log(currentVideo.videoUrl)
-    // let filename=storage.ref.get(currentVideo.videoUrl);
-    // console.log(filename.name)
-    // console.log("Hello")
-    // console.log(":views added")
-  }
+
 
   const [channel, setChannel] = useState({});
   useEffect(() => {
@@ -198,14 +169,15 @@ export default function Video() {
         setLoading(true);
         const videoRes = await axios.get(`/videos/find/${path}`);
         const channelRes = await axios.get(`/users/find/${videoRes.data.userId}`);
+        await axios.put(`/videos/view/${path}`);  //addView
+        await axios.put(`/users/videohistory/${currentVideo._id}`);  //handlehistory
         setChannel(channelRes.data);
         dispatch(fetchSuccess(videoRes.data));
-        addView();
         setLoading(false);
       } catch (err) { }
     };
     fetchData();
-  }, [path, dispatch]); //as our dependecy is path this time which keeps changing
+  }, [path, dispatch,currentVideo._id]); //as our dependecy is path this time which keeps changing
 
 
 
@@ -243,13 +215,9 @@ export default function Video() {
     dispatch(savingVideo(currentVideo._id));
   };
 
-  const handlehistory = async () => {
-    await axios.put(`/users/videohistory/${currentVideo._id}`);
-  }
 
 
   const navigate = useNavigate();
-  // const desertRef = ref(storage,'videos/'+filename);
   const handleDelete = async (c) => {
     setLoading(true)
     const storage = getStorage(app);
@@ -270,7 +238,7 @@ export default function Video() {
       handleOpenAlertModal(error.message, "red");
       setLoading(false)
     });
-    const res = await axios.delete(`/videos/${c}`);
+    await axios.delete(`/videos/${c}`);
     setLoading(false);
     navigate('/')
   }

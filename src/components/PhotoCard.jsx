@@ -1,41 +1,40 @@
 import React from 'react'
 import styled from 'styled-components'
-import {format} from "timeago.js"
+import { format } from "timeago.js"
 import { useState } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
-import AlertModal from './modal/AlertModal';
 import RecommendationLoader from './loader/RecommendationLoader';
 import { useSelector } from 'react-redux';
 import Loader from './loader/Loader';
 import {
-    Link, useNavigate
-  } from "react-router-dom";
-const Container=styled.div`
+  useNavigate
+} from "react-router-dom";
+const Container = styled.div`
 // display:flex;
-height:${(props)=>props.type==="small" ? "15vh":"35vh"};
-width:${(props)=>props.type==="small" ? "22vw":"20vw"};
+height:${(props) => props.type === "small" ? "15vh" : "35vh"};
+width:${(props) => props.type === "small" ? "22vw" : "20vw"};
 cursor:pointer;
-margin-bottom:${(props)=>props.type==="small" ? "0.1vh":"2vh"};
+margin-bottom:${(props) => props.type === "small" ? "0.1vh" : "2vh"};
 margin-top:2vh;
-border:1px  ${(props)=>props.type==="small" ? "0px":`solid ${({theme})=>theme.soft}}` } ;
-border:1px solid ${({theme})=>theme.soft}};
-color:${({theme})=>theme.textSoft}};
+border:1px  ${(props) => props.type === "small" ? "0px" : `solid ${({ theme }) => theme.soft}}`} ;
+border:1px solid ${({ theme }) => theme.soft}};
+color:${({ theme }) => theme.textSoft}};
 border-radius:1.3rem;
-display:${(props)=>props.type==="small" && "flex"};
+display:${(props) => props.type === "small" && "flex"};
 @media (max-width: 500px) {
-  height:${(props)=>props.type==="small" ? "15vh":"35vh"};
-  width:${(props)=>props.type==="small" ? "22vw":"60vw"};
+  height:${(props) => props.type === "small" ? "15vh" : "35vh"};
+  width:${(props) => props.type === "small" ? "22vw" : "60vw"};
 }
 @media (max-width: 350px) {
-  height:${(props)=>props.type==="small" ? "15vh":"35vh"};
-  width:${(props)=>props.type==="small" ? "22vw":"70vw"};
+  height:${(props) => props.type === "small" ? "15vh" : "35vh"};
+  width:${(props) => props.type === "small" ? "22vw" : "70vw"};
 }
 `;
-const LoaderContainer=styled.div`
+const LoaderContainer = styled.div`
 height:35vh;
 width:20vw;
-border:solid ${({theme})=>theme.soft}}
+border:solid ${({ theme }) => theme.soft}}
 display:flex;
 align-items:center;
 justify-content:center;
@@ -43,55 +42,55 @@ border-radius:1.3rem;
 margin-top:2vh;
 margin-bottom:2vh;
 `;
-const Image=styled.img`
+const Image = styled.img`
 width:100%;
-// width:${(props)=>props.type==="small" ? "40%":"100%"};
-height:${(props)=>props.type==="small" ? "15vh":"25vh"};
-background-color:${({theme})=>theme.soft}};
-border:1px solid ${({theme})=>theme.soft}};
+// width:${(props) => props.type === "small" ? "40%" : "100%"};
+height:${(props) => props.type === "small" ? "15vh" : "25vh"};
+background-color:${({ theme }) => theme.soft}};
+border:1px solid ${({ theme }) => theme.soft}};
 border-radius:1.3rem;
 flex:0.8;
 `;
-const Details=styled.div`
+const Details = styled.div`
 display:flex;
 // margin:2vh;
 gap:12px;
-// color:${({theme})=>theme.textSoft}};
+// color:${({ theme }) => theme.textSoft}};
 flex:1;
 `;
-const FunctionImage=styled.img`
+const FunctionImage = styled.img`
 width:3vw;
 height:5vh;
 margin-top:2vh;
 margin-left:1vw;
-background-color:${({theme})=>theme.soft}};
-border:1px solid ${({theme})=>theme.soft}};
+background-color:${({ theme }) => theme.soft}};
+border:1px solid ${({ theme }) => theme.soft}};
 border-radius:50%;
-display:${(props)=>props.type==="small" ?"none" :"flex"};
+display:${(props) => props.type === "small" ? "none" : "flex"};
 `;
-const Text=styled.div`
+const Text = styled.div`
 disply:flex;
 margin-left:1vw;
 flex-direction:coloumn;
-color:${({theme})=>theme.text}};
+color:${({ theme }) => theme.text}};
 `;
-const Organizer=styled.div`
+const Organizer = styled.div`
 font-size:0.8rem
 font-weight:500;
-color:${({theme})=>theme.text}};
+color:${({ theme }) => theme.text}};
 `;
-const FunctionName=styled.div`
+const FunctionName = styled.div`
 font-size:0.6rem;
 font-weight:500;
 color: ${({ theme }) => theme.text};
 `;
-const Info=styled.div`
+const Info = styled.div`
 font-size:0.5rem;
 color: ${({ theme }) => theme.text};
 `;
-const  PhotoCard = ({type,photo})=> {
-  const [loading,setLoading]=useState(false);
-  const navigate=useNavigate();
+const PhotoCard = ({ type, photo }) => {
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
   const [channel, setChannel] = useState({});
   useEffect(() => {
     const fetchChannel = async () => {
@@ -102,35 +101,35 @@ const  PhotoCard = ({type,photo})=> {
     };
     fetchChannel();
   }, [photo.userId]);  //dependency is videos.userId i.e. whenever userid changes this function will get call
-  function onCall(){
+  function onCall() {
     navigate(`/photo/${photo._id}`)
   }
   const { currentUser } = useSelector((state) => state.user);
   let college;
   let collegephoto;
-  if(currentUser.email!==undefined && currentUser.email!==null){
-    college=currentUser.email.split('@')[1];
+  if (currentUser.email !== undefined && currentUser.email !== null) {
+    college = currentUser.email.split('@')[1];
   }
-  collegephoto=photo.uploaderemail.split('@')[1];
-  if(college===collegephoto){
+  collegephoto = photo.uploaderemail.split('@')[1];
+  if (college === collegephoto) {
     return (
       <>
-     {loading===false?<Container type={type} onClick={onCall}>
-        <Image src={photo.imgUrl} type={type}/>
-        <Details>
-          <FunctionImage src={channel.img} type={type}/>
-          <Text>
+        {loading === false ? <Container type={type} onClick={onCall}>
+          <Image src={photo.imgUrl} type={type} />
+          <Details>
+            <FunctionImage src={channel.img} type={type} />
+            <Text>
               <Organizer>{channel.Normalname}</Organizer>
               <FunctionName>{photo.title}</FunctionName>
               <Info>{photo.views} views - {format(photo.createdAt)} </Info>
-          </Text>
-        </Details>
-      </Container>:type!=="small"?<LoaderContainer><Loader/></LoaderContainer>:<RecommendationLoader/>}
+            </Text>
+          </Details>
+        </Container> : type !== "small" ? <LoaderContainer><Loader /></LoaderContainer> : <RecommendationLoader />}
       </>
     )
   }
-  else{
-    return(
+  else {
+    return (
       <></>
     )
   }

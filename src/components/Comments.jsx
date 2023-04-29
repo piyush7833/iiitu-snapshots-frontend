@@ -5,10 +5,7 @@ import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import AlertModal from './modal/AlertModal';
-import Loader from './loader/Loader';
 import { addComments,fetchComment,deleteComment } from '../redux/commentSlice';
-//import store from './store'
-//import { fetchComments } from '../redux/commentSlice';
 const Container=styled.div`
 
 `;
@@ -63,7 +60,6 @@ const Comments = ({videoId,type,photoId}) => {
   const [showAlertModal, setShowAlertModal] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [alertColor, setAlertColor] = useState('white');
-  const [loading,setLoading]=useState(false);
   const handleOpenAlertModal = (message,color) => {
     setAlertMessage(message);
     setAlertColor(color);
@@ -77,11 +73,8 @@ const Comments = ({videoId,type,photoId}) => {
 
   const { currentUser } = useSelector((state) => state.user);
   const dispatch=useDispatch();
-  // const [comments, setComments] = useState([]);  //in start it is an empty array
   
   const {comments} = useSelector((state )=> state.comments);
-  // const loading = useSelector(state => state.comments.loading);
-  // const error = useSelector(state => state.comments.error);
   useEffect(() => {
     try {
       if (type === 'video') {
@@ -105,18 +98,14 @@ const Comments = ({videoId,type,photoId}) => {
         var desc=AddComment;
         let res;
         if(type==="video"){
-          setLoading(true);
           res = await axios.post(`/comments`,{desc,videoId});
           // setaddComment(res.data);
           dispatch(addComments(res.data));
-          setLoading(false);
           handleOpenAlertModal(desc + " added ",'green')
         }
         else if(type==="photo"){
-          setLoading(true);
           res = await axios.post(`/comments`,{desc,photoId});
           dispatch(addComments(res.data))
-          setLoading(false);
           handleOpenAlertModal(desc + " added ",'green')          
         }
       } catch (err) {handleOpenAlertModal(err.message,'red')}
@@ -155,7 +144,6 @@ const Comments = ({videoId,type,photoId}) => {
          
          { <>
          { currentUser._id===currentPhoto.userId?comment.userId!==currentUser._id?(<Button onClick={async()=>handleDelete(comment._id,comment.desc)}>Delete</Button>):" ":" "}
-         {/* {console.log(comment.desc)} */}
          </>}
         </C>
       ))}
@@ -176,8 +164,7 @@ const Comments = ({videoId,type,photoId}) => {
          {comment.userId===currentUser._id?(<Button  onClick={()=>handleDelete(comment._id)}>Delete</Button>):" "}
          
          { <>
-         { currentUser._id===currentPhoto.userId?comment.userId!==currentUser._id?(<Button onClick={async()=>handleDelete(comment._id,comment.desc)}>Delete</Button>):" ":" "}
-         {/* {console.log(comment.desc)} */}
+         { currentUser._id===currentVideo.userId?comment.userId!==currentUser._id?(<Button onClick={async()=>handleDelete(comment._id,comment.desc)}>Delete</Button>):" ":" "}
          </>}
         </C>
       ))}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import styled from "styled-components";
 import {
   getStorage,
@@ -11,7 +11,6 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import AlertModal from './modal/AlertModal';
 import { useSelector } from "react-redux";
-import Loader from './loader/Loader';
 
 const Container = styled.div`
   width: 100%;
@@ -83,7 +82,6 @@ const PhotoUpload = ({ setOpen2 }) => {
   const [alertColor, setAlertColor] = useState('white');
   const { currentUser } = useSelector((state) => state.user);
   let uploaderemail=currentUser.email;
-  const [loading,setLoading]=useState(false);
   const handleOpenAlertModal = (message,color) => {
     setAlertMessage(message);
     setAlertColor(color);
@@ -105,7 +103,7 @@ const PhotoUpload = ({ setOpen2 }) => {
   const [inputs, setInputs] = useState({}); 
   const [t,setT]=useState(""); 
   const [tags, setTags] = useState([]);
-  const navigate = useNavigate()
+
 
   const handleChange = (e) => {
     setInputs((prev) => {
@@ -163,13 +161,6 @@ const PhotoUpload = ({ setOpen2 }) => {
   
     return Promise.all(promises);
   };
-//  const changeTitle=async(i)=>{
-//   console.log(i);
-//   let p=title + " " + i
-//   setTitle(p);
-//   console.log(p);
-//   console.log(title);
-//  }
 
   const handleUpload = async (e)=>{ //sending data to db
     e.preventDefault();
@@ -181,9 +172,8 @@ const PhotoUpload = ({ setOpen2 }) => {
       for (let i = 0; i < imgURL.length; i++) {
         let imgUrl=await imgURL[i];
         let fileName=await filename[i];
-        let title= t+" "+i+1;
-        // await changeTitle(i);
-        // console.log(title);
+        let j=i+1;
+        let title= t+" "+ j;
         res = await axios.post("/photos", {...inputs,title,imgUrl, tags,uploaderemail,fileName})  //sending all inputs and tags
       }
       setOpen2(false) 

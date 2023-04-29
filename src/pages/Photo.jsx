@@ -5,7 +5,6 @@ import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import SendIcon from '@mui/icons-material/Send';
-import NotificationAddIcon from '@mui/icons-material/NotificationAdd';
 import Comments from '../components/Comments';
 import Recommendation from '../components/Recommendation';
 import { useDispatch, useSelector } from "react-redux";
@@ -26,7 +25,6 @@ import ShareModal from '../components/modal/ShareModal';
 import { getStorage, ref, deleteObject } from "firebase/storage";
 import app from "../firebase"; //importing app
 import DownloadIcon from '@mui/icons-material/Download';
-import { saveAs } from 'file-saver';
 const Container = styled.div`
 display:flex;
 gap:24px;
@@ -136,8 +134,9 @@ export default function Photo() {
   const [alertColor, setAlertColor] = useState('white');
   const [loading,setLoading]=useState(false);
   const currentUrl = window.location.href;
-  const handleOpenAlertModal = (message) => {
+  const handleOpenAlertModal = (message,color) => {
     setAlertMessage(message);
+    setAlertColor(color);
     setShowAlertModal(true);
   };
 
@@ -155,15 +154,10 @@ export default function Photo() {
 
   const { currentUser } = useSelector((state) => state.user);
   const { currentPhoto } = useSelector((state) => state.photo);
-  // console.log(currentPhoto._id);
   const dispatch = useDispatch();
   const path = useLocation().pathname.split("/")[2];  //as our pathname include vide/video_id and we want only video id
   //const [currentPhoto,setPhoto]=useState({});  //if we use useState to populate like dislike or subscribe then user need to refresh page to see that like is working or not
-  const addView=async()=>{
-    axios.put(`/photos/view/${path}`);
-    // console.log(":views added")
-    handlehistory();
-  }
+
   const [channel, setChannel] = useState({});
   useEffect(() => {
     const fetchData = async () => {
@@ -172,14 +166,14 @@ export default function Photo() {
         const photoRes = await axios.get(`/photos/find/${path}`);
         const channelRes = await axios.get(`/users/find/${photoRes.data.userId}`);
         setChannel(channelRes.data);
-        //setPhoto(photoRes.data)        // console.log(photoRes.data);
+        axios.put(`/photos/view/${path}`);
+        await axios.put(`/users/photohistory/${currentPhoto._id}`);
         dispatch(fetchSuccess(photoRes.data));
         setLoading(false);
-        addView();
       } catch (err) { handleOpenAlertModal(err.msg,'red')}
     };
     fetchData();
-  }, [path],dispatch); //as our dependecy is path this time which keeps changing
+  }, [path,dispatch,currentPhoto._id]); //as our dependecy is path this time which keeps changing
 
 
 
@@ -214,7 +208,7 @@ export default function Photo() {
     setLoading(true);
     const storage = getStorage(app);
     const desertRef = ref(storage, `photo/${currentPhoto.fileName}`);
-    const res = await axios.delete(`/photos/${c}`);
+    await axios.delete(`/photos/${c}`);
     deleteObject(desertRef).then(() => {
       handleOpenAlertModal("Photo Deleted","green");
     }).catch((error) => {
@@ -231,9 +225,7 @@ export default function Photo() {
       : await axios.put(`/users/photosave/${currentPhoto._id}`);
     dispatch(savingPhoto(currentPhoto._id));
   };
-  const handlehistory=async()=>{
-    await axios.put(`/users/photohistory/${currentPhoto._id}`);
-  }
+
   var FileSaver = require('file-saver');
   const handleDownload = async() => {
     try {
@@ -247,10 +239,11 @@ export default function Photo() {
   }
   return (
     <Container>
-            <AlertModal
+      <AlertModal
         isOpen={showAlertModal}
         onClose={handleCloseAlertModal}
         message={alertMessage}
+        alertColor={alertColor}
       />
                   <ShareModal
         currentUrl={currentUrl}

@@ -2,10 +2,9 @@ import React from "react";
 import styled from "styled-components";
 import { useState } from "react";
 import axios from "axios";
-import { useDispatch } from "react-redux";
 import LockIcon from '@mui/icons-material/Lock';
 import NoEncryptionIcon from '@mui/icons-material/NoEncryption';
-import { useParams, Link } from "react-router-dom";
+import { useParams} from "react-router-dom";
 import AlertModal from '../components/modal/AlertModal';
 import Loader from '../components/loader/Loader'
 import { useEffect } from "react";
@@ -55,12 +54,6 @@ padding: 2em;
 const Title = styled.h1`
   font-size: 1.3em;
 `;
-
-const SubTitle = styled.h2`
-  font-size: 1.1em;
-  font-weight: 300;
-`;
-
 const Input = styled.input`
   border: 1px solid ${({ theme }) => theme.soft};
   border-radius: 3px;
@@ -75,7 +68,6 @@ const Button = styled.button`
   display:flex;
   align-items:center;
   border-radius: 1.3rem;
-  // border: none;
   padding-left:1em;
   padding-right:1em;
   padding-top:0.8em;
@@ -85,7 +77,7 @@ const Button = styled.button`
   background-color: transparent;;
   color: ${({ theme }) => theme.text};
   gap:4px;
-  // box-shadow: 15px 15px 20px rgba(0,0,0,.6);
+
 `;
 
 const I=styled.div`
@@ -104,7 +96,6 @@ height:30vh;
 const SignIn = () => {
 
   const navigate=useNavigate();
-  const dispatch=useDispatch();  //it comes from react redux  ///used to fire redux evets
   const [password, setPassword] = useState("");
   const [confpassword, setconfPassword] = useState("");
   const [validUrl, setValidUrl] = useState(true);
@@ -139,11 +130,13 @@ const SignIn = () => {
         }
     };
     verifyEmailUrl();
-}, []);
+}, [param.id,param.resetToken]);
 
  const handleReset=async()=>{
     if(password===confpassword && validUrl===true){
-        const res = await axios.put(`http://localhost:3000/users/${param.id}/reset/${param.resetToken}`, {password});
+        setLoader(true);
+        await axios.put(`http://localhost:3000/users/${param.id}/reset/${param.resetToken}`, {password});
+        setLoader(false);
         handleOpenAlertModal("Congratulations your password is changed now")
     }
     else{

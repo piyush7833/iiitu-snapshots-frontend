@@ -13,7 +13,6 @@ import { useNavigate, Link } from 'react-router-dom';
 import AlertModal from './modal/AlertModal';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import MenuIcon from '@mui/icons-material/Menu';
-import Menu from './Menu';
 import { ThemeProvider } from "styled-components";
 import useLocalStorage from "../useLocalstorage";
 import { darkTheme } from '../utils/theme';

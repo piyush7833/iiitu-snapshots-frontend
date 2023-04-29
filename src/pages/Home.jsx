@@ -5,7 +5,6 @@ import PhotoCard from '../components/PhotoCard';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Loader from '../components/loader/Loader'
-import AlertModal from '../components/modal/AlertModal';
 const Container = styled.div`
 display:flex;
 justify-content:space-around;
@@ -17,9 +16,6 @@ flex-wrap:wrap;
 }
 `;
 
-// let college=currentUser.email.split('@')[1];
-// let collegevideo=currentVideo.uploaderemail.split('@')[1];
-// let collegephoto=currentPhoto.uploaderemail.split('@')[1];
 const Home=({type,show})=> {
 
     const [videos, setVideos] = useState([]);

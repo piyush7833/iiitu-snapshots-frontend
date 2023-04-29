@@ -4,7 +4,7 @@ import { useState } from "react";
 import axios from "axios";
 import { loginFailure, loginStart, loginSuccess } from "../redux/userSlice";
 import { useDispatch } from "react-redux";
-import {auth,gprovider,giprovider} from "../firebase.js";
+import {auth,gprovider} from "../firebase.js";
 import {signInWithPopup} from "firebase/auth"
 import GoogleIcon from '@mui/icons-material/Google';
 import PersonIcon from '@mui/icons-material/Person';
@@ -12,7 +12,6 @@ import LockIcon from '@mui/icons-material/Lock';
 import ContactPhoneIcon from '@mui/icons-material/ContactPhone';
 import ContactMailIcon from '@mui/icons-material/ContactMail';
 import NoEncryptionIcon from '@mui/icons-material/NoEncryption';
-import GitHubIcon from '@mui/icons-material/GitHub';
 import AlertModal from '../components/modal/AlertModal';
 import Loader from '../components/loader/Loader'
 import { useNavigate } from "react-router-dom";
@@ -80,16 +79,6 @@ const Button = styled.button`
   // box-shadow: 15px 15px 20px rgba(0,0,0,.6);
 `;
 
-// const More = styled.div`
-//   display: flex;
-//   margin-top: 10px;
-//   font-size: 12px;
-//   color: ${({ theme }) => theme.textSoft};
-// `;
-
-// const Links = styled.div`
-//   margin-left: 50px;
-// `;
 
 const Link = styled.span`
   text-align:center
@@ -99,9 +88,6 @@ width:100%;
 display:flex;
 align-items:center;
 justify-content:space-evenly;
-`;
-const Label=styled.label`
-text-align:start;
 `;
 const I=styled.div`
 display:flex;
@@ -150,7 +136,6 @@ const SignIn = () => {
       dispatch(loginSuccess(res.data))
       setsigninLoader(false);
       navigate('/')
-      // console.log(res.data);
     } catch (error) {
       setsigninLoader(false);
       dispatch(loginFailure());  //we can also pass error as payload
@@ -202,14 +187,13 @@ const SignIn = () => {
       if(result2===true){
       if(password===confpassword){
         setsignupLoader(true);
-      const res = await axios.post(`/auth/signup`,{Normalname,name,password,email,phone});
+       await axios.post(`/auth/signup`,{Normalname,name,password,email,phone});
       setsignupLoader(false);
       navigate('/verifyemail')
     }
     else{
       setsignupLoader(false);
       handleOpenAlertModal('Password and correct password is not same','red')
-      // alert("password and correct password is not same")
     }
       }
       else{
@@ -217,7 +201,6 @@ const SignIn = () => {
         handleOpenAlertModal(msg,'red');
       }
     } catch (error) {
-      // console.log(error.message)
       handleOpenAlertModal("Fill all the necessary fields or user already exist",'red')
     }
   };
@@ -227,32 +210,6 @@ const SignIn = () => {
     console.log(isActive);
   };
 
-  
-  // const signInWithGit = async () => {
-  //   dispatch(loginStart());
-  //   signInWithPopup(auth, giprovider)
-  //     // .then((result) => {
-  //     //   axios
-  //     //     .post("http://localhost:8800/api/auth/google", {
-  //     //       name: result.user.displayName,
-  //     //       email: result.user.email,
-  //     //       img: result.user.photoURL,
-  //     //     })
-  //     //     .then((res) => {
-  //     //       console.log(res)
-  //     //       dispatch(loginSuccess(res.data));
-  //     //       // navigate("/")
-  //     //     });
-  //     // })
-  //     // .catch((error) => {
-  //     //   dispatch(loginFailure());
-  //     // });
-  // };
-
-//   onClick(event) {
-//     handleLogin();
-//     toggleClass();
-//  }
 
   return (
     
@@ -282,7 +239,7 @@ const SignIn = () => {
         </Btn>
         <Link style={{cursor:"pointer",color:"blue"}} onClick={()=>navigate('/recovery')} >Forget Password ?</Link>
         
-        <p>Not have an account ? <a onClick={toggleClass} style={{cursor:"pointer",color:"blue"}}>Create one</a></p>
+        <p>Not have an account ? <span onClick={toggleClass} style={{cursor:"pointer",color:"blue"}}>Create one</span></p>
         </Wrapper>:<Loader/>}
         {signuploader===false?<Wrapper style={isActive===false?{display:"none"}:{display:"flex"}} >
         <Title>Sign Up</Title>
@@ -311,7 +268,7 @@ const SignIn = () => {
         <Button onClick={signInWithGoogle}><GoogleIcon/>Google</Button>
         {/* <Button onClick={signInWithGoogle}><GitHubIcon/>Github</Button> */}
         </Btn>
-        <p>Already have an account ?  <a onClick={toggleClass} style={{cursor:"pointer",color:"blue"}}>Log in</a></p>
+        <p>Already have an account ?  <span onClick={toggleClass} style={{cursor:"pointer",color:"blue"}}>Log in</span></p>
       </Wrapper>:<Loader/>}
     </Container>
   );

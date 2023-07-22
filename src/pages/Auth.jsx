@@ -125,14 +125,17 @@ const SignIn = () => {
     setAlertMessage('');
   };
 
-
+  const axiosInstance = axios.create({
+    baseURL: 'https://iiitusnapshotbackend.onrender.com/api',
+    withCredentials: true,
+  });
 
   const handleLogin=async(e)=>{  //as soon as we login we have a cookie with us which include our acess token so we can do like, comment, subscribe functionalities
     e.preventDefault();
     dispatch(loginStart());   //no payload passed
     try {
       setsigninLoader(true);
-      const res = await axios.post(`/auth/signin`,{name,password});
+      const res = await axiosInstance.post(`/auth/signin`,{name,password});
       dispatch(loginSuccess(res.data))
       setsigninLoader(false);
       navigate('/')
@@ -151,14 +154,14 @@ const SignIn = () => {
        let p=reg.test(result.user.email);
        if(p!==true){handleOpenAlertModal("Use IIIT Una college email",'red')} 
        setsigninLoader(true);
-        axios
+        axiosInstance
           .post("/auth/google", {
             name: result.user.email.split('@')[0],
             Normalname: result.user.displayName,
             email: result.user.email,
             img: result.user.photoURL,
             verified: true,
-          })
+          },{withCredentials:true})
           .then((res) => {
             if(p===true){
             dispatch(loginSuccess(res.data));

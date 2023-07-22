@@ -168,6 +168,7 @@ export default function Video() {
       try {
         setLoading(true);
         const videoRes = await axios.get(`/videos/find/${path}`);
+        console.log(videoRes);
         const channelRes = await axios.get(`/users/find/${videoRes.data.userId}`);
         await axios.put(`/videos/view/${path}`);  //addView
         await axios.put(`/users/videohistory/${currentVideo._id}`);  //handlehistory
@@ -317,7 +318,7 @@ export default function Video() {
             </Subscribe>
           </Uploader> : <Loader />}
           <Hr />
-          {loading === false ? <Comments videoId={currentVideo._id} type={"video"} /> : <Loader />}
+          {/* {loading === false ? <Comments videoId={currentVideo._id} type={"video"} /> : <Loader />} */}
         </Content>
         <Hr />
         {loading === false ? <Recommendation tags={currentVideo.tags} /> : <RecommendationLoader />}  {/*//sending current video tags as props  */}

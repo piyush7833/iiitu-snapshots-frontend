@@ -89,6 +89,8 @@ font-size:0.5rem;
 color: ${({ theme }) => theme.text};
 `;
 const PhotoCard = ({ type, photo }) => {
+  axios.defaults.baseURL = 'https://iiitusnapshotbackend.onrender.com/api'
+  axios.defaults.withCredentials=true;
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [channel, setChannel] = useState({});

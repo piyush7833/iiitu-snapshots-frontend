@@ -72,7 +72,6 @@ margin:2vh 0vh;
 
 
 export default function Menu({ darkMode, setDarkMode, setShowMenu, showMenu }) {
-
     const currentUser = useSelector(state => state.user.currentUser);
     if (showMenu === false) {
         return null;

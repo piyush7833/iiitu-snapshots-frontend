@@ -56,7 +56,6 @@ const Button = styled.button`
 `;
 const Comments = ({videoId,type,photoId}) => {
 
-
   const [showAlertModal, setShowAlertModal] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [alertColor, setAlertColor] = useState('white');

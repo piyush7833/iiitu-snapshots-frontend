@@ -68,7 +68,6 @@ align-items:center;
 gap:1vw;
 `;
 const SignIn = () => {
-
     const navigate = useNavigate();
     const [name, setName] = useState("");
     const [loader, setLoader] = useState(false);

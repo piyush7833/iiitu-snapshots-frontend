@@ -17,7 +17,6 @@ flex-wrap:wrap;
 `;
 
 const Home=({type,show})=> {
-
     const [videos, setVideos] = useState([]);
     const [loading, setLoading] = useState(false);
     useEffect(() => {

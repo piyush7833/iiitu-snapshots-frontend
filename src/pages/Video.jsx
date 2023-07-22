@@ -168,13 +168,14 @@ export default function Video() {
       try {
         setLoading(true);
         const videoRes = await axios.get(`/videos/find/${path}`);
-        console.log(videoRes);
+        // console.log(videoRes);
+        setLoading(false);
         const channelRes = await axios.get(`/users/find/${videoRes.data.userId}`);
         await axios.put(`/videos/view/${path}`);  //addView
         await axios.put(`/users/videohistory/${currentVideo._id}`);  //handlehistory
         setChannel(channelRes.data);
         dispatch(fetchSuccess(videoRes.data));
-        setLoading(false);
+        
       } catch (err) { }
     };
     fetchData();

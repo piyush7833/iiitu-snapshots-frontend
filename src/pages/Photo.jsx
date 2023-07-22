@@ -170,6 +170,7 @@ export default function Photo() {
         await axios.put(`/users/photohistory/${currentPhoto._id}`);
         dispatch(fetchSuccess(photoRes.data));
         setLoading(false);
+        // console.log(currentPhoto.imgUrl);
       } catch (err) { handleOpenAlertModal(err.msg,'red')}
     };
     fetchData();

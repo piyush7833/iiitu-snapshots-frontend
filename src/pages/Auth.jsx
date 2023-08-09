@@ -126,7 +126,7 @@ const SignIn = () => {
   };
 
   const axiosInstance = axios.create({
-    baseURL: 'https://iiitusnapshotbackend.onrender.com',
+    baseURL: 'http://localhost:8800/api',
     withCredentials: true,
   });
 

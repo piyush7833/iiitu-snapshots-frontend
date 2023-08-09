@@ -1,70 +1,59 @@
-# Getting Started with Create React App
+# IIITU Snapshot
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+![IIITU Snapshot Logo](images/logo.png)
 
-## Available Scripts
+IIITU Snapshot is a web app that allows users to relive and celebrate their college memories through photos and videos. Powered by MongoDB, Firebase, Express.js, Node.js, and React.js, this platform offers a seamless way to capture and share cherished moments from your college journey.
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+- Upload and manage photos and videos to capture memorable moments.
+- Like, comment, share, and download media to engage with your college community.
+- Exclusive access for college club members to purchase admin plans and enhance the platform.
+- Secure and personalized environment - users can only access media from their own college.
+- Immersive user experience with a responsive and intuitive design.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Screenshots
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+![Screenshot 1](images/1.png)
+_Authenticate yourself._
 
-### `npm test`
+![Screenshot 1](images/2.png)
+_Explore the vibrant memories of campus festivals._
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+![Screenshot 2](images/3.png)
+_Like, comment, and share your favorite moments._
 
-### `npm run build`
+![Screenshot 2](images/4.png)
+_Like, comment, and share your favorite moments._
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+![Screenshot 3](images/5.png)
+_Add media if you are admin._
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+![Screenshot 3](images/6.png)
+_Purchase plans to become admin._
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Installation
 
-### `npm run eject`
+1. Clone the repository: `git clone https://github.com/yourusername/iiitu-snapshot.git`
+2. Install server dependencies: `npm install`
+3. Install client dependencies: `cd client && npm install`
+4. Configure MongoDB and Firebase credentials.
+5. Run the development server: `npm run dev`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Contributing
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+We welcome contributions from the community! If you'd like to contribute to IIITU Snapshot, please follow these steps:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+1. Fork the repository.
+2. Create a new branch: `git checkout -b feature/your-feature-name`
+3. Commit your changes: `git commit -m "Add your feature"`
+4. Push to the branch: `git push origin feature/your-feature-name`
+5. Open a pull request.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## License
 
-## Learn More
+This project is licensed under the [MIT License](LICENSE).
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+---
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Feel free to explore and contribute to IIITU Snapshot. Capture the magic of your college memories and keep them alive for generations to come!

@@ -16,6 +16,8 @@ import PaymentIcon from '@mui/icons-material/Payment';
 import ContactPageIcon from '@mui/icons-material/ContactPage';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useSelector } from 'react-redux';
+import { useState } from 'react';
+import AlertModal from './modal/AlertModal';
 import {
     Link
 } from "react-router-dom";
@@ -35,6 +37,7 @@ display:absolute;
   }
   @media (max-width: 350px) {
     display:${(props)=>props.showMenu===true ? "none":"absolute"};/
+    ${(props)=>console.log(props.showMenu)}
 }
 `;
 const Wrapper = styled.div`
@@ -69,9 +72,15 @@ const Hr = styled.hr`
 margin:2vh 0vh;
   border: 0.5px solid ${({ theme }) => theme.soft}};
 `;
-
+const Top = styled.div`
+display:flex;
+align-items:center;
+gap:1vw;
+`;
 
 export default function Menu({ darkMode, setDarkMode, setShowMenu, showMenu }) {
+    // const [showMenu, setShowMenu] = useState(false);
+
     const currentUser = useSelector(state => state.user.currentUser);
     if (showMenu === false) {
         return null;

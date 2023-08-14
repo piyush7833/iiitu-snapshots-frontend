@@ -13,6 +13,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import AlertModal from './modal/AlertModal';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import MenuIcon from '@mui/icons-material/Menu';
+import Menu from './Menu';
 import { ThemeProvider } from "styled-components";
 import useLocalStorage from "../useLocalstorage";
 import { darkTheme } from '../utils/theme';
@@ -137,16 +138,11 @@ export default function Navbar({showMenu, setShowMenu}) {
     role = currentUser.role;
   }
 
-
-  const axiosInstance = axios.create({
-    baseURL: 'https://iiitusnapshotbackend.onrender.com/api',
-    withCredentials: true,
-  });
   const dispatch = useDispatch();
   const handleLogout = async (e) => {  //as soon as we login we have a cookie with us which include our acess token so we can do like, comment, subscribe functionalities
     e.preventDefault();
     try {
-      const res = await axiosInstance.post(`/auth/signout`);
+      const res = await axios.post(`/auth/signout`);
       dispatch(logout(res.data))
       navigation('/')
     } catch (error) {

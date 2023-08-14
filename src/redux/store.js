@@ -1,4 +1,5 @@
-import { configureStore, combineReducers} from "@reduxjs/toolkit";
+import { configureStore, combineReducers, applyMiddleware } from "@reduxjs/toolkit";
+import thunkMiddleware from 'redux-thunk';
 
 import userReducer from "./userSlice";
 import videoReducer from "./videoSlice";
@@ -15,6 +16,8 @@ import {
   REGISTER,
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
+import { PersistGate } from "redux-persist/integration/react";
+const redux=require('redux');
 
 
 

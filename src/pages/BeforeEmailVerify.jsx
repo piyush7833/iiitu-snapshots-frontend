@@ -2,6 +2,8 @@
 import React from 'react'
 import styled from 'styled-components'
 import Email from '../img/email.gif'
+import { useNavigate } from "react-router-dom";
+import { Link } from 'react-router-dom';
 const Container=styled.div`
 display: flex;
 flex-direction: column;
@@ -54,6 +56,7 @@ text-align:center;
 box-shadow: 0 15px 25px rgba(0,0,0,.6);
 `;
 const BeforeEmailVerify = () => {
+  const navigate=useNavigate();
   return (
     <Container>
     <VerifyWrapper>
@@ -61,7 +64,9 @@ const BeforeEmailVerify = () => {
       <Title>Verify Your email</Title>
       <Info>We have sent an email to you to verify your email address and activate your account. So please verify your email within 24hr otherwise link will get expired and then login again</Info>
       <Button onClick={()=>window.location.replace(`https://mail.google.com/mail/u/0/#inbox`)} >
+      {/* <Link to={`https://mail.google.com/mail/u/0/#inbox`} style={{textDecoration:"none",color:"inherit"}}> */}
         Check Email
+      {/* </Link> */}
       </Button>
       </VerifyWrapper>
     </Container>

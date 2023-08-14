@@ -3,10 +3,11 @@ import styled from 'styled-components'
 import { useSelector } from 'react-redux';
 import { useState } from 'react';
 import AlertModal from '../components/modal/AlertModal';
+import Loader from '../components/loader/Loader'
 import { useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { updateUserStart, updateUserSuccess, updateUserFailure, deleteUserFailure, deleteUserStart, deleteUserSuccess } from '../redux/userSlice'
+import { updateUserStart, updateUserSuccess, updateUserFailure, deleteUserFailure, deleteUserStart, deleteUserSuccess, logout } from '../redux/userSlice'
 import { useDispatch } from 'react-redux';
 import {
   getStorage,
@@ -16,6 +17,7 @@ import {
   deleteObject,
 } from "firebase/storage";
 import app from "../firebase"; //importing app
+import { async } from '@firebase/util';
 const Container = styled.div`
 display:flex;
 align-items:center;
@@ -91,6 +93,7 @@ const Profile = () => {
   const navigate = useNavigate();
   const [showAlertModal, setShowAlertModal] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
+  const [loading, setLoading] = useState(false);
   const handleOpenAlertModal = (message) => {
     setAlertMessage(message);
     setShowAlertModal(true);
@@ -115,7 +118,8 @@ const Profile = () => {
       const desertRef = ref(storage, `profile/${currentUser.imgName}`);
       deleteObject(desertRef).then(() => {
       }).catch((error) => {
-        handleOpenAlertModal(error.message, "red");       
+        handleOpenAlertModal(error.message, "red");
+        setLoading(false)
       });
     }
   }
@@ -144,6 +148,7 @@ const Profile = () => {
             handleOpenAlertModal("Upload paused", "yellow")
             break;
           case "running":
+            // handleOpenAlertModal("Uploading","green")
             break;
           default:
             break;
@@ -170,6 +175,7 @@ const Profile = () => {
     e.preventDefault()
     dispatch(updateUserStart);
     try {
+      //img && await uploadFile(img, "img");
       const res = await axios.put(`/users/${currentUser._id}`, { ...inputs, imgName })  //sending all inputs and tags
       handleCloseAlertModal("Profile uploaded successfully", "green");
       setEdit(false);
@@ -186,23 +192,28 @@ const Profile = () => {
   const [photos, setPhotos] = useState([]);
   const [videos, setVideos] = useState([]);
   const fetchPhotos = async () => {
+    setLoading(true);
     const res = await axios.get(`/photos/myfiles`)
     setPhotos(res.data)
+    setLoading(false);
   }
   const fetchVideos = async () => {
+    setLoading(true);
     const res = await axios.get(`/videos/myfiles`);
     setVideos(res.data);
+    setLoading(false);
   };
 
 
   const handleVideoDel = async (e) => {
-   await axios.delete(`/videos/${e}`);
+    const res = await axios.delete(`/videos/${e}`);
   }
   const handlePhotoDel = async (e) => {
-    await axios.delete(`/photos/${e}`);
+    const res = await axios.delete(`/photos/${e}`);
   }
 
   const handleDelete = async () => {
+
     try {
       dispatch(deleteUserStart)
       fetchPhotos()
@@ -211,12 +222,12 @@ const Profile = () => {
         const storage = getStorage(app);
         const desertRef = ref(storage, `photo/${element.fileName}`);
         deleteObject(desertRef).then(() => {
-          handlePhotoDel(element._id);
+
         }).catch((error) => {
           handleOpenAlertModal(error.message, "red");
-          
+          setLoading(false)
         });
-        
+        handlePhotoDel(element._id);
       });
 
 
@@ -234,14 +245,13 @@ const Profile = () => {
 
 
         deleteObject(desertRef2).then(() => {
-          handleVideoDel(element._id)
         }).catch((error) => {
           handleOpenAlertModal(error.message, "red");
         });
-        
+        handleVideoDel(element._id)
       });
 
-      const res =await axios.delete(`users/${currentUser._id}`);  //todo delete users all videos
+      const res = axios.delete(`users/${currentUser._id}`);  //todo delete users all videos
       handleOpenAlertModal("Your account is deleted", 'red')
       dispatch(deleteUserSuccess(res.data))
       navigate('/')
@@ -262,12 +272,13 @@ const Profile = () => {
 
   const handleUpdatePassword = async (name) => {
     try {
-      await axios.post('/users/recovery', { name })
+      const res = await axios.post('/users/recovery', { name })
       handleOpenAlertModal("Email Sent for changing password", '#66bb6a')
     } catch (error) {
       handleOpenAlertModal(error.message, "red")
     }
   }
+
   return (
     <Container>
       <AlertModal
@@ -288,6 +299,7 @@ const Profile = () => {
             /> : ""}
           </>
         )}
+        {/* <Button>Upload Photo</Button> */}
       </Photo>
       <Details>
         <Infos><Info>Full Name : </Info>{edit === true ? <Input name='Normalname' placeholder={currentUser.Normalname} onChange={handleChange} /> : <Info>{currentUser.Normalname}</Info>}</Infos>
@@ -312,3 +324,4 @@ const Profile = () => {
 }
 
 export default Profile
+// export currentUser;

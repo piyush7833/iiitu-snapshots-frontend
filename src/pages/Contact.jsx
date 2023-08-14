@@ -113,6 +113,7 @@ width:40%;
 margin-left:10vw; 
 font-size:1.5rem;
 `;
+const Table=styled.table``;
 const Contact = () => {
   const [message, setMessage] = useState("");
   const { currentUser } = useSelector((state) => state.user);
@@ -138,7 +139,7 @@ const Contact = () => {
   const savemsg=async(e)=>{  //as soon as we login we have a cookie with us which include our acess token so we can do like, comment, subscribe functionalities
     e.preventDefault();
     try {
-      await axios.post(`/contacts`,{Normalname,name,email,message});
+      const res = await axios.post(`/contacts`,{Normalname,name,email,message});
       handleOpenAlertModal("Your message is sent. We will get back to you soon","green")
       setMessage("");
     } catch (error) {

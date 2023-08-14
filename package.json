@@ -2,6 +2,7 @@
   "name": "iiitu_snapshots",
   "version": "0.1.0",
   "private": true,
+
   "dependencies": {
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
@@ -36,7 +37,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && echo '/* /index.html  200' | cat >build/_redirects ",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -58,4 +59,5 @@
       "last 1 safari version"
     ]
   }
+  
 }

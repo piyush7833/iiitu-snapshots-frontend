@@ -8,7 +8,7 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import axios from 'axios';
 
-axios.defaults.baseURL = 'https://iiitusnapshots.onrender.com'
+axios.defaults.baseURL = 'https://vercel.com/piyush7833/iiit-snapshots-backend/AW9eDUP9xy2TsaDD4Ln8Bw4YzoSn'
 axios.defaults.withCredentials = true;
 
 

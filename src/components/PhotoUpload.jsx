@@ -186,7 +186,7 @@ const PhotoUpload = ({ setOpen2 }) => {
         // console.log(title);
         res = await axios.post("/photos", {...inputs,title,imgUrl, tags,uploaderemail,fileName})  //sending all inputs and tags
       }
-      setOpen2(false) 
+      setOpen2(false);
       res.status===200 && handleOpenAlertModal("Photo uploaded successfully","green");  //navigate to video page
     } catch (error) {
       console.log(error);

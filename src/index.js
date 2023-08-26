@@ -8,7 +8,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import axios from 'axios';
 
 axios.defaults.baseURL = 'https://iiitusnapshotbackend.onrender.com'
-axios.defaults.withCredentials = true;
+// axios.defaults.withCredentials = true;
 axios.defaults.headers.post['mode']='cors'
 axios.defaults.headers.post['Access-Control-Allow-Origin']='*'
 

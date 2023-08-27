@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { format } from "timeago.js";
 import AlertModal from './modal/AlertModal';
-import Loader from './loader/Loader';
 import CommentLoader from './loader/CommentLoader';
 const Container=styled.div`
 display:flex;

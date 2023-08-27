@@ -136,7 +136,7 @@ export default function Navbar({showMenu, setShowMenu}) {
   let role;
   if (currentUser !== null) {
     role = currentUser.role;
-    console.log(role);
+    // console.log(role)
   }
 
   const dispatch = useDispatch();
@@ -184,15 +184,23 @@ export default function Navbar({showMenu, setShowMenu}) {
 
               <>
 
-
+                {role === "admin" ? (
+                  <>
                     <Photos>
                       <AddAPhotoOutlinedIcon onClick={() => { setOpen2(true) }} />
                     </Photos>
                     <Video>
                       <VideoCallOutlinedIcon onClick={() => { setOpen(true) }} />
                     </Video> </>
-                
-              
+                ) : (<>
+                  <Photos>
+                    <AddAPhotoOutlinedIcon onClick={() => handleOpenAlertModal("You are not an admin so you are not allowed to upload photo. To become admin go to payment section and purchase a plan", "green")} />
+                  </Photos>
+                  <Video>
+                    <VideoCallOutlinedIcon onClick={() => handleOpenAlertModal("You are not an admin so you are not allowed to upload video. To become admin go to payment section and purchase a plan", "green")} />
+                  </Video> </>)
+                }
+              </>
             </Item>
 
             <User>

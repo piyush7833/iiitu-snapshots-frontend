@@ -32,13 +32,9 @@ _Add media if you are admin._
 ![Screenshot 3](images/6.png)
 _Purchase plans to become admin._
 
-## Installation
+## Use
 
-1. Clone the repository: `git clone https://github.com/yourusername/iiitu-snapshot.git`
-2. Install server dependencies: `npm install`
-3. Install client dependencies: `cd client && npm install`
-4. Configure MongoDB and Firebase credentials.
-5. Run the development server: `npm run dev`
+For using it go to the deployment link :- https://iiitu-snapshots-frontend.vercel.app/
 
 ## Contributing
 

@@ -135,6 +135,8 @@ const SignIn = () => {
   };
 
   const handleCloseAlertModal = () => {
+    setsignupLoader(false)
+    setsigninLoader(false)
     setShowAlertModal(false);
     setAlertMessage('');
   };

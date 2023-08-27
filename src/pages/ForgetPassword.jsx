@@ -132,9 +132,9 @@ const SignIn = () => {
  useEffect(() => {
     const verifyEmailUrl = async () => {
         try {
-            const url = `https://iiitu-snapshots-frontend.vercel.app/users/${param.id}/reset/${param.resetToken}`;
+            const url = `users/${param.id}/reset/${param.resetToken}`;
             console.log(url);
-            const { data } = await axiosInstance.get(url);
+            const { data } = await axios.get(url);
             console.log(data);
             setValidUrl(true);
         } catch (error) {
@@ -147,7 +147,7 @@ const SignIn = () => {
 
  const handleReset=async()=>{
     if(password===confpassword && validUrl===true){
-        const res = await axios.put(`https://iiitu-snapshots-frontend.vercel.app/${param.id}/reset/${param.resetToken}`, {password});
+        const res = await axios.put(`users/${param.id}/reset/${param.resetToken}`, {password});
         handleOpenAlertModal("Congratulations your password is changed now")
     }
     else{

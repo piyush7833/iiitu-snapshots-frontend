@@ -59,31 +59,32 @@ box-shadow: 0 15px 25px rgba(0,0,0,.6);
 `;
 const EmailVerify = () => {
 	const [validUrl, setValidUrl] = useState(true);
-	const navigate = useNavigate();
+	const navigate=useNavigate();
 	const param = useParams();
 	const [showAlertModal, setShowAlertModal] = useState(false);
 	const [alertMessage, setAlertMessage] = useState(" ");
 	const [alertColor, setAlertColor] = useState('white');
-	const handleOpenAlertModal = (message, color) => {
-		setAlertMessage(message);
-		setAlertColor(color)
-		setShowAlertModal(true);
+	const handleOpenAlertModal = (message,color) => {
+	  setAlertMessage(message);
+	  setAlertColor(color)
+	  setShowAlertModal(true);
 	};
-
+  
 	const handleCloseAlertModal = () => {
-		setShowAlertModal(false);
-		setAlertMessage('');
+	  setShowAlertModal(false);
+	  setAlertMessage('');
 	};
 
 	useEffect(() => {
 		const verifyEmailUrl = async () => {
 			try {
-				const url = `https://iiitu-snapshots-frontend.vercel.app/users/${param.id}/verify/${param.token}`;
+				const url = `users/${param.id}/verify/${param.token}`;
 				const { data } = await axios.get(url);
 				console.log(data);
 				setValidUrl(true);
 			} catch (error) {
-				handleOpenAlertModal(error.message, "red")
+				console.log(error)
+				handleOpenAlertModal(error.message,"red")
 				setValidUrl(false);
 			}
 		};
@@ -92,12 +93,12 @@ const EmailVerify = () => {
 
 	return (
 		<>
-			<AlertModal
-				isOpen={showAlertModal}
-				onClose={handleCloseAlertModal}
-				message={alertMessage}
-				color={alertColor}
-			/>
+		            <AlertModal
+        isOpen={showAlertModal}
+        onClose={handleCloseAlertModal}
+        message={alertMessage}
+        color={alertColor}
+      />
 			{validUrl ? (
 				<Container>
 					<VerifyWrapper>

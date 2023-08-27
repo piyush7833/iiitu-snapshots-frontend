@@ -174,7 +174,7 @@ export default function Video() {
 
   const { currentUser } = useSelector((state) => state.user);
   const { currentVideo } = useSelector((state) => state.video);
-  console.log(currentVideo);
+  // console.log(currentVideo);
   // console.log(currentUser);
   const dispatch = useDispatch();
   const path = useLocation().pathname.split("/")[2];
@@ -353,7 +353,7 @@ export default function Video() {
         </Content>
         <Hr />
         {loading === false ? <Recommendation tags={currentVideo.tags} /> : <RecommendationLoader />}  {/*//sending current video tags as props  */}
-        {console.log(currentVideo.videoUrl)}
+        {/* {console.log(currentVideo.videoUrl)} */}
       </Container>
     </>
   )

@@ -183,7 +183,7 @@ export default function Navbar({showMenu, setShowMenu}) {
 
               <>
 
-                {role === "admin" ? (
+                {currentUser.role === "admin" ? (
                   <>
                     <Photos>
                       <AddAPhotoOutlinedIcon onClick={() => { setOpen2(true) }} />

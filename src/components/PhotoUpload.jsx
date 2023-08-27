@@ -83,7 +83,6 @@ const PhotoUpload = ({ setOpen2 }) => {
   const [alertColor, setAlertColor] = useState('white');
   const { currentUser } = useSelector((state) => state.user);
   let uploaderemail=currentUser.email;
-  const [loading,setLoading]=useState(false);
   const handleOpenAlertModal = (message,color) => {
     setAlertMessage(message);
     setAlertColor(color);
@@ -187,7 +186,7 @@ const PhotoUpload = ({ setOpen2 }) => {
         res = await axios.post("/photos", {...inputs,title,imgUrl, tags,uploaderemail,fileName})  //sending all inputs and tags
       }
       setOpen2(false);
-      res.status===200 && handleOpenAlertModal("Photo uploaded successfully","green");  //navigate to video page
+      res.status===200 && window.location.reload() && handleOpenAlertModal("Photo Uploaded suuccessfully",'grren');  //navigate to video page
     } catch (error) {
       console.log(error);
     }

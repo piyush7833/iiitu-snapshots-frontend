@@ -69,9 +69,10 @@ const Search = styled.div`
 `;
 const Input = styled.input`
    width:98%;
-   border:1px;
+   border:none;
    border-radius:1.3em;
    background-color:transparent;
+  
 `;
 const Item = styled.div`
 display:flex;

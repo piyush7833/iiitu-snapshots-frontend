@@ -349,7 +349,7 @@ export default function Video() {
             </Subscribe>
           </Uploader> : <Loader />}
           <Hr />
-          {/* {loading === false ? <Comments videoId={currentVideo._id} type={"video"} /> : <Loader />} */}
+          {loading === false ? <Comments videoId={currentVideo._id} type={"video"} /> : <Loader />}
         </Content>
         <Hr />
         {loading === false ? <Recommendation tags={currentVideo.tags} /> : <RecommendationLoader />}  {/*//sending current video tags as props  */}

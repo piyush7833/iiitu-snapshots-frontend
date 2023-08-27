@@ -304,7 +304,7 @@ export default function Photo() {
         </Uploader>:<Loader/>}   
 
         <Hr />
-       {/* {loading===false? <Comments photoId={currentPhoto._id} type={"photo"}/>:<Loader/>} */}
+       {loading===false? <Comments photoId={currentPhoto._id} type={"photo"}/>:<Loader/>}
       </Content>
       <Hr />
        {loading===false?<Recommendation tags={currentPhoto.tags} />:<RecommendationLoader/>}{/*  //sending current video tags as props  */}

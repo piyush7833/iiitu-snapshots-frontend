@@ -148,7 +148,7 @@ const Comments = ({videoId,type,photoId}) => {
         <Avatar src={currentUser.img} />
         <Input onKeyPress={addComment} placeholder="Add a comment..." onChange={e => setaddComment(e.target.value)}/>
       </NewComment>
-      {comments.map(comment=>(
+      {comments && comments.map(comment=>(
         <C>
         <Comment key={comment._id} comment={comment}/>
          {comment.userId===currentUser._id?(<Button  onClick={()=>handleDelete(comment._id)}>Delete</Button>):" "}

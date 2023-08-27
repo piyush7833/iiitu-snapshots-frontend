@@ -2,8 +2,6 @@
 import React from 'react'
 import styled from 'styled-components'
 import Email from '../img/email.gif'
-import { useNavigate } from "react-router-dom";
-import { Link } from 'react-router-dom';
 const Container=styled.div`
 display: flex;
 flex-direction: column;
@@ -56,7 +54,6 @@ text-align:center;
 box-shadow: 0 15px 25px rgba(0,0,0,.6);
 `;
 const BeforeEmailVerify = () => {
-  const navigate=useNavigate();
   return (
     <Container>
     <VerifyWrapper>

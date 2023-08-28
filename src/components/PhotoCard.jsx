@@ -4,15 +4,17 @@ import {format} from "timeago.js"
 import { useState } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
-import AlertModal from './modal/AlertModal';
 import RecommendationLoader from './loader/RecommendationLoader';
 import { useSelector } from 'react-redux';
 import Loader from './loader/Loader';
 import {
-    Link, useNavigate
+     useNavigate
   } from "react-router-dom";
+
+  
 const Container=styled.div`
-// display:flex;
+padding-top:0.4vh;
+padding-bottom:0.4vh;
 height:${(props)=>props.type==="small" ? "15vh":"35vh"};
 width:${(props)=>props.type==="small" ? "22vw":"20vw"};
 cursor:pointer;
@@ -23,6 +25,11 @@ border:1px solid ${({theme})=>theme.soft}};
 color:${({theme})=>theme.textSoft}};
 border-radius:1.3rem;
 display:${(props)=>props.type==="small" && "flex"};
+
+
+&:hover {
+  background-color:${({theme})=>theme.soft}};
+}
 @media (max-width: 500px) {
   height:${(props)=>props.type==="small" ? "15vh":"35vh"};
   width:${(props)=>props.type==="small" ? "22vw":"60vw"};
@@ -45,7 +52,7 @@ margin-bottom:2vh;
 `;
 const Image=styled.img`
 width:100%;
-// width:${(props)=>props.type==="small" ? "40%":"100%"};
+width:${(props)=>props.type==="small" ? "10vw":"100%"};
 height:${(props)=>props.type==="small" ? "15vh":"25vh"};
 background-color:${({theme})=>theme.soft}};
 border:1px solid ${({theme})=>theme.soft}};
@@ -54,9 +61,8 @@ flex:0.8;
 `;
 const Details=styled.div`
 display:flex;
-// margin:2vh;
 gap:12px;
-// color:${({theme})=>theme.textSoft}};
+color:${({theme})=>theme.textSoft}};
 flex:1;
 `;
 const FunctionImage=styled.img`

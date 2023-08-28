@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
 import {format} from "timeago.js"
-import AlertModal from './modal/AlertModal';
 import { useSelector } from "react-redux";
 import Loader from './loader/Loader';
 import {
@@ -22,6 +21,11 @@ border:1px solid ${({theme})=>theme.soft}};
 color:${({theme})=>theme.textSoft}};
 border-radius:1.3rem;
 display:${(props)=>props.type==="small" && "flex"};
+
+&:hover {
+  background-color:${({theme})=>theme.soft}};
+}
+
 @media (max-width: 500px) {
   height:${(props)=>props.type==="small" ? "15vh":"35vh"};
   width:${(props)=>props.type==="small" ? "22vw":"60vw"};
@@ -43,7 +47,6 @@ margin-top:2vh;
 margin-bottom:2vh;
 `;
 const Image=styled.img`
-//width:100%;
 width:${(props)=>props.type==="small" ? "10vw":"100%"};
 height:${(props)=>props.type==="small" ? "15vh":"25vh"};
 background-color:${({theme})=>theme.soft}};

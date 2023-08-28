@@ -2,24 +2,34 @@ import React from 'react'
 import styled from 'styled-components'
 import VideoCard from '../components/VideoCard';
 import PhotoCard from '../components/PhotoCard';
-import { useEffect, useState } from 'react';
+import { useEffect, useState} from 'react';
 import axios from 'axios';
 import Loader from '../components/loader/Loader'
-import AlertModal from '../components/modal/AlertModal';
 const Container = styled.div`
 display:flex;
 justify-content:space-around;
 flex-wrap:wrap;
+height:35vh;
+overflow-x:hidden;
+overflow-y:scroll;
+
+
+@media (max-width: 500px) {
+  justify-content:center;
+  align-items:center;
+}
+::-webkit-scrollbar {
+  display: none; /* Hide the default scrollbar */
+}
+`;
+const Main = styled.div`
+height:100vh
 @media (max-width: 500px) {
   flex-direction:column;
   justify-content:center;
   align-items:center;
 }
 `;
-
-// let college=currentUser.email.split('@')[1];
-// let collegevideo=currentVideo.uploaderemail.split('@')[1];
-// let collegephoto=currentPhoto.uploaderemail.split('@')[1];
 const Home=({type,show})=> {
 
     const [videos, setVideos] = useState([]);
@@ -44,8 +54,11 @@ const Home=({type,show})=> {
       fetchPhotos()
     },[type])
   
+
+
+
     return (
-      <>
+      <Main>
         {<p style={{textAlign:"center"}}>Videos</p>}
       {loading===false?<Container>
         {videos.map((video) => (
@@ -58,7 +71,7 @@ const Home=({type,show})=> {
         <PhotoCard key={photo._id} photo={photo}/>
       ))}
       </Container>:<Loader/>}
-      </>
+      </Main>
     )
   }
 export default Home;

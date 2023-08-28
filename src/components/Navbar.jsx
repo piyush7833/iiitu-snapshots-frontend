@@ -13,11 +13,6 @@ import { useNavigate, Link } from 'react-router-dom';
 import AlertModal from './modal/AlertModal';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import MenuIcon from '@mui/icons-material/Menu';
-import Menu from './Menu';
-import { ThemeProvider } from "styled-components";
-import useLocalStorage from "../useLocalstorage";
-import { darkTheme } from '../utils/theme';
-import { lightTheme } from '../utils/theme';
 import snapshots from "../img/logo.png"
 const Logo = styled.div`
  display flex;
@@ -71,8 +66,15 @@ const Input = styled.input`
    width:98%;
    border:none;
    border-radius:1.3em;
+   enabled-border:none;
    background-color:transparent;
-  
+   color:white;
+   &:focus {
+    outline: none;
+  }
+  &::placeholder {
+    color: white; /* Change this color to your desired placeholder color */
+  }
 `;
 const Item = styled.div`
 display:flex;
@@ -155,7 +157,6 @@ export default function Navbar({showMenu, setShowMenu}) {
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
   const [q, setQ] = useState("");
-  let [darkMode, setDarkMode] = useLocalStorage("darkMode", false);
   return (
     <>
       <AlertModal
@@ -164,11 +165,10 @@ export default function Navbar({showMenu, setShowMenu}) {
         message={alertMessage}
         color={alertColor}
       />
-      <ThemeProvider theme={darkMode ? darkTheme : lightTheme}></ThemeProvider>
       {currentUser ? (
         <Container>
               {showMenu===false?<LogoWrapper>
-                <MenuIcon onClick={() => setShowMenu(!showMenu)} />
+                <MenuIcon onClick={() => setShowMenu(!showMenu)} style={{color:"white"}} />
                 <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
                   <Logo>
                     <Img src={snapshots}>

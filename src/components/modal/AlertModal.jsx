@@ -28,9 +28,15 @@ const Wrapper = styled.div`
   gap: 20px;
   position: relative;
   border-radius:1.3rem;
-  box-shadow: 0 15px 25px rgba(0,0,0,.6);
+  box-shadow: 0 15px 25px rgba(0,0,0,0.6);
   font-size:1.3rem;
   text-align:justify;
+  overflow-x:hidden;
+  overflow-y:scroll
+  @media (max-width: 800px) {
+    width: 60vw;
+    height: 30vh;
+  }
 `;
 const Close = styled.div`
   position: absolute; //it goes to end due to position absolute

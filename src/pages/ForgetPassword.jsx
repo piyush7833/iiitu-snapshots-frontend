@@ -2,10 +2,9 @@ import React from "react";
 import styled from "styled-components";
 import { useState } from "react";
 import axios from "axios";
-import { useDispatch } from "react-redux";
 import LockIcon from '@mui/icons-material/Lock';
 import NoEncryptionIcon from '@mui/icons-material/NoEncryption';
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import AlertModal from '../components/modal/AlertModal';
 import Loader from '../components/loader/Loader'
 import { useEffect } from "react";
@@ -29,12 +28,17 @@ const Wrapper = styled.div`
   background-color:${({ theme }) => theme.bgLighter};
   background-image:url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg');
   border: 1px solid ${({ theme }) => theme.soft};
-  padding: 2em;
+  padding:1rem 2rem;
   gap: 0.8vh;
   box-shadow: 0 15px 25px rgba(0,0,0,.6);
   border-radius:1.3rem;
   width:20vw;
-  
+  @media (max-width: 800px) {
+    width:50vw;
+  }
+  @media (max-width: 500px) {
+    width:70vw;
+  }
 `;
 const VerifyWrapper = styled.div`
 display:flex;
@@ -56,10 +60,6 @@ const Title = styled.h1`
   font-size: 1.3em;
 `;
 
-const SubTitle = styled.h2`
-  font-size: 1.1em;
-  font-weight: 300;
-`;
 
 const Input = styled.input`
   border: 1px solid ${({ theme }) => theme.soft};
@@ -104,7 +104,6 @@ height:30vh;
 const SignIn = () => {
 
   const navigate=useNavigate();
-  const dispatch=useDispatch();  //it comes from react redux  ///used to fire redux evets
   const [password, setPassword] = useState("");
   const [confpassword, setconfPassword] = useState("");
   const [validUrl, setValidUrl] = useState(true);
@@ -124,10 +123,6 @@ const SignIn = () => {
     setAlertMessage('');
   };
 
-  const axiosInstance = axios.create({
-    baseURL: '',
-
-  });
 
  useEffect(() => {
     const verifyEmailUrl = async () => {
@@ -143,11 +138,13 @@ const SignIn = () => {
         }
     };
     verifyEmailUrl();
-}, []);
+}, [param.id,param.resetToken]);
 
  const handleReset=async()=>{
     if(password===confpassword && validUrl===true){
-        const res = await axios.put(`users/${param.id}/reset/${param.resetToken}`, {password});
+      setLoader(true);
+         await axios.put(`users/${param.id}/reset/${param.resetToken}`, {password});
+         setLoader(false);
         handleOpenAlertModal("Congratulations your password is changed now")
     }
     else{

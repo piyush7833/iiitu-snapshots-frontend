@@ -4,7 +4,7 @@ import { useState } from "react";
 import axios from "axios";
 import { loginFailure, loginStart, loginSuccess } from "../redux/userSlice";
 import { useDispatch } from "react-redux";
-import {auth,gprovider,giprovider} from "../firebase.js";
+import {auth,gprovider} from "../firebase.js";
 import {signInWithPopup} from "firebase/auth"
 import GoogleIcon from '@mui/icons-material/Google';
 import PersonIcon from '@mui/icons-material/Person';
@@ -12,7 +12,7 @@ import LockIcon from '@mui/icons-material/Lock';
 import ContactPhoneIcon from '@mui/icons-material/ContactPhone';
 import ContactMailIcon from '@mui/icons-material/ContactMail';
 import NoEncryptionIcon from '@mui/icons-material/NoEncryption';
-import GitHubIcon from '@mui/icons-material/GitHub';
+// import GitHubIcon from '@mui/icons-material/GitHub';
 import AlertModal from '../components/modal/AlertModal';
 import Loader from '../components/loader/Loader'
 import { useNavigate } from "react-router-dom";
@@ -36,38 +36,51 @@ const Wrapper = styled.div`
   background-color:${({ theme }) => theme.bgLighter};
   background-image:url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg');
   border: 1px solid ${({ theme }) => theme.soft};
-  padding: 2em;
+  padding:1rem 2rem;
   gap: 0.8vh;
   box-shadow: 0 15px 25px rgba(0,0,0,.6);
   border-radius:1.3rem;
   width:20vw;
-  
+  @media (max-width: 800px) {
+    width:50vw;
+  }
+  @media (max-width: 500px) {
+    width:70vw;
+  }
 `;
 
 const Title = styled.h1`
   font-size: 1.3em;
+  @media (max-width: 500px) {
+    font-size:1.2rem;
+  }
 `;
 
 const SubTitle = styled.h2`
   font-size: 1.1em;
   font-weight: 300;
+  @media (max-width: 500px) {
+    font-size:0.8rem;
+  }
 `;
 
 const Input = styled.input`
   border: 1px solid ${({ theme }) => theme.soft};
   border-radius: 3px;
-  padding: 10px;
+  padding: 0.8rem;
   background-color: transparent;
   width: 100%;
   border-radius:1.3rem;
   color: ${({ theme }) => theme.text};
+  @media (max-width: 800px) {
+    padding:0.6rem;
+  }
 `;
 
 const Button = styled.button`
   display:flex;
   align-items:center;
   border-radius: 1.3rem;
-  // border: none;
   padding-left:1em;
   padding-right:1em;
   padding-top:0.8em;
@@ -76,20 +89,16 @@ const Button = styled.button`
   cursor: pointer;
   background-color: transparent;;
   color: ${({ theme }) => theme.text};
-  gap:4px;
+  // gap:4px;
   // box-shadow: 15px 15px 20px rgba(0,0,0,.6);
+  @media (max-width: 500px) {
+  padding-left:0.8rem;
+  padding-right:0.8rem;
+  padding-top:0.6rem;
+  padding-bottom:0.6rem;
+  }
 `;
 
-// const More = styled.div`
-//   display: flex;
-//   margin-top: 10px;
-//   font-size: 12px;
-//   color: ${({ theme }) => theme.textSoft};
-// `;
-
-// const Links = styled.div`
-//   margin-left: 50px;
-// `;
 
 const Link = styled.span`
   text-align:center
@@ -99,9 +108,6 @@ width:100%;
 display:flex;
 align-items:center;
 justify-content:space-evenly;
-`;
-const Label=styled.label`
-text-align:start;
 `;
 const I=styled.div`
 display:flex;
@@ -204,7 +210,7 @@ const SignIn = () => {
       if(result2===true){
       if(password===confpassword){
         setsignupLoader(true);
-      const res = await axios.post(`/auth/signup`,{Normalname,name,password,email,phone});
+      await axios.post(`/auth/signup`,{Normalname,name,password,email,phone});
       setsignupLoader(false);
       navigate('/verifyemail')
     }
@@ -284,7 +290,7 @@ const SignIn = () => {
         </Btn>
         <Link style={{cursor:"pointer",color:"blue"}} onClick={()=>navigate('/recovery')} >Forget Password ?</Link>
         
-        <p>Not have an account ? <a onClick={toggleClass} style={{cursor:"pointer",color:"blue"}}>Create one</a></p>
+        <p>Not have an account ? <span onClick={toggleClass} style={{cursor:"pointer",color:"blue"}}>Create one</span></p>
         </Wrapper>:<Loader/>}
         {signuploader===false?<Wrapper style={isActive===false?{display:"none"}:{display:"flex"}} >
         <Title>Sign Up</Title>
@@ -313,7 +319,7 @@ const SignIn = () => {
         <Button onClick={signInWithGoogle}><GoogleIcon/>Google</Button>
         {/* <Button onClick={signInWithGoogle}><GitHubIcon/>Github</Button> */}
         </Btn>
-        <p>Already have an account ?  <a onClick={toggleClass} style={{cursor:"pointer",color:"blue"}}>Log in</a></p>
+        <p>Already have an account ?  <span onClick={toggleClass} style={{cursor:"pointer",color:"blue"}}>Log in</span></p>
       </Wrapper>:<Loader/>}
     </Container>
   );

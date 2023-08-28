@@ -16,15 +16,12 @@ import PaymentIcon from '@mui/icons-material/Payment';
 import ContactPageIcon from '@mui/icons-material/ContactPage';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useSelector } from 'react-redux';
-import { useState } from 'react';
-import AlertModal from './modal/AlertModal';
 import {
     Link
 } from "react-router-dom";
 const Container = styled.div`
 display:absolute;
   flex: 1;
-//   width:13vw;
   background-color: ${({ theme }) => theme.bg}};
   height: 100vh;
   color: ${({ theme }) => theme.text};
@@ -32,6 +29,11 @@ display:absolute;
   position: sticky;
   top: 0;
   z-index:999;
+  overflow-x:hidden;
+  overflow-y:scroll;
+  ::-webkit-scrollbar {
+    display: none; /* Hide the default scrollbar */
+  }
   @media (max-width: 900px) {
     font-size:1rem;
   }
@@ -72,11 +74,7 @@ const Hr = styled.hr`
 margin:2vh 0vh;
   border: 0.5px solid ${({ theme }) => theme.soft}};
 `;
-const Top = styled.div`
-display:flex;
-align-items:center;
-gap:1vw;
-`;
+
 
 export default function Menu({ darkMode, setDarkMode, setShowMenu, showMenu }) {
     // const [showMenu, setShowMenu] = useState(false);

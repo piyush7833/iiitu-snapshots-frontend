@@ -2,12 +2,9 @@ import React from "react";
 import styled from "styled-components";
 import { useState } from "react";
 import axios from "axios";
-import { useDispatch } from "react-redux";
-import { useParams, Link } from "react-router-dom";
 import PersonIcon from '@mui/icons-material/Person';
 import AlertModal from '../components/modal/AlertModal';
 import Loader from '../components/loader/Loader'
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 const Container = styled.div`
   display: flex;
@@ -27,12 +24,17 @@ const Wrapper = styled.div`
   background-color:${({ theme }) => theme.bgLighter};
   background-image:url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg');
   border: 1px solid ${({ theme }) => theme.soft};
-  padding: 2em;
+  padding:1rem 2rem;
   gap: 0.8vh;
   box-shadow: 0 15px 25px rgba(0,0,0,.6);
   border-radius:1.3rem;
   width:20vw;
-  
+  @media (max-width: 800px) {
+    width:50vw;
+  }
+  @media (max-width: 500px) {
+    width:70vw;
+  }
 `;
 const Title = styled.h1`
   font-size: 1.3em;
@@ -70,19 +72,11 @@ width:100%;
 align-items:center;
 gap:1vw;
 `;
-const Info = styled.div`
-width:30vw;
-font-size:1.3rem;
-`;
-const Image = styled.img`
-height:30vh;
-`;
+
 const SignIn = () => {
 
     const navigate = useNavigate();
-    const dispatch = useDispatch();  //it comes from react redux  ///used to fire redux evets
     const [name, setName] = useState("");
-    const [validUrl, setValidUrl] = useState(true);
     const [loader, setLoader] = useState(false);
     const [showAlertModal, setShowAlertModal] = useState(false);
     const [alertMessage, setAlertMessage] = useState(" ");
@@ -100,7 +94,9 @@ const SignIn = () => {
 
     const handleMail = async () => {
         try {
-            const res=await axios.post('/users/recovery',{name})
+            setLoader(true);
+            await axios.post('/users/recovery',{name});
+            setLoader(false);
             handleOpenAlertModal("An email has been sent to you to recover your email.","green")
         } catch (error) {
             handleOpenAlertModal(error.message,"red");
@@ -124,7 +120,7 @@ const SignIn = () => {
                         <Input placeholder="username *" required onChange={e => setName(e.target.value)} />
                     </I>
                     <Button onClick={handleMail}>Send Mail</Button>
-                        <p> <a onClick={()=>navigate('/')} style={{cursor:"pointer",color:"blue"}}>Log in</a></p>
+                        <p> <span onClick={()=>navigate('/')} style={{cursor:"pointer",color:"blue"}}>Log in</span></p>
                 </Wrapper> : <Loader />}
             </Container>
 

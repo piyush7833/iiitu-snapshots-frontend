@@ -9,8 +9,8 @@ import dotenv from "dotenv";
 import axios from 'axios';
 dotenv.config(); 
 
-axios.defaults.baseURL = process.env.BACKEND_URL;
-// axios.defaults.baseURL = 'https://iiitusnapshotbackend.onrender.com/api';
+// axios.defaults.baseURL = process.env.BACKEND_URL;
+axios.defaults.baseURL = 'https://iiitusnapshotbackend.onrender.com/api';
 axios.defaults.withCredentials = true;
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

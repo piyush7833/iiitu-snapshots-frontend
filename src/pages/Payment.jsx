@@ -108,7 +108,7 @@ const Payment = () => {
       description: "Subscription Transaction",
       image: { logo },
       order_id: data.id,
-      callback_url: "http:localhost:8800/api/pay/paymentverification",
+      callback_url: "https://iiitusnapshotbackend.onrender.com/api/pay/paymentverification",
       prefill: {
         name: currentUser.name,
         email: currentUser.email,

@@ -3,11 +3,10 @@ import styled from 'styled-components'
 import { useSelector } from 'react-redux';
 import { useState } from 'react';
 import AlertModal from '../components/modal/AlertModal';
-import Loader from '../components/loader/Loader'
 import { useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { updateUserStart, updateUserSuccess, updateUserFailure, deleteUserFailure, deleteUserStart, deleteUserSuccess, logout } from '../redux/userSlice'
+import { updateUserStart, updateUserSuccess, updateUserFailure, deleteUserFailure, deleteUserStart, deleteUserSuccess } from '../redux/userSlice'
 import { useDispatch } from 'react-redux';
 import {
   getStorage,
@@ -17,13 +16,14 @@ import {
   deleteObject,
 } from "firebase/storage";
 import app from "../firebase"; //importing app
-import { async } from '@firebase/util';
 const Container = styled.div`
 display:flex;
 align-items:center;
-justify-content:space-evenly;
-height:90vh;
-
+justify-content:center;
+height:95vh;
+@media (max-width: 500px) {
+  flex-direction:column;
+}
 `;
 const Image = styled.img`
 height:40vh;
@@ -33,24 +33,31 @@ margin-bottom:2vh;
 `;
 const Details = styled.div`
 display:flex;
-align-items:centre;
-// justify-content:space-evenly;
+align-items:strech;
 flex-direction:column;
-width:25vw;
+justify-content:flex-start;
+width:50%;
+@media (max-width: 500px) {
+  width:100%;
+  justify-content:space-between;
+}
 `;
 const Photo = styled.div`
 display:flex;
-align-items:centre;
-justify-content:space-evenly;
+align-items:center;
+// justify-content:center;
 flex-direction:column;
-width:20vw;
+width:50%;
+@media (max-width: 500px) {
+  width:100%;
+}
 `;
 const Input = styled.input`
   border: 1px solid ${({ theme }) => theme.soft};
   border-radius: 3px;
   padding: 10px;
+  width: 50%;
   background-color: transparent;
-  // width: 100%;
   border-radius:1.3rem;
   color: ${({ theme }) => theme.text};
 `;
@@ -59,12 +66,19 @@ const Infos = styled.div`
   width: 100%;
   color: ${({ theme }) => theme.text};
   display:flex; 
-  // justify-content:flex-start;
   margin-top:2vh;
+  align-items: center;
+  justify-content: center;
 `;
 const Info = styled.div`
   background-color: transparent;
-  width: 100%;
+  width: 40%;
+  border-radius:1.3rem;
+  color: ${({ theme }) => theme.text};
+`;
+const Info2 = styled.div`
+  background-color: transparent;
+  width: 50%;
   border-radius:1.3rem;
   color: ${({ theme }) => theme.text};
 `;
@@ -87,6 +101,7 @@ display:flex;
 align-items:center;
 justify-content:space-evenly; 
 margin-top:3vh;
+
 `;
 const Profile = () => {
   const dispatch = useDispatch();
@@ -206,10 +221,10 @@ const Profile = () => {
 
 
   const handleVideoDel = async (e) => {
-    const res = await axios.delete(`/videos/${e}`);
+    await axios.delete(`/videos/${e}`);
   }
   const handlePhotoDel = async (e) => {
-    const res = await axios.delete(`/photos/${e}`);
+     await axios.delete(`/photos/${e}`);
   }
 
   const handleDelete = async () => {
@@ -251,7 +266,7 @@ const Profile = () => {
         handleVideoDel(element._id)
       });
 
-      const res = axios.delete(`users/${currentUser._id}`);  //todo delete users all videos
+      const res = await axios.delete(`users/${currentUser._id}`);  //todo delete users all videos
       handleOpenAlertModal("Your account is deleted", 'red')
       dispatch(deleteUserSuccess(res.data))
       navigate('/')
@@ -272,7 +287,7 @@ const Profile = () => {
 
   const handleUpdatePassword = async (name) => {
     try {
-      const res = await axios.post('/users/recovery', { name })
+      await axios.post('/users/recovery', { name })
       handleOpenAlertModal("Email Sent for changing password", '#66bb6a')
     } catch (error) {
       handleOpenAlertModal(error.message, "red")
@@ -302,13 +317,13 @@ const Profile = () => {
         {/* <Button>Upload Photo</Button> */}
       </Photo>
       <Details>
-        <Infos><Info>Full Name : </Info>{edit === true ? <Input name='Normalname' placeholder={currentUser.Normalname} onChange={handleChange} /> : <Info>{currentUser.Normalname}</Info>}</Infos>
-        <Infos><Info>User Name :  </Info>{edit === true ? <Input name='name' placeholder={currentUser.name} onChange={handleChange} /> : <Info>{currentUser.name}</Info>}</Infos>
-        <Infos><Info>Phone : </Info>{edit === true ? <Input name='phone' placeholder={currentUser.phone ? currentUser.phone : "Phone number"} onChange={handleChange} /> : <Info>{currentUser.phone}</Info>}</Infos>
-        <Infos><Info>Email : </Info><Info>{currentUser.email}</Info></Infos>
+        <Infos><Info>Full Name : </Info>{edit === true ? <Input name='Normalname' placeholder={currentUser.Normalname} onChange={handleChange} /> : <Info2>{currentUser.Normalname}</Info2>}</Infos>
+        <Infos><Info>User Name :  </Info>{edit === true ? <Input name='name' placeholder={currentUser.name} onChange={handleChange} /> : <Info2>{currentUser.name}</Info2>}</Infos>
+        <Infos><Info>Phone : </Info>{edit === true ? <Input name='phone' placeholder={currentUser.phone ? currentUser.phone : "Phone number"} onChange={handleChange} /> : <Info2>{currentUser.phone}</Info2>}</Infos>
+        <Infos><Info>Email : </Info><Info2>{currentUser.email}</Info2></Infos>
 
 
-        {currentUser.role === "admin" ? <Infos><Info>Favourites:</Info><Info>{currentUser.subscribers}</Info></Infos> : ""}
+        {currentUser.role === "admin" ? <Infos><Info>Favourites:</Info><Info2>{currentUser.subscribers}</Info2></Infos> : ""}
         <Btn>
           {edit === false ? <Button onClick={onCall}>Edit</Button> :
             <>

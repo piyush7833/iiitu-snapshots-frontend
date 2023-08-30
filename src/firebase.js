@@ -1,9 +1,7 @@
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
 import {getAuth, GoogleAuthProvider,GithubAuthProvider} from "firebase/auth"
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/storage';
-// import dotenv from "dotenv"
+// import dotenv from "dotenv" 
 // dotenv.config();
 const firebaseConfig = {
   apiKey: "AIzaSyCXKMDZ3W24Y4FvmVhmXskHK4g_g9wZP-M",
@@ -21,5 +19,4 @@ export const auth=getAuth();
 export const gprovider =new GoogleAuthProvider();
 export const giprovider =new GithubAuthProvider();
 export const storage=firebase.storage();
-const analytics = getAnalytics(app);
 export default app;

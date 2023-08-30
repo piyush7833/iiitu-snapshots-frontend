@@ -4,9 +4,6 @@ import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import VideoCallOutlinedIcon from '@mui/icons-material/VideoCallOutlined';
 import AddAPhotoOutlinedIcon from '@mui/icons-material/AddAPhotoOutlined';
 import { useSelector } from 'react-redux';
-import axios from "axios";
-import { logout, logoutFailure } from "../redux/userSlice";
-import { useDispatch } from "react-redux";
 import VideoUpload from './VideoUpload';
 import PhotoUpload from './PhotoUpload';
 import { useNavigate, Link } from 'react-router-dom';
@@ -118,33 +115,29 @@ const Input = styled.input`
 `;
 const Item = styled.div`
 display:flex;
-width:25%;
-justify-content:space-around;
+width:50%;
+justify-content:flex-end;
+gap:5px;
 color:${({ theme }) => theme.text};
 @media (max-width: 500px) {
   width:40%;
 }
+
 `;
 const User = styled.div`
 display:flex;
-width:50%;
-justify-content:space-around;
+justify-content:flex-end;
+gap:5px;
 color:${({ theme }) => theme.text};
 cursor:pointer;
-@media (max-width: 500px) {
-  width:20%;
+padding:5px;
+
+&:hover{
+  background-color: ${({ theme }) => theme.soft}};
+  border-radius:1.3rem;
 }
 `;
-const LogOut = styled.div`
-display:flex;
-width:25%;
-justify-content:space-evenly;
-color:${({ theme }) => theme.text};
-cursor:pointer;
-@media (max-width: 500px) {
-  width:40%;
-}
-`;
+
 const Avatar = styled.img`
   width: 32px;
   height: 32px;
@@ -153,22 +146,27 @@ const Avatar = styled.img`
 `;
 const Video = styled.div`
 cursor:pointer;
+display:flex;
+align-items:center;
+justify-content:center;
+padding:5px;
+width:25%;
+&:hover{
+  background-color: ${({ theme }) => theme.soft}};
+  border-radius:1.3rem;
+}
 `;
 const Photos = styled.div`
 cursor:pointer;
-`;
-const Button = styled.button`
-  display:flex;
-  align-items:center;
-  border-radius: 1.3rem;
-  padding-left:1em;
-  padding-right:1em;
-  padding-top:0.8em;
-  padding-bottom:0.8em;
-  font-weight: 500;
-  cursor: pointer;
-  background-color: transparent;;
-  color: ${({ theme }) => theme.text};
+display:flex;
+align-items:center;
+justify-content:center;
+width:25%;
+padding:5px;
+&:hover{
+  background-color: ${({ theme }) => theme.soft}};
+  border-radius:1.3rem;
+}
 `;
 const UserName = styled.div`
 @media (max-width: 500px) {
@@ -201,18 +199,7 @@ export default function Navbar({ showMenu, setShowMenu }) {
     // console.log(role)
   }
 
-  const dispatch = useDispatch();
-  const handleLogout = async (e) => {  //as soon as we login we have a cookie with us which include our acess token so we can do like, comment, subscribe functionalities
-    e.preventDefault();
-    try {
-      const res = await axios.post(`/auth/signout`);
-      dispatch(logout(res.data))
-      navigation('/')
-    } catch (error) {
-      dispatch(logoutFailure());  //we can also pass error as payload
-      handleOpenAlertModal(error.message, 'red')
-    }
-  };
+
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
   const [q, setQ] = useState("");
@@ -252,18 +239,18 @@ export default function Navbar({ showMenu, setShowMenu }) {
 
                   {role === "admin" ? (
                     <>
-                      <Photos>
-                        <AddAPhotoOutlinedIcon onClick={() => { setOpen2(true) }} />
+                      <Photos onClick={() => { setOpen2(true) }}>
+                        <AddAPhotoOutlinedIcon  />
                       </Photos>
-                      <Video>
-                        <VideoCallOutlinedIcon onClick={() => { setOpen(true) }} />
+                      <Video onClick={() => { setOpen(true) }}>
+                        <VideoCallOutlinedIcon  />
                       </Video> </>
                   ) : (<>
-                    <Photos>
-                      <AddAPhotoOutlinedIcon onClick={() => handleOpenAlertModal("You are not an admin so you are not allowed to upload photo. To become admin go to payment section and purchase a plan", "green")} />
+                    <Photos onClick={() => handleOpenAlertModal("You are not an admin so you are not allowed to upload photo. To become admin go to payment section and purchase a plan", "green")}>
+                      <AddAPhotoOutlinedIcon  />
                     </Photos>
-                    <Video>
-                      <VideoCallOutlinedIcon onClick={() => handleOpenAlertModal("You are not an admin so you are not allowed to upload video. To become admin go to payment section and purchase a plan", "green")} />
+                    <Video onClick={() => handleOpenAlertModal("You are not an admin so you are not allowed to upload video. To become admin go to payment section and purchase a plan", "green")}>
+                      <VideoCallOutlinedIcon  />
                     </Video> </>)
                   }
                 </>
@@ -274,9 +261,6 @@ export default function Navbar({ showMenu, setShowMenu }) {
                {currentUser.img ? <Avatar src={currentUser.img} /> : <AccountCircleIcon />}
                 <UserName> {currentUser.Normalname ? currentUser.Normalname : currentUser.name}</UserName>
               </User>
-              <LogOut>
-                <Button onClick={handleLogout}>Logout</Button>
-              </LogOut>
             </ItemWrapper>
           </Wrapper>
         </Container>) : " "

@@ -7,7 +7,7 @@ import InstagramIcon from '@mui/icons-material/Instagram';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import AlertModal from '../components/modal/AlertModal';
 import axios from 'axios';
-import { useEffect } from 'react';
+// import { useEffect } from 'react';
 import Msg from '../components/Msg'
 import {
   Link
@@ -15,8 +15,6 @@ import {
 const Container = styled.div`
 background-color:${({ theme }) => theme.bgLighter};
 height:90vh;
-align-items:center;
-justify-content:space-between;
 `;
 const ContactWrapper = styled.div`
 display:flex;
@@ -24,12 +22,18 @@ text-align:center;
 height:70vh;
 align-items:center;
 justify-content:space-around;
+@media (max-width: 600px) {
+  flex-direction:column;
+}
 `;
 const Title = styled.div`
 font-size:3rem;
 align-items:center;
 justify-content:center;
 text-align:center;
+@media (max-width: 1000px) {
+  font-size:2.3rem;
+}
 `;
 
 const Message = styled.textarea`
@@ -42,6 +46,9 @@ const Message = styled.textarea`
   width:40%;
   height:50%;
   box-shadow: 15px 15px 20px rgba(0,0,0,.6);
+  @media (max-width: 600px) {
+    width:80%;
+  }
 `;
 const Button = styled.button`
   border-radius: 1.3rem;
@@ -59,20 +66,30 @@ const Button = styled.button`
   box-shadow: 15px 15px 20px rgba(0,0,0,.6);
 `;
 const Connect = styled.div`
-width:40%;
+// width:40%;
 font-size:2.3rem;
 display:flex;
 flex-direction:column;
 justify-content:space-between;
 align-items:space-evenly;
+@media (max-width: 1000px) {
+  font-size:1.8rem;
+}
+@media (max-width: 800px) {
+  font-size:1.5rem;
+}
+@media (max-width: 600px) {
+  width:100%;
+}
+
 `;
 const Icon = styled.div`
 position: relative; 
 display: inline-block;
-height: 8.8vh;
-width: 4vw;
+height: 50px;
+width: 50px;
 margin: 1vh;
-line-height: 9vh;
+line-height: 50px;
 border-radius: 50%;
 color: ${({ theme }) => theme.text};
 background-color: ${({ theme }) => theme.bg};
@@ -87,8 +104,8 @@ transition: all .2s ease-in-out;
   position: absolute;
   top: 0;
   left: 0;
-  height: 8.8vh;
-  width: 4vw;
+  height: 51px;
+  width: 51px;
   border-radius: 50%;
   opacity: 0;
   box-shadow: 0 0 0 1px #fff;
@@ -109,18 +126,20 @@ display:flex;
 align-items:center;
 justify-content:justify;
 gap:2vw;
-width:40%;
 margin-left:10vw; 
 font-size:1.5rem;
+@media (max-width: 1000px) {
+  font-size:1.2rem;
+}
 `;
-const Table=styled.table``;
+// const Table=styled.table``;
 const Contact = () => {
   const [message, setMessage] = useState("");
   const { currentUser } = useSelector((state) => state.user);
   let name = currentUser.name;
   let Normalname = currentUser.Normalname;
   let email = currentUser.email;
-  const [loading,setLoading]=useState(false)
+  // const [loading,setLoading]=useState(false);
   const [showAlertModal, setShowAlertModal] = useState(false);
   const [alertMessage, setAlertMessage] = useState(" ");
   const [alertColor, setAlertColor] = useState('white');
@@ -139,7 +158,7 @@ const Contact = () => {
   const savemsg=async(e)=>{  //as soon as we login we have a cookie with us which include our acess token so we can do like, comment, subscribe functionalities
     e.preventDefault();
     try {
-      const res = await axios.post(`/contacts`,{Normalname,name,email,message});
+      await axios.post(`/contacts`,{Normalname,name,email,message});
       handleOpenAlertModal("Your message is sent. We will get back to you soon","green")
       setMessage("");
     } catch (error) {
@@ -147,18 +166,18 @@ const Contact = () => {
     }
   };
 
-  const [msgs,setMsgs]=useState([]);
-  useEffect(() => {
-    if(currentUser.role==="developer"){
-      const fetchMsg = async () => {
-        setLoading(true)
-        const res = await axios.get(`/contacts`);
-        setMsgs(res.data);
-        setLoading(false);
-      };
-      fetchMsg();
-    }
-  }, []);  //dependency is videos.userId i.e. whenever userid changes this function will get call
+  // const [msgs,setMsgs]=useState([]);
+  // useEffect(() => {
+  //   if(currentUser.role==="developer"){
+  //     const fetchMsg = async () => {
+  //       setLoading(true)
+  //       const res = await axios.get(`/contacts`);
+  //       setMsgs(res.data);
+  //       setLoading(false);
+  //     };
+  //     fetchMsg();
+  //   }
+  // }, [currentUser.role]);  //dependency is videos.userId i.e. whenever userid changes this function will get call
   return (
     <>
                 <AlertModal

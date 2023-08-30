@@ -13,11 +13,17 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 import HistoryToggleOffRoundedIcon from '@mui/icons-material/HistoryToggleOffRounded';
 import WhatshotIcon from '@mui/icons-material/Whatshot';
 import PaymentIcon from '@mui/icons-material/Payment';
+import LogoutIcon from '@mui/icons-material/Logout';
 import ContactPageIcon from '@mui/icons-material/ContactPage';
 import MenuIcon from '@mui/icons-material/Menu';
+import axios from "axios";
+import AlertModal from './modal/AlertModal';
+import { useState } from 'react';
+import { logout, logoutFailure } from "../redux/userSlice";
+import { useDispatch } from "react-redux";
 import { useSelector } from 'react-redux';
 import {
-    Link
+    Link, useNavigate
 } from "react-router-dom";
 const Container = styled.div`
 display:absolute;
@@ -28,7 +34,7 @@ display:absolute;
   font-size: 1rem;
   position: sticky;
   top: 0;
-  z-index:999;
+  z-index:2;
   overflow-x:hidden;
   overflow-y:scroll;
   ::-webkit-scrollbar {
@@ -80,14 +86,14 @@ const Items = styled.div`
   align-items: center;
   gap: 1vw;
   cursor: pointer;
-  padding:1.3vh 1vh;
+  padding:1vh 1vh;
   &:hover{
     background-color: ${({ theme }) => theme.soft}};
     border-radius:1.3rem;
   }
   @media (max-width: 900px) {
     gap:0.5vw;
-    padding:1.3vh 0.1vh;
+    padding:0.8vh 0.1vh;
   }
   @media (max-width: 700px) {
     gap:0.5vw;
@@ -96,11 +102,8 @@ const Items = styled.div`
 
 `;
 const Hr = styled.hr`
-margin:2vh 0vh;
+margin:1vh 0vh;
   border: 0.5px solid ${({ theme }) => theme.soft}};
-  @media (max-width: 700px) {
-    margin:1vh 0vh;
-  }
 `;
 const ItemsText = styled.div`
 @media (max-width: 600px) {
@@ -112,14 +115,46 @@ const ItemsIcon = styled.div`
 
 export default function Menu({ darkMode, setDarkMode, setShowMenu, showMenu }) {
     // const [showMenu, setShowMenu] = useState(false);
-
+    const [showAlertModal, setShowAlertModal] = useState(false);
+    const [alertMessage, setAlertMessage] = useState(" ");
+    const [alertColor, setAlertColor] = useState('white');
+  
+    const handleOpenAlertModal = (message, color) => {
+      setAlertMessage(message);
+      setAlertColor(color)
+      setShowAlertModal(true);
+    };
+  
+    const handleCloseAlertModal = () => {
+      setShowAlertModal(false);
+      setAlertMessage('');
+    };
+    const navigation=useNavigate()
     const currentUser = useSelector(state => state.user.currentUser);
+    const dispatch = useDispatch();
+    const handleLogout = async (e) => {  //as soon as we login we have a cookie with us which include our acess token so we can do like, comment, subscribe functionalities
+      e.preventDefault();
+      try {
+        const res = await axios.post(`/auth/signout`);
+        dispatch(logout(res.data))
+        navigation('/')
+      } catch (error) {
+        dispatch(logoutFailure());  //we can also pass error as payload
+        handleOpenAlertModal(error.message, 'red')
+      }
+    };
     if (showMenu === false) {
         return null;
     }
     else {
         return (
             <>
+                  <AlertModal
+        isOpen={showAlertModal}
+        onClose={handleCloseAlertModal}
+        message={alertMessage}
+        color={alertColor}
+      />
                 {currentUser ? (
                     <Container >
                         <LogoWrapper>
@@ -254,7 +289,15 @@ export default function Menu({ darkMode, setDarkMode, setShowMenu, showMenu }) {
                                     {darkMode ? "Light" : "Dark"} Mode
                                 </ItemsText>
                             </Items>
-
+                            <Hr />
+                            <Items onClick={handleLogout}>
+                                <ItemsIcon>
+                                   <LogoutIcon/>
+                                </ItemsIcon>
+                                <ItemsText>
+                                    Log Out
+                                </ItemsText>
+                            </Items>
                         </Wrapper>
                         {/* :""} */}
 

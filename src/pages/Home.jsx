@@ -9,11 +9,9 @@ const Container = styled.div`
 display:flex;
 justify-content:space-around;
 flex-wrap:wrap;
-height:35vh;
+height:37.5vh;
 overflow-x:hidden;
 overflow-y:scroll;
-
-
 @media (max-width: 500px) {
   justify-content:center;
   align-items:center;
@@ -23,7 +21,7 @@ overflow-y:scroll;
 }
 `;
 const Main = styled.div`
-height:100vh
+height:90vh
 @media (max-width: 500px) {
   flex-direction:column;
   justify-content:center;

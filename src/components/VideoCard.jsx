@@ -70,6 +70,9 @@ background-color:${({theme})=>theme.soft}};
 border:1px solid ${({theme})=>theme.soft}};
 border-radius:50%;
 display:${(props)=>props.type==="small" ?"none" :"flex"};
+@media (max-width: 500px) {
+  width:8vw;
+}
 `;
 const Text=styled.div`
 disply:flex;

@@ -8,8 +8,10 @@ import { PersistGate } from 'redux-persist/integration/react';
 // import dotenv from "dotenv";
 import axios from 'axios';
 // dotenv.config(); 
-
-// axios.defaults.baseURL = process.env.BACKEND_URL;
+const apiUrl = process.env.BACKEND_URL
+axios.defaults.baseURL = apiUrl;
+// console.log(apiUrl)
+// axios.defaults.baseURL = "http://localhost:8800/api";
 axios.defaults.baseURL = 'https://iiitusnapshotbackend.onrender.com/api';
 axios.defaults.withCredentials = true;
 

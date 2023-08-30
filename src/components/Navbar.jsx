@@ -22,37 +22,71 @@ const Logo = styled.div`
 `;
 const Img = styled.img`
  height:12vh;
+ @media (max-width: 500px) {
+  display:none;
+}
+`;
+const LogoWrapper = styled.div`
+  display:flex;
+  align-items:center;
+  height:100%;
+  padding : 0vh 2vw;
+  width:10%;
+  justify-content:space-evenly;
+  overflow:hidden;
 `;
 const Container = styled.div`;
    display:flex;
+   justifyContent:space-between;
    position:sticky;
    top:0;
    background-color:${({ theme }) => theme.bg};
    height:10vh;
    z-index:2;
+  //  margin-right:-6vw;
 `;
 const Wrapper = styled.div`
   display:flex;
   align-items:center;
   height:100%;
   width:90%;
-  padding : 0vh 4vw;
+  padding : 0vh 2vw;
   justify-content:flex-end;
+  @media (max-width: 1000px) {
+    justify-content:flex-end;
+  }
 `;
-const LogoWrapper = styled.div`
+const ItemWrapper = styled.div`
   display:flex;
   align-items:center;
   height:100%;
-  // padding : 0vh 4vw;
-  width:15%;
-  justify-content:space-evenly;
+  width:30%;
+  justify-content:space-around;;
+  @media (max-width: 700px) {
+    width:40%;
+  }
+  @media (max-width: 500px) {
+    width:50%;
+  }
 `;
+const SearchWrapper = styled.div`
+  display:flex;
+  align-items:center;
+  height:100%;
+  width:70%;
+  justify-content:center;
+  @media (max-width: 700px) {
+    width:60%;
+  }
+  @media (max-width: 500px) {
+    width:50%;
+  }
+`;
+
 const Search = styled.div`
    width:40%;
-   position:absolute;
    left:0;
    right:0;
-   margin:auto;
    display:flex;
    align-items:center;
   justify-content:space-around;
@@ -60,6 +94,12 @@ const Search = styled.div`
    border:0.2px solid #cccc;
    border-radius:1.3em;
    cursor:pointer;
+   @media (max-width: 700px) {
+    width:60%;
+  }
+   @media (max-width: 500px) {
+    width:80%;
+  }
    color:${({ theme }) => theme.text};
 `;
 const Input = styled.input`
@@ -78,17 +118,32 @@ const Input = styled.input`
 `;
 const Item = styled.div`
 display:flex;
-width:6.5%;
-justify-content:space-between;
+width:25%;
+justify-content:space-around;
 color:${({ theme }) => theme.text};
+@media (max-width: 500px) {
+  width:40%;
+}
 `;
 const User = styled.div`
 display:flex;
-width:20%;
+width:50%;
+justify-content:space-around;
+color:${({ theme }) => theme.text};
+cursor:pointer;
+@media (max-width: 500px) {
+  width:20%;
+}
+`;
+const LogOut = styled.div`
+display:flex;
+width:25%;
 justify-content:space-evenly;
 color:${({ theme }) => theme.text};
 cursor:pointer;
-margin-right:-3vw;
+@media (max-width: 500px) {
+  width:40%;
+}
 `;
 const Avatar = styled.img`
   width: 32px;
@@ -115,8 +170,12 @@ const Button = styled.button`
   background-color: transparent;;
   color: ${({ theme }) => theme.text};
 `;
-
-export default function Navbar({showMenu, setShowMenu}) {
+const UserName = styled.div`
+@media (max-width: 500px) {
+  display:none;
+}
+`
+export default function Navbar({ showMenu, setShowMenu }) {
 
   const [showAlertModal, setShowAlertModal] = useState(false);
   const [alertMessage, setAlertMessage] = useState(" ");
@@ -157,6 +216,7 @@ export default function Navbar({showMenu, setShowMenu}) {
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
   const [q, setQ] = useState("");
+  const navigate=useNavigate()
   return (
     <>
       <AlertModal
@@ -167,49 +227,57 @@ export default function Navbar({showMenu, setShowMenu}) {
       />
       {currentUser ? (
         <Container>
-              {showMenu===false?<LogoWrapper>
-                <MenuIcon onClick={() => setShowMenu(!showMenu)} style={{color:"white"}} />
-                <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
-                  <Logo>
-                    <Img src={snapshots}>
-                    </Img>
-                  </Logo>
-                </Link>
-              </LogoWrapper>:null}
+          {showMenu === false ? <LogoWrapper>
+            <MenuIcon onClick={() => setShowMenu(!showMenu)} style={{ color: "white" }} />
+            <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
+              <Logo>
+                <Img src={snapshots}>
+                </Img>
+              </Logo>
+            </Link>
+          </LogoWrapper> : null}
+
+
           <Wrapper>
-            <Search>
-              <Input placeholder='Search' onChange={(e) => { setQ(e.target.value) }} />
-              <SearchOutlinedIcon onClick={() => navigation(`/search?q=${q}`)} />
-            </Search >
-            <Item>
+            <SearchWrapper>
+              <Search>
+                <Input placeholder='Search' onChange={(e) => { setQ(e.target.value) }} />
+                <SearchOutlinedIcon onClick={() => navigation(`/search?q=${q}`)} />
+              </Search >
+            </SearchWrapper>
+            <ItemWrapper>
+              <Item>
 
-              <>
+                <>
 
-                {role === "admin" ? (
-                  <>
+                  {role === "admin" ? (
+                    <>
+                      <Photos>
+                        <AddAPhotoOutlinedIcon onClick={() => { setOpen2(true) }} />
+                      </Photos>
+                      <Video>
+                        <VideoCallOutlinedIcon onClick={() => { setOpen(true) }} />
+                      </Video> </>
+                  ) : (<>
                     <Photos>
-                      <AddAPhotoOutlinedIcon onClick={() => { setOpen2(true) }} />
+                      <AddAPhotoOutlinedIcon onClick={() => handleOpenAlertModal("You are not an admin so you are not allowed to upload photo. To become admin go to payment section and purchase a plan", "green")} />
                     </Photos>
                     <Video>
-                      <VideoCallOutlinedIcon onClick={() => { setOpen(true) }} />
-                    </Video> </>
-                ) : (<>
-                  <Photos>
-                    <AddAPhotoOutlinedIcon onClick={() => handleOpenAlertModal("You are not an admin so you are not allowed to upload photo. To become admin go to payment section and purchase a plan", "green")} />
-                  </Photos>
-                  <Video>
-                    <VideoCallOutlinedIcon onClick={() => handleOpenAlertModal("You are not an admin so you are not allowed to upload video. To become admin go to payment section and purchase a plan", "green")} />
-                  </Video> </>)
-                }
-              </>
-            </Item>
+                      <VideoCallOutlinedIcon onClick={() => handleOpenAlertModal("You are not an admin so you are not allowed to upload video. To become admin go to payment section and purchase a plan", "green")} />
+                    </Video> </>)
+                  }
+                </>
+              </Item>
 
-            <User>
-              <Link to="/profile" style={{ textDecoration: "none", color: "inherit" }}>{currentUser.img ? <Avatar src={currentUser.img} /> : <AccountCircleIcon />}</Link>
-              <Link to="/profile" style={{ textDecoration: "none", color: "inherit" }}> {currentUser.Normalname ? currentUser.Normalname : currentUser.name} </Link>
-              <Button onClick={handleLogout}>Logout</Button>
-            </User>
-
+              
+              <User onClick={()=>navigate('/profile')}>
+               {currentUser.img ? <Avatar src={currentUser.img} /> : <AccountCircleIcon />}
+                <UserName> {currentUser.Normalname ? currentUser.Normalname : currentUser.name}</UserName>
+              </User>
+              <LogOut>
+                <Button onClick={handleLogout}>Logout</Button>
+              </LogOut>
+            </ItemWrapper>
           </Wrapper>
         </Container>) : " "
       }

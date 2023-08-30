@@ -35,19 +35,32 @@ display:absolute;
     display: none; /* Hide the default scrollbar */
   }
   @media (max-width: 900px) {
-    font-size:1rem;
+    font-size:0.8rem;
   }
   @media (max-width: 350px) {
-    display:${(props)=>props.showMenu===true ? "none":"absolute"};/
-    ${(props)=>console.log(props.showMenu)}
+    display:${(props) => props.showMenu === true ? "none" : "absolute"};/
+    ${(props) => console.log(props.showMenu)}
 }
 `;
 const Wrapper = styled.div`
  padding-left:2vh;
+ @media (max-width: 700px) {
+    padding-left:0.2vh;
+  }
+  @media (max-width: 600px) {
+    padding-left:3vh;
+  }
+  @media (max-width: 500px) {
+    padding-left:2vh;
+  }
+  @media (max-width: 300px) {
+    padding-left:1vh;
+  }
 `;
 const LogoWrapper = styled.div`
   display:flex;
- align-items:center;
+  height:12vh;
+  align-items:center;
   justify-content:space-evenly;
 `;
 const Logo = styled.div`
@@ -58,23 +71,44 @@ const Logo = styled.div`
 `;
 const Img = styled.img`
  height:12vh;
+ @media (max-width: 500px) {
+    display:none
+  }
 `;
 const Items = styled.div`
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 1vw;
   cursor: pointer;
   padding:1.3vh 1vh;
   &:hover{
     background-color: ${({ theme }) => theme.soft}};
     border-radius:1.3rem;
   }
+  @media (max-width: 900px) {
+    gap:0.5vw;
+    padding:1.3vh 0.1vh;
+  }
+  @media (max-width: 700px) {
+    gap:0.5vw;
+    padding:0.8vh 0vh;
+  }
+
 `;
 const Hr = styled.hr`
 margin:2vh 0vh;
   border: 0.5px solid ${({ theme }) => theme.soft}};
+  @media (max-width: 700px) {
+    margin:1vh 0vh;
+  }
 `;
-
+const ItemsText = styled.div`
+@media (max-width: 600px) {
+    display:none
+  }
+`
+const ItemsIcon = styled.div`
+`
 
 export default function Menu({ darkMode, setDarkMode, setShowMenu, showMenu }) {
     // const [showMenu, setShowMenu] = useState(false);
@@ -100,77 +134,125 @@ export default function Menu({ darkMode, setDarkMode, setShowMenu, showMenu }) {
                         <Wrapper>
                             <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
                                 <Items>
-                                    <HomeIcon />
-                                    Home
+                                    <ItemsIcon>
+                                        <HomeIcon />
+                                    </ItemsIcon>
+                                    <ItemsText>
+                                        Home
+                                    </ItemsText>
                                 </Items>
                             </Link>
                             <Link to="/trend" style={{ textDecoration: "none", color: "inherit" }}>
                                 <Items>
-                                    <WhatshotIcon />
-                                    Trending
+                                    <ItemsIcon>
+                                        <WhatshotIcon />
+                                    </ItemsIcon>
+                                    <ItemsText>
+                                        Trending
+                                    </ItemsText>
                                 </Items>
                             </Link>
                             <Link to="/favorite" style={{ textDecoration: "none", color: "inherit" }}>
                                 <Items>
-                                    <FavoriteIcon />
-                                    Favorite
+                                    <ItemsIcon>
+                                        <FavoriteIcon />
+                                    </ItemsIcon>
+                                    <ItemsText>
+                                        Favorite
+                                    </ItemsText>
                                 </Items>
                             </Link>
                             <Hr />
                             <Link to="/photos" style={{ textDecoration: "none", color: "inherit" }}>
                                 <Items>
-                                    <PhotoSizeSelectActualIcon />
-                                    Photos
+                                    <ItemsIcon>
+                                        <PhotoSizeSelectActualIcon />
+                                    </ItemsIcon>
+                                    <ItemsText>
+                                        Photos
+                                    </ItemsText>
                                 </Items>
                             </Link>
                             <Link to="/videos" style={{ textDecoration: "none", color: "inherit" }}>
                                 <Items>
-                                    <SwitchVideoIcon />
-                                    Videos
+                                    <ItemsIcon>
+                                        <SwitchVideoIcon />
+                                    </ItemsIcon>
+                                    <ItemsText>
+                                        Videos
+                                    </ItemsText>
                                 </Items>
                             </Link>
                             <Hr />
                             <Link to="/recent" style={{ textDecoration: "none", color: "inherit" }}>
                                 <Items>
-                                    <HistoryToggleOffRoundedIcon />
-                                    Recent
+                                    <ItemsIcon>
+                                        <HistoryToggleOffRoundedIcon />
+                                    </ItemsIcon>
+                                    <ItemsText>
+                                        Recent
+                                    </ItemsText>
                                 </Items>
                             </Link>
                             <Link to="/history" style={{ textDecoration: "none", color: "inherit" }}>
                                 <Items>
-                                    <HistoryRoundedIcon />
-                                    History
+                                    <ItemsIcon>
+                                        <HistoryRoundedIcon />
+                                    </ItemsIcon>
+                                    <ItemsText>
+                                        History
+                                    </ItemsText>
                                 </Items>
                             </Link>
                             <Link to="/saved" style={{ textDecoration: "none", color: "inherit" }}>
                                 <Items>
-                                    <LibraryBooksIcon />
-                                    Library
+                                    <ItemsIcon>
+                                        <LibraryBooksIcon />
+                                    </ItemsIcon>
+                                    <ItemsText>
+                                        Library
+                                    </ItemsText>
                                 </Items>
                             </Link>
                             <Hr />
                             <Link to="/contact" style={{ textDecoration: "none", color: "inherit" }}>
                                 <Items>
-                                    <ContactPageIcon />
-                                    Contact
+                                    <ItemsIcon>
+                                        <ContactPageIcon />
+                                    </ItemsIcon>
+                                    <ItemsText>
+                                        Contact
+                                    </ItemsText>
                                 </Items>
                             </Link>
                             <Link to="/payment" style={{ textDecoration: "none", color: "inherit" }}>
                                 <Items>
-                                    <PaymentIcon />
-                                    Payment
+                                    <ItemsIcon>
+                                        <PaymentIcon />
+                                    </ItemsIcon>
+                                    <ItemsText>
+                                        Payment
+                                    </ItemsText>
                                 </Items>
                             </Link>
                             <Hr />
                             <Link to="/myfiles" style={{ textDecoration: "none", color: "inherit" }}>
                                 {currentUser.role === "admin" ? <Items>
-                                    <FolderSharedRoundedIcon />
-                                    My files
+                                    <ItemsIcon>
+                                        <FolderSharedRoundedIcon />
+                                    </ItemsIcon>
+                                    <ItemsText>
+                                        My files
+                                    </ItemsText>
                                 </Items> : ""}
                             </Link>
                             <Items onClick={() => setDarkMode(!darkMode)}>
-                                {darkMode ? <LightModeIcon /> : <DarkModeIcon />}
-                                {darkMode ? "Light" : "Dark"} Mode
+                                <ItemsIcon>
+                                    {darkMode ? <LightModeIcon /> : <DarkModeIcon />}
+                                </ItemsIcon>
+                                <ItemsText>
+                                    {darkMode ? "Light" : "Dark"} Mode
+                                </ItemsText>
                             </Items>
 
                         </Wrapper>

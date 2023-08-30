@@ -179,7 +179,7 @@ export default function Photo() {
       } catch (err) { handleOpenAlertModal(err.msg,'red')}
     };
     fetchData();
-  }, [path],dispatch); //as our dependecy is path this time which keeps changing
+  }, [path,dispatch,addView]); //as our dependecy is path this time which keeps changing
 
 
 

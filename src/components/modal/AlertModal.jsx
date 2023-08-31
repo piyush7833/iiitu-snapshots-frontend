@@ -17,7 +17,7 @@ z-index:9999999;
 
 const Wrapper = styled.div`
   width: 25vw;
-  height: 20vh;
+  height: 25vh;
   background-color: ${({ theme }) => theme.bgLighter};
   color: ${({ theme }) => theme.text};
   padding: 1.3em;
@@ -32,10 +32,13 @@ const Wrapper = styled.div`
   font-size:1.3rem;
   text-align:justify;
   overflow-x:hidden;
-  overflow-y:scroll
+  overflow-y:auto;
   @media (max-width: 800px) {
     width: 60vw;
     height: 30vh;
+  }
+  @media (max-width: 500px) {
+    font-size:1rem;
   }
 `;
 const Close = styled.div`

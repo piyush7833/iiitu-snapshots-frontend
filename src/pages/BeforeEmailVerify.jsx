@@ -14,10 +14,19 @@ color: ${({ theme }) => theme.text};
 `;
 const Title=styled.div`
 font-size:2rem;
+@media (max-width: 400px) {
+  font-size:1.5rem;
+}
 `;
 const Info=styled.div`
 width:30vw;
 font-size:1.3rem;
+@media (max-width: 1000px) {
+	width:80%;
+  }
+@media (max-width: 400px) {
+    font-size:1rem;
+  }
 `;
 
 const VerifyWrapper=styled.div`
@@ -35,6 +44,12 @@ background-image:url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.s
 border-radius:1.3rem;
 box-shadow: 0 15px 25px rgba(0,0,0,.6);
 padding: 2em;
+@media (max-width: 1000px) {
+	width:60%;
+  }
+@media (max-width: 1000px) {
+	width:80%;
+  }
 `;
 const Image=styled.img`
 height:30vh;
@@ -59,7 +74,8 @@ const BeforeEmailVerify = () => {
     <VerifyWrapper>
       <Image src={Email}/>
       <Title>Verify Your email</Title>
-      <Info>We have sent an email to you to verify your email address and activate your account. So please verify your email within 24hr otherwise link will get expired and then login again</Info>
+      <Info>
+Congratulations on joining IIITU Snapshot! To ensure a secure and personalized experience, we invite you to verify your email address. Once verified, you'll gain access to a treasure trove of college memories captured in photos and videos.</Info>
       <Button onClick={()=>window.location.replace(`https://mail.google.com/mail/u/0/#inbox`)} >
       {/* <Link to={`https://mail.google.com/mail/u/0/#inbox`} style={{textDecoration:"none",color:"inherit"}}> */}
         Check Email

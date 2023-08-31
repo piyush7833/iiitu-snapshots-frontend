@@ -15,11 +15,20 @@ color: ${({ theme }) => theme.text};
 `;
 const Title=styled.div`
 font-size:2rem;
+@media (max-width: 400px) {
+  font-size:1.5rem;
+}
 `;
 const Info=styled.div`
 width:30vw;
 font-size:1.3rem;
 text-align:center;
+@media (max-width: 1000px) {
+	width:80%;
+  }
+@media (max-width: 400px) {
+    font-size:1rem;
+  }
 `;
 
 const VerifyWrapper=styled.div`
@@ -37,6 +46,12 @@ background-image:url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.s
 border-radius:1.3rem;
 box-shadow: 0 15px 25px rgba(0,0,0,.6);
 padding: 2em;
+@media (max-width: 1000px) {
+	width:60%;
+  }
+@media (max-width: 1000px) {
+	width:80%;
+  }
 `;
 const Image=styled.img`
 height:30vh;
@@ -65,7 +80,8 @@ const PaymentSuccess = () => {
     <VerifyWrapper>
       <Image src={Email}/>
       <Title>Congratulations</Title>
-      <Info>You are admin now</Info>
+      <Info>
+🎉 Congratulations on Becoming an Admin in IIITU Snapshot! 🥳🎓 Your journey with us just got even more exciting. Your successful payment has unlocked a world of possibilities as you take the reins as an admin. 📸✨</Info>
       <Button onClick={()=>navigate('/')} >
         Home
       {/* </Link> */}

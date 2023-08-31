@@ -21,7 +21,7 @@ display:flex;
 text-align:center;
 height:70vh;
 align-items:center;
-justify-content:space-around;
+justify-content:center;
 @media (max-width: 600px) {
   flex-direction:column;
 }
@@ -43,13 +43,21 @@ const Message = styled.textarea`
   border-radius: 1.3rem;
   padding: 10px;
   background-color: transparent;
-  width:40%;
+  width:100%;
   height:50%;
   box-shadow: 15px 15px 20px rgba(0,0,0,.6);
-  @media (max-width: 600px) {
-    width:80%;
-  }
 `;
+const MessageWrapper=styled.div`
+  margin-top:4vh;
+  color: ${({ theme }) => theme.text};
+  background-color: transparent;
+  width:40%;
+  height:80%;
+  @media (max-width: 600px) {
+  width:80%;
+  margin-top:16vh;
+}
+`
 const Button = styled.button`
   border-radius: 1.3rem;
   padding-left:1em;
@@ -66,7 +74,7 @@ const Button = styled.button`
   box-shadow: 15px 15px 20px rgba(0,0,0,.6);
 `;
 const Connect = styled.div`
-// width:40%;
+width:40%;
 font-size:2.3rem;
 display:flex;
 flex-direction:column;
@@ -190,12 +198,15 @@ const Contact = () => {
     {currentUser.role!=="developer"?<Container>
       <Title>Contact for querries and feedback</Title>
       <ContactWrapper>
+        <MessageWrapper>
         <Message
           placeholder="Message"
           name="desc"
           rows={12}
           onChange={(e) => setMessage(e.target.value)}
         />
+         <Button onClick={savemsg } >Send</Button>
+        </MessageWrapper>
         <Connect>Connect with me on
           <Link to="mailto:ps671248@gmail.com" target={'_blank'} style={{ textDecoration: "none", color: "inherit" }}>
             <Social><Icon><EmailIcon /></Icon>Mail</Social>
@@ -211,7 +222,7 @@ const Contact = () => {
           </Link>
         </Connect>
       </ContactWrapper>
-      <Button onClick={savemsg } >Send</Button>
+     
     </Container>:
     <Container>
       <Msg/>

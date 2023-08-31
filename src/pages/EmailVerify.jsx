@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams} from "react-router-dom";
 import axios from "axios";
 import Verify from '../img/verify2.gif'
 import Expired from '../img/expired.gif'
@@ -16,12 +16,21 @@ background-color:${({ theme }) => theme.bg};
 background-image:url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg');
 color: ${({ theme }) => theme.text};
 `;
-const Title = styled.div`
+const Title=styled.div`
 font-size:2rem;
+@media (max-width: 400px) {
+  font-size:1.5rem;
+}
 `;
-const Info = styled.div`
+const Info=styled.div`
 width:30vw;
 font-size:1.3rem;
+@media (max-width: 1000px) {
+	width:80%;
+  }
+@media (max-width: 400px) {
+    font-size:1rem;
+  }
 `;
 
 const VerifyWrapper = styled.div`
@@ -39,7 +48,14 @@ background-image:url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.s
 border-radius:1.3rem;
 box-shadow: 0 15px 25px rgba(0,0,0,.6);
 padding: 2em;
+@media (max-width: 1000px) {
+	width:60%;
+  }
+@media (max-width: 1000px) {
+	width:80%;
+  }
 `;
+
 const Image = styled.img`
 height:30vh;
 `;
@@ -103,8 +119,8 @@ const EmailVerify = () => {
 				<Container>
 					<VerifyWrapper>
 						<Image src={Verify} />
-						<Title>Congratulations</Title>
-						<Info>Your email is verified now so Login to your account and start using our services</Info>
+						<Title>🎉 Congratulations! 🎉</Title>
+						<Info>You're now a part of the vibrant IIITU Snapshot community. 📸✨ Your email has been successfully verified, and you've officially become a registered user. Get ready to embark on a journey down memory lane as you relive those unforgettable college moments through photos and videos.</Info>
 						<Button onClick={() => { navigate('/') }}>
 							Login
 						</Button>

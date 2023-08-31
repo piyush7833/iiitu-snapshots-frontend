@@ -26,7 +26,7 @@ import {
     Link, useNavigate
 } from "react-router-dom";
 const Container = styled.div`
-display:absolute;
+// display:absolute;
   flex: 1;
   background-color: ${({ theme }) => theme.bg}};
   height: 100vh;
@@ -34,7 +34,7 @@ display:absolute;
   font-size: 1rem;
   position: sticky;
   top: 0;
-  z-index:2;
+  z-index:6;
   overflow-x:hidden;
   overflow-y:scroll;
   ::-webkit-scrollbar {
@@ -43,10 +43,6 @@ display:absolute;
   @media (max-width: 900px) {
     font-size:0.8rem;
   }
-  @media (max-width: 350px) {
-    display:${(props) => props.showMenu === true ? "none" : "absolute"};/
-    ${(props) => console.log(props.showMenu)}
-}
 `;
 const Wrapper = styled.div`
  padding-left:2vh;

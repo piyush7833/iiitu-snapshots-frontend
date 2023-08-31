@@ -59,6 +59,9 @@ background-image:url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.s
 border-radius:1.3rem;
 box-shadow: 0 15px 25px rgba(0,0,0,.6);
 padding: 2em;
+height:80vh;
+overflow-y:auto;
+
 
 `;
 const Logo = styled.img`
@@ -68,10 +71,25 @@ width:30vw;
 const Title = styled.div`
 font-size:2em;
 color:#18b439;
+@media (max-width: 650px) {
+  font-size:1.5rem;
+}
+@media (max-width: 500px) {
+  font-size:1.2rem;
+}
+@media (max-width: 00px) {
+  font-size:1rem;
+}
 `;
 const Info = styled.div`
 font-size:1.3rem;
 text-align:justify;
+@media (max-width: 600px) {
+  font-size:1rem;
+}
+@media (max-width: 500px) {
+  font-size:0.8rem;
+}
 `;
 const Button = styled.button`
   display:flex;
@@ -216,18 +234,6 @@ const Payment = () => {
         }
       </Pay>
       <Hr />
-      {/* <About>
-        <Logo src={logo} />
-        <Info>
-          If you are managing a club or organization and want to share media exclusively with college students and faculties, you can consider becoming an
-        </Info>
-        <Title>
-          Admin on IIITU Snapshots
-        </Title>
-        <Info>
-          By doing so, you will be granted permission to upload photos and videos of college events, allowing college students and faculties to cherish their memories for years to come. To become an admin on IIITU Snapshots, you need to follow the guidelines and criteria for admin selection such as you should be part of an active club in your college.
-        </Info>
-      </About> */}
     </Container>
   )
 }

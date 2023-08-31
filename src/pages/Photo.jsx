@@ -5,7 +5,6 @@ import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import SendIcon from '@mui/icons-material/Send';
-import NotificationAddIcon from '@mui/icons-material/NotificationAdd';
 import Comments from '../components/Comments';
 import Recommendation from '../components/Recommendation';
 import { useDispatch, useSelector } from "react-redux";
@@ -26,10 +25,12 @@ import ShareModal from '../components/modal/ShareModal';
 import { getStorage, ref, deleteObject } from "firebase/storage";
 import app from "../firebase"; //importing app
 import DownloadIcon from '@mui/icons-material/Download';
-import { saveAs } from 'file-saver';
 const Container = styled.div`
 display:flex;
 gap:24px;
+@media (max-width: 800px) {
+  flex-direction:column;
+}
 `;
 const Content = styled.div`
 flex:5;
@@ -50,24 +51,33 @@ justify-content:space-between;
 font-size:0.9rem;
 margin:2vh;
 color:${({ theme }) => theme.textSoft};
+@media (max-width: 450px) {
+  align-items:flex-start;
+  flex-direction:column;
+}
 `;
 const Info = styled.span`
 
 `;
+const Info2 = styled.span`
+@media (max-width: 1000px) {
+  display:none
+}
+`;
 const Buttons = styled.span`
-width:60%;
 display:flex;
+gap:10px;
 align-items:center;
 justify-content:space-between;
 cursor:pointer;
 `;
 const Btn = styled.span(props => ({
   display: "flex",
-  width: props.width,
+  padding:'1px 10px',
+  gap:'5px',
   height: "5vh",
   borderRadius: `1.3em`,
   backgroundColor: `#b7b7b7`,
-  // backgroundColor:`${({theme})=>theme.soft}}`,
   alignItems: "center",
   justifyContent: "space-evenly",
 }));
@@ -106,21 +116,33 @@ margin-bottom:1vh;
 font-size:0.6em;
 `;
 const UploaderDesc = styled.div`
-font-size:0.8em;
+  font-size: 0.8em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+`;
+
+const MoreButton = styled.button`
+  font-weight:bold;
+  font-size: 0.8rem;
+  color: ${({ theme }) => theme.text};
+  background: none;
+  border: none;
+  cursor: pointer;
 `;
 const Subscribe = styled.button`
   display:flex;
   align-items:center;
-  justify-content:space-between;
+  padding:10px;
+  gap:10px;
   font-size:1.2rem;
-  width:16%;
   background-color: #cc1a00;
   font-weight: 500;
   color: white;
   border: none;
   border-radius: 3px;
   height: max-content;
-  padding: 10px 20px;
   cursor: pointer;
 `;
 const ImageFrame = styled.img`
@@ -130,21 +152,26 @@ const ImageFrame = styled.img`
 `;
 
 export default function Photo() {
+  const [showFullDescription, setShowFullDescription] = useState(false);
+  const toggleDescription = () => {
+    setShowFullDescription(!showFullDescription);
+  };
   const [showAlertModal, setShowAlertModal] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
   const [alertMessage, setAlertMessage] = useState(" ");
   const [alertColor, setAlertColor] = useState('white');
   const [loading,setLoading]=useState(false);
   const currentUrl = window.location.href;
-  const handleOpenAlertModal = (message) => {
+  const handleOpenAlertModal = (message, color) => {
     setAlertMessage(message);
+    setAlertColor(color)
     setShowAlertModal(true);
   };
 
   const handleCloseAlertModal = () => {
     setShowAlertModal(false);
     setAlertMessage('');
-  };
+  }
 
   const handleOpenShareModal = () => {
     setShowShareModal(true);
@@ -159,13 +186,16 @@ export default function Photo() {
   const dispatch = useDispatch();
   const path = useLocation().pathname.split("/")[2];  //as our pathname include vide/video_id and we want only video id
   //const [currentPhoto,setPhoto]=useState({});  //if we use useState to populate like dislike or subscribe then user need to refresh page to see that like is working or not
-  const addView=async()=>{
-    axios.put(`/photos/view/${path}`);
-    // console.log(":views added")
-    handlehistory();
-  }
+
   const [channel, setChannel] = useState({});
   useEffect(() => {
+    const handlehistory=async()=>{
+      await axios.put(`/users/photohistory/${currentPhoto._id}`);
+    }
+    const addView=async()=>{
+      axios.put(`/photos/view/${path}`);
+      handlehistory();
+    }
     const fetchData = async () => {
       try {
         setLoading(true);
@@ -179,7 +209,7 @@ export default function Photo() {
       } catch (err) { handleOpenAlertModal(err.msg,'red')}
     };
     fetchData();
-  }, [path,dispatch,addView]); //as our dependecy is path this time which keeps changing
+  }, [path,dispatch,currentPhoto._id]); //as our dependecy is path this time which keeps changing
 
 
 
@@ -214,7 +244,7 @@ export default function Photo() {
     setLoading(true);
     const storage = getStorage(app);
     const desertRef = ref(storage, `photo/${currentPhoto.fileName}`);
-    const res = await axios.delete(`/photos/${c}`);
+     await axios.delete(`/photos/${c}`);
     deleteObject(desertRef).then(() => {
       handleOpenAlertModal("Photo Deleted","green");
     }).catch((error) => {
@@ -231,9 +261,7 @@ export default function Photo() {
       : await axios.put(`/users/photosave/${currentPhoto._id}`);
     dispatch(savingPhoto(currentPhoto._id));
   };
-  const handlehistory=async()=>{
-    await axios.put(`/users/photohistory/${currentPhoto._id}`);
-  }
+
   var FileSaver = require('file-saver');
   const handleDownload = async() => {
     try {
@@ -247,10 +275,11 @@ export default function Photo() {
   }
   return (
     <Container>
-            <AlertModal
+                  <AlertModal
         isOpen={showAlertModal}
         onClose={handleCloseAlertModal}
         message={alertMessage}
+        alertColor={alertColor}
       />
                   <ShareModal
         currentUrl={currentUrl}
@@ -266,22 +295,28 @@ export default function Photo() {
         <Details>
           <Info>{currentPhoto.views} views - {format(currentPhoto.createdAt)}</Info>
           <Buttons>
-            <Btn width="30%">
+            <Btn>
               {currentPhoto.likes?.includes(currentUser._id) ? <ThumbUpIcon onClick={handleunlike} /> : <ThumbUpOffAltIcon onClick={handleLike} />} {currentPhoto.likes?.length}
               <Hr />
               {currentPhoto.dislikes?.includes(currentUser._id) ? <ThumbDownIcon onClick={handleundislike} /> : <ThumbDownOffAltIcon onClick={handleDislike} />} {currentPhoto.dislikes?.length}
             </Btn>
-            <Btn onClick={handleOpenShareModal} width="20%">
-              <SendIcon  /> share
+            <Btn onClick={handleOpenShareModal} >
+              <SendIcon  /> 
+              <Info2>
+              share
+              </Info2>
             </Btn>
-            <Btn width="20%" onClick={handleSave}>
-              {currentUser.photosaved.includes(currentPhoto._id)?(<><TaskAltIcon  /> <Info>Remove</Info></>):(<><AddTaskRoundedIcon  /> <Info>Save</Info></>)}
+            <Btn  onClick={handleSave}>
+              {currentUser.photosaved.includes(currentPhoto._id)?(<><TaskAltIcon  /> <Info>Remove</Info></>):(<><AddTaskRoundedIcon  /> <Info2>Save</Info2></>)}
             </Btn>
             {currentUser._id===currentPhoto.userId? 
-           <Btn width="20%">
+           <Btn >
               <DeleteSweepOutlinedIcon onClick={()=>handleDelete(currentPhoto._id)}/> Delete
-            </Btn>:<Btn width="25%" onClick={()=>handleDownload()}>
-              <DownloadIcon /> Download
+            </Btn>:<Btn onClick={()=>handleDownload()}>
+              <DownloadIcon /> 
+              <Info2>
+              Download
+              </Info2>
             </Btn>}
           </Buttons>
         </Details>
@@ -293,10 +328,17 @@ export default function Photo() {
             <UploaderDetail>
               <UploaderName>{channel.name}</UploaderName>
               <UploaderCounter>{channel.subscribers} favorite</UploaderCounter>
-              <UploaderDesc>{currentPhoto.desc}</UploaderDesc>
+              <UploaderDesc>
+                  {showFullDescription ? currentPhoto.desc : currentPhoto.desc.slice(0, 50)}{" "}
+                  {currentPhoto.desc.length > 50  && (
+                    <MoreButton onClick={toggleDescription}>
+                      {showFullDescription ? "Less" : "More"}
+                    </MoreButton>
+                  )}
+                </UploaderDesc>
             </UploaderDetail>
           </UploaderInfo>
-          <Subscribe onClick={handleSub}>
+          <Subscribe onClick={handleSub} style={{backgroundColor:currentUser.subscribedUsers?.includes(channel._id)?'gray':'red',transition:'all 0.5s ease-in-out'}}>
             {currentUser.subscribedUsers?.includes(channel._id)  //already subscribed
               ? (<><div><RemoveCircleOutlineOutlinedIcon /></div><div>Favorite</div></>)
               : (<><div><AddCircleOutlineOutlinedIcon /></div><div>Favorite</div></>)} 

@@ -26,13 +26,17 @@ display:${(props)=>props.type==="small" && "flex"};
   background-color:${({theme})=>theme.soft}};
 }
 
+@media (max-width: 800px) {
+  height:${(props)=>props.type==="small" ? "15vh":"35vh"};
+  width:${(props)=>props.type==="small" ? "initial":"20vw"};
+}
 @media (max-width: 500px) {
   height:${(props)=>props.type==="small" ? "15vh":"35vh"};
-  width:${(props)=>props.type==="small" ? "22vw":"60vw"};
+  width:${(props)=>props.type==="small" ? "initial":"60vw"};
 }
 @media (max-width: 350px) {
   height:${(props)=>props.type==="small" ? "15vh":"35vh"};
-  width:${(props)=>props.type==="small" ? "22vw":"70vw"};
+  width:${(props)=>props.type==="small" ? "initial":"70vw"};
 }
 `;
 const LoaderContainer=styled.div`

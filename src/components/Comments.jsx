@@ -6,6 +6,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import AlertModal from './modal/AlertModal';
 import { addComments,fetchComment,deleteComment } from '../redux/commentSlice';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 const Container=styled.div`
 
 `;
@@ -47,20 +49,33 @@ const Button = styled.button`
   padding-right:1em;
   padding-top:0.2em;
   padding-bottom:0.2em;
-  // font-weight: 500;
   cursor: pointer;
   background-color: transparent;;
   color: ${({ theme }) => theme.text};
-  // box-shadow: 15px 15px 20px rgba(0,0,0,.6);
-  // margin-right:-4vw;
 `;
+
+const CommentsPara=styled.div`
+display:flex;
+justify-content:space-between;
+align-items:center;
+`
+const Arrow=styled.div`
+cursor:pointer;
+display:none;
+@media (max-width: 800px) {
+  display:block;
+}
+`
+const CommentContainer=styled.div`
+
+`
 const Comments = ({videoId,type,photoId}) => {
 
 
   const [showAlertModal, setShowAlertModal] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [alertColor, setAlertColor] = useState('white');
-
+  const [upArrow,setUpArrow]=useState(true);
   const handleOpenAlertModal = (message,color) => {
     setAlertMessage(message);
     setAlertColor(color);
@@ -139,6 +154,13 @@ const Comments = ({videoId,type,photoId}) => {
         <Avatar src={currentUser.img} />
         <Input onKeyPress={addComment} placeholder="Add a comment..." onChange={e => setaddComment(e.target.value)}/>
       </NewComment>
+      <CommentsPara>
+      <p>Comments</p>
+      <Arrow>
+      {upArrow===true?<KeyboardArrowUpIcon onClick={()=>setUpArrow(!upArrow)}/>:<KeyboardArrowDownIcon onClick={()=>setUpArrow(!upArrow)}/>}
+      </Arrow>
+      </CommentsPara>
+      <CommentContainer style={{height:upArrow===true?'auto':'0vh'}}>
       {comments && comments.map(comment=>(
         <C>
         <Comment key={comment._id} comment={comment}/>
@@ -150,6 +172,7 @@ const Comments = ({videoId,type,photoId}) => {
          </>}
         </C>
       ))}
+      </CommentContainer>
     </Container>
     </>
     
@@ -161,6 +184,13 @@ const Comments = ({videoId,type,photoId}) => {
         <Avatar src={currentUser.img} />
         <Input onKeyPress={addComment} placeholder="Add a comment..." onChange={e => setaddComment(e.target.value)}/>
       </NewComment>
+      <CommentsPara>
+      <p>Comments</p>
+      <Arrow>
+      {upArrow===true?<KeyboardArrowUpIcon onClick={()=>setUpArrow(!upArrow)}/>:<KeyboardArrowDownIcon onClick={()=>setUpArrow(!upArrow)}/>}
+      </Arrow>
+      </CommentsPara>
+      <CommentContainer>
       {comments && comments.map(comment=>(
         <C>
         <Comment key={comment._id} comment={comment}/>
@@ -172,6 +202,7 @@ const Comments = ({videoId,type,photoId}) => {
          </>}
         </C>
       ))}
+      </CommentContainer>
     </Container> 
     </>}
     </>

@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { format } from "timeago.js";
-import AlertModal from './modal/AlertModal';
 import CommentLoader from './loader/CommentLoader';
 const Container=styled.div`
 display:flex;
@@ -41,19 +40,8 @@ const Text = styled.span`
   font-size: 0.8em;
 `;
 const Comment = ({ comment }) => {
-  const [showAlertModal, setShowAlertModal] = useState(false);
-  const [alertMessage, setAlertMessage] = useState('');
   const[loading,setLoading]=useState(false);
 
-  const handleOpenAlertModal = (message) => {
-    setAlertMessage(message);
-    setShowAlertModal(true);
-  };
-
-  const handleCloseAlertModal = () => {
-    setShowAlertModal(false);
-    setAlertMessage('');
-  };
 
   const [channel, setChannel] = useState({});
   useEffect(() => {
@@ -69,11 +57,6 @@ const Comment = ({ comment }) => {
   return (
    <>
    {loading===false?<Container>
-            <AlertModal
-        isOpen={showAlertModal}
-        onClose={handleCloseAlertModal}
-        message={alertMessage}
-      />
       <Avatar src={channel.img} />
       <Details>
         <Name>

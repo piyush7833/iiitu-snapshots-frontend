@@ -246,10 +246,10 @@ export default function Navbar({ showMenu, setShowMenu }) {
                         <VideoCallOutlinedIcon  />
                       </Video> </>
                   ) : (<>
-                    <Photos onClick={() => handleOpenAlertModal("You are not an admin so you are not allowed to upload photo. To become admin go to payment section and purchase a plan", "green")}>
+                    <Photos onClick={() => handleOpenAlertModal("As a non-admin user, uploading photos is restricted. To obtain admin privileges, proceed to the payment section and select a plan for purchase.", "green")}>
                       <AddAPhotoOutlinedIcon  />
                     </Photos>
-                    <Video onClick={() => handleOpenAlertModal("You are not an admin so you are not allowed to upload video. To become admin go to payment section and purchase a plan", "green")}>
+                    <Video onClick={() => handleOpenAlertModal("As a non-admin user, uploading videos is restricted. To obtain admin privileges, proceed to the payment section and select a plan for purchase.", "green")}>
                       <VideoCallOutlinedIcon  />
                     </Video> </>)
                   }

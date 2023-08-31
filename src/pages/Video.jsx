@@ -309,9 +309,6 @@ export default function Video() {
   if (!currentVideo) {
     return null;
   }
-  if(!currentUser){
-    navigate('/')
-  }
   return (
     <>
       <AlertModal

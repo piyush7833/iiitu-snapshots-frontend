@@ -277,11 +277,8 @@ export default function Photo() {
       console.log(error);
     }
   }
-  if(!currentPhoto){
+  if(!currentPhoto || !currentUser){
     return null;
-  }
-  if(!currentUser){
-    navigate('/')
   }
   return (
     <Container>

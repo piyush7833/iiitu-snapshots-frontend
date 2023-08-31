@@ -306,7 +306,7 @@ export default function Video() {
     }
   }
 
-  if (!currentVideo) {
+  if (!currentVideo || !currentUser) {
     return null;
   }
   return (

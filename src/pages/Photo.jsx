@@ -87,13 +87,17 @@ margin:2vh 0vh;
   border: 0.5px solid ${({ theme }) => theme.soft}};
 `;
 const Image = styled.img`
-width:4vw;
-height:7vh;
+width:50px;
+height:50px;
 margin-top:2vh;
 margin-left:1vw;
 background-color:${({ theme }) => theme.soft}};
 border:1px solid ${({ theme }) => theme.soft}};
 border-radius:50%;
+@media (max-width: 500px) {
+  width:40px;
+height:40px;
+}
 `;
 const Uploader = styled.div`
 display: flex;
@@ -144,6 +148,9 @@ const Subscribe = styled.button`
   border-radius: 3px;
   height: max-content;
   cursor: pointer;
+  @media (max-width: 500px) {
+    font-size:1rem;
+  }
 `;
 const ImageFrame = styled.img`
   max-height: 70vh;
@@ -270,8 +277,11 @@ export default function Photo() {
       console.log(error);
     }
   }
-  if(!currentPhoto || !currentUser){
+  if(!currentPhoto){
     return null;
+  }
+  if(!currentUser){
+    navigate('/')
   }
   return (
     <Container>
@@ -338,7 +348,7 @@ export default function Photo() {
                 </UploaderDesc>
             </UploaderDetail>
           </UploaderInfo>
-          <Subscribe onClick={handleSub} style={{backgroundColor:currentUser.subscribedUsers?.includes(channel._id)?'gray':'red',transition:'all 0.5s ease-in-out'}}>
+          <Subscribe onClick={handleSub} style={{backgroundColor:currentUser.subscribedUsers?.includes(channel._id)?'gray':'red',transition:'all 0.2s ease-in-out'}}>
             {currentUser.subscribedUsers?.includes(channel._id)  //already subscribed
               ? (<><div><RemoveCircleOutlineOutlinedIcon /></div><div>Favorite</div></>)
               : (<><div><AddCircleOutlineOutlinedIcon /></div><div>Favorite</div></>)} 

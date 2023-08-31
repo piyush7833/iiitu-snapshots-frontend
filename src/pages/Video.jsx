@@ -91,13 +91,17 @@ margin:2vh 0vh;
   }
 `;
 const Image = styled.img`
-width:4vw;
-height:7vh;
+width:50px;
+height:50px;
 margin-top:2vh;
 margin-left:1vw;
 background-color:${({ theme }) => theme.soft}};
 border:1px solid ${({ theme }) => theme.soft}};
 border-radius:50%;
+@media (max-width: 500px) {
+  width:40px;
+height:40px;
+}
 `;
 const Uploader = styled.div`
 display: flex;
@@ -149,6 +153,9 @@ const Subscribe = styled.button`
   border-radius: 3px;
   height: max-content;
   cursor: pointer;
+  @media (max-width: 500px) {
+    font-size:1rem;
+  }
 `;
 
 const VideoFrame = styled.video`
@@ -299,8 +306,11 @@ export default function Video() {
     }
   }
 
-  if (!currentVideo || !currentUser) {
+  if (!currentVideo) {
     return null;
+  }
+  if(!currentUser){
+    navigate('/')
   }
   return (
     <>
@@ -355,29 +365,29 @@ export default function Video() {
             </Details>
           </> : <Loader />}
           <Hr />
-          {loading === false ? 
-          <Uploader>
-            <UploaderInfo>
-              <Image src={channel.img} />
-              <UploaderDetail>
-                <UploaderName>{channel.Normalname}</UploaderName>
-                <UploaderCounter>{channel.subscribers} favorite</UploaderCounter>
-                <UploaderDesc>
-                  {showFullDescription ? currentVideo.desc : currentVideo.desc.slice(0, 50)}{" "}
-                  {currentVideo.desc.length > 50  && (
-                    <MoreButton onClick={toggleDescription}>
-                      {showFullDescription ? "Less" : "... More"}
-                    </MoreButton>
-                  )}
-                </UploaderDesc>
-              </UploaderDetail>
-            </UploaderInfo>
-            <Subscribe onClick={handleSub} style={{ backgroundColor: currentUser.subscribedUsers?.includes(channel._id) ? 'gray' : 'red', transition: 'all 0.5s ease-in-out' }}>
-              {currentUser.subscribedUsers?.includes(channel._id)  //already subscribed
-                ? (<><div><RemoveCircleOutlineOutlinedIcon /></div><div>Favorite</div></>)
-                : (<><div><AddCircleOutlineOutlinedIcon /></div><div>Favorite</div></>)}
-            </Subscribe>
-          </Uploader> : <Loader />}
+          {loading === false ?
+            <Uploader>
+              <UploaderInfo>
+                <Image src={channel.img} />
+                <UploaderDetail>
+                  <UploaderName>{channel.Normalname}</UploaderName>
+                  <UploaderCounter>{channel.subscribers} favorite</UploaderCounter>
+                  <UploaderDesc>
+                    {showFullDescription ? currentVideo.desc : currentVideo.desc.slice(0, 50)}{" "}
+                    {currentVideo.desc.length > 50 && (
+                      <MoreButton onClick={toggleDescription}>
+                        {showFullDescription ? "Less" : "... More"}
+                      </MoreButton>
+                    )}
+                  </UploaderDesc>
+                </UploaderDetail>
+              </UploaderInfo>
+              <Subscribe onClick={handleSub} style={{ backgroundColor: currentUser.subscribedUsers?.includes(channel._id) ? 'gray' : 'red', transition: 'all 0.2s ease-in-out' }}>
+                {currentUser.subscribedUsers?.includes(channel._id)  //already subscribed
+                  ? (<><div><RemoveCircleOutlineOutlinedIcon /></div><div>Favorite</div></>)
+                  : (<><div><AddCircleOutlineOutlinedIcon /></div><div>Favorite</div></>)}
+              </Subscribe>
+            </Uploader> : <Loader />}
           <Hr />
           {loading === false ? <Comments videoId={currentVideo._id} type={"video"} /> : <Loader />}
         </Content>

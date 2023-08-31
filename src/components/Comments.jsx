@@ -5,27 +5,32 @@ import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import AlertModal from './modal/AlertModal';
-import { addComments,fetchComment,deleteComment } from '../redux/commentSlice';
+import { addComments, fetchComment, deleteComment } from '../redux/commentSlice';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-const Container=styled.div`
+const Container = styled.div`
 
 `;
-const NewComment=styled.div`
+const NewComment = styled.div`
 display:flex;
 align=items:center;
 gap:10px;
 `;
-const Avatar=styled.img`
-width:4vw;
-height:7vh;
+const Avatar = styled.img`
+width:40px;
+height:40px;
 margin-top:2vh;
 margin-left:1vw;
-background-color:${({theme})=>theme.soft}};
-border:1px solid ${({theme})=>theme.soft}};
+background-color:${({ theme }) => theme.soft}};
+border:1px solid ${({ theme }) => theme.soft}};
 border-radius:50%;
+@media (max-width: 500px) {
+  width:25px;
+height:25px;
+}
 `;
-const Input=styled.input`
+
+const Input = styled.input`
 border: none;
 border-bottom: 1px solid ${({ theme }) => theme.soft};
 color: ${({ theme }) => theme.text};
@@ -34,7 +39,7 @@ outline: none;
 padding: 5px;
 width: 100%;
 `;
-const C=styled.div`
+const C = styled.div`
 display:flex;
 align-items:center;
 justify-content:space-between;
@@ -54,29 +59,29 @@ const Button = styled.button`
   color: ${({ theme }) => theme.text};
 `;
 
-const CommentsPara=styled.div`
+const CommentsPara = styled.div`
 display:flex;
 justify-content:space-between;
 align-items:center;
 `
-const Arrow=styled.div`
+const Arrow = styled.div`
 cursor:pointer;
 display:none;
 @media (max-width: 800px) {
   display:block;
 }
 `
-const CommentContainer=styled.div`
-
+const CommentContainer = styled.div`
+overflow:hidden;
 `
-const Comments = ({videoId,type,photoId}) => {
+const Comments = ({ videoId, type, photoId }) => {
 
 
   const [showAlertModal, setShowAlertModal] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [alertColor, setAlertColor] = useState('white');
-  const [upArrow,setUpArrow]=useState(true);
-  const handleOpenAlertModal = (message,color) => {
+  const [upArrow, setUpArrow] = useState(true);
+  const handleOpenAlertModal = (message, color) => {
     setAlertMessage(message);
     setAlertColor(color);
     setShowAlertModal(true);
@@ -88,9 +93,9 @@ const Comments = ({videoId,type,photoId}) => {
   };
 
   const { currentUser } = useSelector((state) => state.user);
-  const dispatch=useDispatch();
-  
-  const {comments} = useSelector((state )=> state.comments);
+  const dispatch = useDispatch();
+
+  const { comments } = useSelector((state) => state.comments);
   useEffect(() => {
     try {
       if (type === 'video') {
@@ -99,42 +104,42 @@ const Comments = ({videoId,type,photoId}) => {
         dispatch(fetchComment(`/comments/photoComment/${photoId}`));
       }
     } catch (error) {
-      handleOpenAlertModal(error.message,"red")
+      handleOpenAlertModal(error.message, "red")
     }
 
   }, [dispatch, type, videoId, photoId]);
 
 
-  const [AddComment,setaddComment]=useState(" ");
-  const addComment=async(e)=>{
+  const [AddComment, setaddComment] = useState(" ");
+
+  const addComment = async (e) => {
     if (e.keyCode === 13 || e.which === 13) {
       e.preventDefault();
-      console.log("key");
       try {
-        var desc=AddComment;
+        var desc = AddComment;
         let res;
-        if(type==="video"){
-          res = await axios.post(`/comments`,{desc,videoId});
+        if (type === "video") {
+          res = await axios.post(`/comments`, { desc, videoId });
           dispatch(addComments(res.data));
           setaddComment("");
-          handleOpenAlertModal(desc + " added ",'green')
+          // handleOpenAlertModal(desc + " added ", 'green')
         }
-        else if(type==="photo"){
-          res = await axios.post(`/comments`,{desc,photoId});
+        else if (type === "photo") {
+          res = await axios.post(`/comments`, { desc, photoId });
           dispatch(addComments(res.data))
           setaddComment("");
-          handleOpenAlertModal(desc + " added ",'green')          
+          // handleOpenAlertModal(desc + " added ", 'green')
         }
-      } catch (err) {handleOpenAlertModal(err.message,'red')}
+      } catch (err) { handleOpenAlertModal(err.message, 'red') }
     };
   }
-  const handleDelete=async(c)=>{
+  const handleDelete = async (c) => {
     try {
-    const res = await axios.delete(`/comments/${c}`);
-    dispatch(deleteComment(res.data));
-    handleOpenAlertModal(`Comment deleted`,'green')
+      const res = await axios.delete(`/comments/${c}`);
+      dispatch(deleteComment(res.data));
+      // handleOpenAlertModal(`Comment deleted`, 'green')
     } catch (error) {
-      handleOpenAlertModal(error.message,'red')
+      handleOpenAlertModal(error.message, 'red')
     }
   }
   const { currentVideo } = useSelector((state) => state.video);
@@ -142,69 +147,69 @@ const Comments = ({videoId,type,photoId}) => {
 
   return (
     <>
-            <AlertModal
+      <AlertModal
         isOpen={showAlertModal}
         onClose={handleCloseAlertModal}
         message={alertMessage}
         color={alertColor}
       />
-      {type==="video"?<>
-    <Container>
-      <NewComment>
-        <Avatar src={currentUser.img} />
-        <Input onKeyPress={addComment} placeholder="Add a comment..." onChange={e => setaddComment(e.target.value)}/>
-      </NewComment>
-      <CommentsPara>
-      <p>Comments</p>
-      <Arrow>
-      {upArrow===true?<KeyboardArrowUpIcon onClick={()=>setUpArrow(!upArrow)}/>:<KeyboardArrowDownIcon onClick={()=>setUpArrow(!upArrow)}/>}
-      </Arrow>
-      </CommentsPara>
-      <CommentContainer style={{height:upArrow===true?'auto':'0vh'}}>
-      {comments && comments.map(comment=>(
-        <C>
-        <Comment key={comment._id} comment={comment}/>
-         {comment.userId===currentUser._id?(<Button  onClick={()=>handleDelete(comment._id)}>Delete</Button>):" "}
-         
-         { <>
-         { currentUser._id===currentVideo.userId?comment.userId!==currentUser._id?(<Button onClick={async()=>handleDelete(comment._id,comment.desc)}>Delete</Button>):" ":" "}
-         {/* {console.log(comment.desc)} */}
-         </>}
-        </C>
-      ))}
-      </CommentContainer>
-    </Container>
-    </>
-    
-    :
-    
-    <>
-    <Container>
-      <NewComment>
-        <Avatar src={currentUser.img} />
-        <Input onKeyPress={addComment} placeholder="Add a comment..." onChange={e => setaddComment(e.target.value)}/>
-      </NewComment>
-      <CommentsPara>
-      <p>Comments</p>
-      <Arrow>
-      {upArrow===true?<KeyboardArrowUpIcon onClick={()=>setUpArrow(!upArrow)}/>:<KeyboardArrowDownIcon onClick={()=>setUpArrow(!upArrow)}/>}
-      </Arrow>
-      </CommentsPara>
-      <CommentContainer>
-      {comments && comments.map(comment=>(
-        <C>
-        <Comment key={comment._id} comment={comment}/>
-         {comment.userId===currentUser._id?(<Button  onClick={()=>handleDelete(comment._id)}>Delete</Button>):" "}
-         
-         { <>
-         { currentUser._id===currentPhoto.userId?comment.userId!==currentUser._id?(<Button onClick={async()=>handleDelete(comment._id,comment.desc)}>Delete</Button>):" ":" "}
-         {/* {console.log(comment.desc)} */}
-         </>}
-        </C>
-      ))}
-      </CommentContainer>
-    </Container> 
-    </>}
+      {type === "video" ? <>
+        <Container>
+          <NewComment>
+            <Avatar src={currentUser.img} />
+            <Input onKeyPress={addComment} placeholder="Add a comment..." onChange={e => setaddComment(e.target.value)} />
+          </NewComment>
+          <CommentsPara>
+            <p>Comments</p>
+            <Arrow>
+              {upArrow === true ? <KeyboardArrowUpIcon onClick={() => setUpArrow(!upArrow)} /> : <KeyboardArrowDownIcon onClick={() => setUpArrow(!upArrow)} />}
+            </Arrow>
+          </CommentsPara>
+          <CommentContainer style={{ height: upArrow === true ? '0vh' : 'auto' }}>
+            {comments && comments.map(comment => (
+              <C>
+                <Comment key={comment._id} comment={comment} />
+                {comment.userId === currentUser._id ? (<Button onClick={() => handleDelete(comment._id)}>Delete</Button>) : " "}
+
+                {<>
+                  {currentUser._id === currentVideo.userId ? comment.userId !== currentUser._id ? (<Button onClick={async () => handleDelete(comment._id, comment.desc)}>Delete</Button>) : " " : " "}
+                  {/* {console.log(comment.desc)} */}
+                </>}
+              </C>
+            ))}
+          </CommentContainer>
+        </Container>
+      </>
+
+        :
+
+        <>
+          <Container>
+            <NewComment>
+              <Avatar src={currentUser.img} />
+              <Input onKeyPress={addComment} placeholder="Add a comment..." onChange={e => setaddComment(e.target.value)} />
+            </NewComment>
+            <CommentsPara>
+              <p>Comments</p>
+              <Arrow>
+                {upArrow === true ? <KeyboardArrowUpIcon onClick={() => setUpArrow(!upArrow)} /> : <KeyboardArrowDownIcon onClick={() => setUpArrow(!upArrow)} />}
+              </Arrow>
+            </CommentsPara>
+            <CommentContainer>
+              {comments && comments.map(comment => (
+                <C>
+                  <Comment key={comment._id} comment={comment} />
+                  {comment.userId === currentUser._id ? (<Button onClick={() => handleDelete(comment._id)}>Delete</Button>) : " "}
+
+                  {<>
+                    {currentUser._id === currentPhoto.userId ? comment.userId !== currentUser._id ? (<Button onClick={async () => handleDelete(comment._id, comment.desc)}>Delete</Button>) : " " : " "}
+                    {/* {console.log(comment.desc)} */}
+                  </>}
+                </C>
+              ))}
+            </CommentContainer>
+          </Container>
+        </>}
     </>
   );
 };

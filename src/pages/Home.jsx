@@ -22,7 +22,7 @@ overflow-y:scroll;
 
 `;
 const Main = styled.div`
-height:90vh
+height:90vh;
 @media (max-width: 500px) {
   flex-direction:column;
   justify-content:center;

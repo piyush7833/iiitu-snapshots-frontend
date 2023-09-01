@@ -84,10 +84,7 @@ const Info2 = styled.div`
 `;
 const Button = styled.button`
   border-radius: 1.3rem;
-  padding-left:1em;
-  padding-right:1em;
-  padding-top:0.8em;
-  padding-bottom:0.8em;
+padding:0.8rem 1rem;
   font-weight: 500;
   cursor: pointer;
   background-color: transparent;;
@@ -95,6 +92,9 @@ const Button = styled.button`
   box-shadow: 15px 15px 20px rgba(0,0,0,.6);
   text-align:center;
   margin-top:2vh;
+  @media (max-width: 350px) {
+    padding:0.6rem 0.4rem;
+  }
 `;
 const Btn = styled.div`
 display:flex;

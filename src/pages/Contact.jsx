@@ -24,6 +24,11 @@ align-items:center;
 justify-content:center;
 @media (max-width: 600px) {
   flex-direction:column;
+  height:80vh;
+}
+@media (max-width: 400px) {
+  flex-direction:column;
+  height:70vh;
 }
 `;
 const Title = styled.div`
@@ -46,6 +51,9 @@ const Message = styled.textarea`
   width:100%;
   height:50%;
   box-shadow: 15px 15px 20px rgba(0,0,0,.6);
+  @media (max-width: 600px) {
+    margin-top:0vh;
+  }
 `;
 const MessageWrapper=styled.div`
   margin-top:4vh;
@@ -55,7 +63,8 @@ const MessageWrapper=styled.div`
   height:80%;
   @media (max-width: 600px) {
   width:80%;
-  margin-top:16vh;
+  height:40%;
+  // margin-top:16vh;
 }
 `
 const Button = styled.button`
@@ -88,6 +97,8 @@ align-items:space-evenly;
 }
 @media (max-width: 600px) {
   width:100%;
+  overflow-y:auto;
+  height:40%;
 }
 
 `;
@@ -103,6 +114,10 @@ color: ${({ theme }) => theme.text};
 background-color: ${({ theme }) => theme.bg};
 cursor: pointer; 
 transition: all .2s ease-in-out;
+@media (max-width: 600px) {
+  height: 40px;
+width: 40px;
+}
 &:hover{
   background-color: ${({ theme }) => theme.text}; 
   color: ${({ theme }) => theme.bgLighter};
@@ -138,6 +153,9 @@ margin-left:10vw;
 font-size:1.5rem;
 @media (max-width: 1000px) {
   font-size:1.2rem;
+}
+@media (max-width: 600px) {
+  font-size:1rem;
 }
 `;
 // const Table=styled.table``;

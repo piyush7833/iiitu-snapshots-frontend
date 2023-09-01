@@ -31,6 +31,7 @@ display:flex;
 gap:24px;
 @media (max-width: 800px) {
   flex-direction:column;
+  gap:0px;
 }
 `;
 const Content = styled.div`

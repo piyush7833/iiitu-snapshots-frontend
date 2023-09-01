@@ -73,7 +73,13 @@ const Logo = styled.div`
 `;
 const Img = styled.img`
  height:12vh;
- @media (max-width: 500px) {
+ @media (max-width: 1100px) {
+    height:8vh;
+  }
+ @media (max-width: 800px) {
+    height:6vh;
+  }
+ @media (max-width: 600px) {
     display:none
   }
 `;

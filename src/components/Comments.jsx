@@ -155,10 +155,7 @@ const Comments = ({ videoId, type, photoId }) => {
       />
       {type === "video" ? <>
         <Container>
-          <NewComment>
-            <Avatar src={currentUser.img} />
-            <Input onKeyPress={addComment} placeholder="Add a comment..." onChange={e => setaddComment(e.target.value)} />
-          </NewComment>
+
           <CommentsPara>
             <p>Comments</p>
             <Arrow>
@@ -166,6 +163,11 @@ const Comments = ({ videoId, type, photoId }) => {
             </Arrow>
           </CommentsPara>
           <CommentContainer style={{ height: upArrow === true ? '0vh' : 'auto' }}>
+            
+          <NewComment>
+            <Avatar src={currentUser.img} />
+            <Input onKeyPress={addComment} placeholder="Add a comment..." onChange={e => setaddComment(e.target.value)} />
+          </NewComment>
             {comments && comments.map(comment => (
               <C>
                 <Comment key={comment._id} comment={comment} />
@@ -185,17 +187,19 @@ const Comments = ({ videoId, type, photoId }) => {
 
         <>
           <Container>
-            <NewComment>
-              <Avatar src={currentUser.img} />
-              <Input onKeyPress={addComment} placeholder="Add a comment..." onChange={e => setaddComment(e.target.value)} />
-            </NewComment>
+
             <CommentsPara>
               <p>Comments</p>
               <Arrow>
                 {upArrow === true ? <KeyboardArrowUpIcon onClick={() => setUpArrow(!upArrow)} /> : <KeyboardArrowDownIcon onClick={() => setUpArrow(!upArrow)} />}
               </Arrow>
             </CommentsPara>
-            <CommentContainer>
+            <CommentContainer style={{ height: upArrow === true ? '0vh' : 'auto' }}>
+
+            <NewComment>
+              <Avatar src={currentUser.img} />
+              <Input onKeyPress={addComment} placeholder="Add a comment..." onChange={e => setaddComment(e.target.value)} />
+            </NewComment>
               {comments && comments.map(comment => (
                 <C>
                   <Comment key={comment._id} comment={comment} />

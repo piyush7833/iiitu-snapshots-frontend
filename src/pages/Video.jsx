@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState} from 'react'
 import styled from 'styled-components'
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
@@ -72,16 +72,19 @@ align-items:center;
 // justify-content:space-between;
 cursor:pointer;
 `;
-const Btn = styled.span(props => ({
-  display: "flex",
-  padding: '1px 10px',
-  gap: '5px',
-  height: "5vh",
-  borderRadius: `1.3em`,
-  backgroundColor: `#b7b7b7`,
-  alignItems: "center",
-  justifyContent: "space-evenly",
-}));
+const Btn = styled.span`
+  display: flex;
+  padding:1px 10px;
+  gap:5px;
+  height: 5vh;
+  border-radius: 1.3em;
+  background-color: #b7b7b7;
+  align-items: center;
+  justify-content: space-evenly;
+  @media (max-width: 370px) {
+    padding:1px 3px;
+  }
+`
 
 const Hr = styled.hr`
 margin:2vh 0vh;
@@ -208,10 +211,10 @@ export default function Video() {
 
 
   const [channel, setChannel] = useState({});
-  
-  const handlehistory = useCallback(() => {
-     axios.put(`/users/videohistory/${currentVideo._id}`);
-  },[currentVideo._id])
+
+   const handlehistory = async() => {
+     await axios.put(`/users/videohistory/${currentVideo._id}`);
+  }
   
   useEffect(() => {
     const addView = async () => {
@@ -230,7 +233,7 @@ export default function Video() {
       } catch (err) { }
     };
     fetchData();
-  }, [path, dispatch,handlehistory]); //as our dependecy is path this time which keeps changing
+  }, [path, dispatch]); //as our dependecy is path this time which keeps changing
 
 
 

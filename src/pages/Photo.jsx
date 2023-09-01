@@ -36,6 +36,9 @@ gap:24px;
 const Content = styled.div`
 flex:5;
 margin:2vh;
+@media (max-width: 300px) {
+  margin:2vh 0.5vh;
+}
 `;
 const ImageWrapper = styled.div`
 
@@ -291,7 +294,7 @@ export default function Photo() {
     return null;
   }
   if(!currentUser){
-    handleOpenAlertModal("Sign in to IIITU Snapshots to view media");
+    navigate('/')
   }
   return (
     <Container>
@@ -331,7 +334,10 @@ export default function Photo() {
             </Btn>
             {currentUser._id===currentPhoto.userId? 
            <Btn >
-              <DeleteSweepOutlinedIcon onClick={()=>handleDelete(currentPhoto._id)}/> Delete
+              <DeleteSweepOutlinedIcon onClick={()=>handleDelete(currentPhoto._id)}/> 
+              <Info2>
+              Delete
+              </Info2>
             </Btn>:<Btn onClick={()=>handleDownload()}>
               <DownloadIcon /> 
               <Info2>
@@ -358,7 +364,7 @@ export default function Photo() {
                 </UploaderDesc>
             </UploaderDetail>
           </UploaderInfo>
-          <Subscribe onClick={handleSub} style={{backgroundColor:currentUser.subscribedUsers?.includes(channel._id)?'gray':'red',transition:'all 0.2s ease-in-out'}}>
+          <Subscribe onClick={handleSub} style={{backgroundColor:currentUser.subscribedUsers?.includes(channel._id)?'gray':'red',transition:'all 10ms ease-in-out'}}>
             {currentUser.subscribedUsers?.includes(channel._id)  //already subscribed
               ? (<><div><RemoveCircleOutlineOutlinedIcon /></div><div>Favorite</div></>)
               : (<><div><AddCircleOutlineOutlinedIcon /></div><div>Favorite</div></>)} 

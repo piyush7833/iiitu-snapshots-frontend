@@ -15,6 +15,9 @@ height:90vh;
 const Pay = styled.div`
 flex:2;
 margin:2vh;
+@media (max-width: 400px) {
+  margin:2vh 0.5vh;
+}
 `;
 
 const Hr = styled.hr`
@@ -32,6 +35,14 @@ margin-left:2vw;
 justigy-content:center;
 align-items:center;
 border-radius:1.3rem;
+@media (max-width: 400px) {
+  font-size: 1rem;
+  margin-left:0.5vw;
+}
+@media (max-width: 330px) {
+  font-size: 0.8rem;
+  margin-left:0.5vw;
+}
 `;
 const Wrapper = styled.div`
  padding:1vw;
@@ -46,6 +57,10 @@ const Items = styled.div`
   &:hover{
     background-color: ${({ theme }) => theme.soft}};
     border-radius:1.3rem;
+  }
+  @media (max-width: 330px) {
+    padding:1vh 0.8vh;
+    gap:10px;
   }
 `;
 const About = styled.div`
@@ -77,7 +92,7 @@ color:#18b439;
 @media (max-width: 500px) {
   font-size:1.2rem;
 }
-@media (max-width: 00px) {
+@media (max-width: 400px) {
   font-size:1rem;
 }
 `;

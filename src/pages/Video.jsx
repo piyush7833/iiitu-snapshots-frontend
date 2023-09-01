@@ -36,6 +36,9 @@ gap:24px;
 const Content = styled.div`
 flex:5;
 margin:2vh;
+@media (max-width: 300px) {
+  margin:2vh 0.5vh;
+}
 `;
 const VideoWrapper = styled.div`
 
@@ -313,7 +316,7 @@ export default function Video() {
     return null;
   }
   if(!currentUser){
-    handleOpenAlertModal("Sign in to IIITU Snapshots to view media");
+    navigate('/')
   }
   return (
     <>
@@ -355,7 +358,10 @@ export default function Video() {
 
                 {currentUser._id === currentVideo.userId ?
                   <Btn width="20%" onClick={() => handleDelete(currentVideo._id)}>
-                    <DeleteSweepOutlinedIcon /> Delete
+                    <DeleteSweepOutlinedIcon /> 
+                    <Info2>
+                    Delete
+                    </Info2>
                   </Btn> : <Btn width="25%" onClick={() => {
                     handleDownload()
                   }}>

@@ -16,6 +16,7 @@ import ForgetPass from './pages/ForgetPass'
 import { darkTheme } from './utils/theme';
 import { lightTheme } from './utils/theme';
 import { useSelector } from "react-redux";
+import Footer from './components/Footer'
 import {
   BrowserRouter,
   Routes,
@@ -84,6 +85,7 @@ function App() {
                 </Route>
               </Routes>
             </Wrapper>
+            <Footer/>
           </Main>
         </BrowserRouter>
       </Container>

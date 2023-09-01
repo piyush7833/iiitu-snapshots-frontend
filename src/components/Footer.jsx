@@ -1,0 +1,32 @@
+import React from "react";
+import snapshots from "../img/logo.png"
+import styled from "styled-components";
+
+const FooterContainer = styled.footer`
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background-color: ${({ theme }) => theme.bg};
+  color: ${({ theme }) => theme.text};
+  text-align: center;
+  padding:0vh 2vh;
+  @media (max-width: 500px) {
+    font-size:0.8rem;
+  }
+`;
+
+const Logo = styled.img`
+  // width: 50px;
+  height: 12vh;
+`;
+
+const Footer = () => {
+  return (
+    <FooterContainer>
+      <Logo src={snapshots} alt="IIITU Snapshot Logo" />
+      <p>&copy; IIITU Snapshot. All rights reserved.</p>
+    </FooterContainer>
+  );
+};
+
+export default Footer;

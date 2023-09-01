@@ -19,6 +19,7 @@ overflow-y:scroll;
 ::-webkit-scrollbar {
   display: none; /* Hide the default scrollbar */
 }
+
 `;
 const Main = styled.div`
 height:90vh
@@ -64,7 +65,7 @@ const Home=({type,show})=> {
       ))}
       </Container>:<Loader/>}
       <p style={{textAlign:"center"}}>Photos</p>
-      {loading===false?<Container>
+      {loading===false?<Container style={{paddingBottom:'2vh'}}>
         {photos.map((photo) => (
         <PhotoCard key={photo._id} photo={photo}/>
       ))}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import styled from 'styled-components'
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
@@ -99,8 +99,8 @@ background-color:${({ theme }) => theme.soft}};
 border:1px solid ${({ theme }) => theme.soft}};
 border-radius:50%;
 @media (max-width: 500px) {
-  width:40px;
-height:40px;
+  width:30px;
+height:30px;
 }
 `;
 const Uploader = styled.div`
@@ -201,8 +201,6 @@ export default function Video() {
 
   const { currentUser } = useSelector((state) => state.user);
   const { currentVideo } = useSelector((state) => state.video);
-  // console.log(currentVideo);
-  // console.log(currentUser);
   const dispatch = useDispatch();
   const path = useLocation().pathname.split("/")[2];
 
@@ -210,10 +208,12 @@ export default function Video() {
 
 
   const [channel, setChannel] = useState({});
+  
+  const handlehistory = useCallback(() => {
+     axios.put(`/users/videohistory/${currentVideo._id}`);
+  },[currentVideo._id])
+  
   useEffect(() => {
-    const handlehistory = async () => {
-      await axios.put(`/users/videohistory/${currentVideo._id}`);
-    }
     const addView = async () => {
       axios.put(`/videos/view/${path}`);
       handlehistory();
@@ -230,7 +230,7 @@ export default function Video() {
       } catch (err) { }
     };
     fetchData();
-  }, [path, dispatch, currentVideo._id]); //as our dependecy is path this time which keeps changing
+  }, [path, dispatch,handlehistory]); //as our dependecy is path this time which keeps changing
 
 
 
@@ -306,8 +306,11 @@ export default function Video() {
     }
   }
 
-  if (!currentVideo || !currentUser) {
+  if (!currentVideo) {
     return null;
+  }
+  if(!currentUser){
+    handleOpenAlertModal("Sign in to IIITU Snapshots to view media");
   }
   return (
     <>
@@ -379,7 +382,7 @@ export default function Video() {
                   </UploaderDesc>
                 </UploaderDetail>
               </UploaderInfo>
-              <Subscribe onClick={handleSub} style={{ backgroundColor: currentUser.subscribedUsers?.includes(channel._id) ? 'gray' : 'red', transition: 'all 0.2s ease-in-out' }}>
+              <Subscribe onClick={handleSub} style={{ backgroundColor: currentUser.subscribedUsers?.includes(channel._id) ? 'gray' : 'red', transition: 'all 0.5s ease-in-out' }}>
                 {currentUser.subscribedUsers?.includes(channel._id)  //already subscribed
                   ? (<><div><RemoveCircleOutlineOutlinedIcon /></div><div>Favorite</div></>)
                   : (<><div><AddCircleOutlineOutlinedIcon /></div><div>Favorite</div></>)}

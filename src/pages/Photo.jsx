@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import styled from 'styled-components'
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
@@ -25,6 +25,7 @@ import ShareModal from '../components/modal/ShareModal';
 import { getStorage, ref, deleteObject } from "firebase/storage";
 import app from "../firebase"; //importing app
 import DownloadIcon from '@mui/icons-material/Download';
+var FileSaver = require('file-saver');
 const Container = styled.div`
 display:flex;
 gap:24px;
@@ -189,16 +190,16 @@ export default function Photo() {
 
   const { currentUser } = useSelector((state) => state.user);
   const { currentPhoto } = useSelector((state) => state.photo);
-  // console.log(currentPhoto._id);
+
   const dispatch = useDispatch();
   const path = useLocation().pathname.split("/")[2];  //as our pathname include vide/video_id and we want only video id
   //const [currentPhoto,setPhoto]=useState({});  //if we use useState to populate like dislike or subscribe then user need to refresh page to see that like is working or not
 
   const [channel, setChannel] = useState({});
+  const handlehistory = useCallback(() => {
+    axios.put(`/users/videohistory/${currentPhoto._id}`);
+ },[currentPhoto._id])
   useEffect(() => {
-    const handlehistory=async()=>{
-      await axios.put(`/users/photohistory/${currentPhoto._id}`);
-    }
     const addView=async()=>{
       axios.put(`/photos/view/${path}`);
       handlehistory();
@@ -216,7 +217,7 @@ export default function Photo() {
       } catch (err) { handleOpenAlertModal(err.msg,'red')}
     };
     fetchData();
-  }, [path,dispatch,currentPhoto._id]); //as our dependecy is path this time which keeps changing
+  }, [path,dispatch,handlehistory]); //as our dependecy is path this time which keeps changing
 
 
 
@@ -269,16 +270,19 @@ export default function Photo() {
     dispatch(savingPhoto(currentPhoto._id));
   };
 
-  var FileSaver = require('file-saver');
+
   const handleDownload = async() => {
     try {
       FileSaver.saveAs(currentPhoto.imgUrl, currentPhoto.title);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   }
-  if(!currentPhoto || !currentUser){
+  if(!currentPhoto){
     return null;
+  }
+  if(!currentUser){
+    handleOpenAlertModal("Sign in to IIITU Snapshots to view media");
   }
   return (
     <Container>

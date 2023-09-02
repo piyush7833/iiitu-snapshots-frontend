@@ -331,7 +331,7 @@ export default function Photo() {
               </Info2>
             </Btn>
             <Btn  onClick={handleSave}>
-              {currentUser.photosaved.includes(currentPhoto._id)?(<><TaskAltIcon  /> <Info>Remove</Info></>):(<><AddTaskRoundedIcon  /> <Info2>Save</Info2></>)}
+              {currentUser.photosaved.includes(currentPhoto._id)?(<><TaskAltIcon  /> <Info2>Remove</Info2></>):(<><AddTaskRoundedIcon  /> <Info2>Save</Info2></>)}
             </Btn>
             {currentUser._id===currentPhoto.userId? 
            <Btn >

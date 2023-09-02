@@ -17,11 +17,11 @@ background-color: #000000a7;
 display: flex;
 align-items: center;
 justify-content: center;
-z-index:5;
+z-index:9999;
 `;
 
 const Wrapper = styled.div`
-  width: 28vw;
+  // width: 28vw;
   height: 25vh;
   background-color: ${({ theme }) => theme.bgLighter};
   color: ${({ theme }) => theme.text};
@@ -34,6 +34,14 @@ const Wrapper = styled.div`
   position: relative;
   border-radius:1.3rem;
   box-shadow: 0 15px 25px rgba(0,0,0,.6);
+  overflow-x:hidden;
+  overflow-y:auto;
+  @media (max-width: 800px) {
+    height: 30vh;
+  }
+  @media (max-width: 500px) {
+    font-size:1rem;
+  }
 `;
 const Close = styled.div`
   position: absolute; //it goes to end due to position absolute
@@ -65,6 +73,13 @@ const Box = styled.div`
   border-radius:1.3rem;
   color: ${({ theme }) => theme.text};
   margin-top:3vh;
+  overflow-x:auto;
+  @media (max-width: 500px) {
+    font-size:0.7rem;
+  }
+  @media (max-width: 300px) {
+    font-size:0.6rem;
+  }
 `;
 const Btn=styled.div`
 display:flex;

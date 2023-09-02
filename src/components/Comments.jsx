@@ -66,11 +66,12 @@ align-items:center;
 `
 const Arrow = styled.div`
 cursor:pointer;
-display:none;
+// display:none;
 @media (max-width: 800px) {
   display:block;
 }
 `
+
 const CommentContainer = styled.div`
 overflow:hidden;
 `
@@ -80,7 +81,7 @@ const Comments = ({ videoId, type, photoId }) => {
   const [showAlertModal, setShowAlertModal] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [alertColor, setAlertColor] = useState('white');
-  const [upArrow, setUpArrow] = useState(true);
+  const [upArrow, setUpArrow] = useState(false);
   const handleOpenAlertModal = (message, color) => {
     setAlertMessage(message);
     setAlertColor(color);
@@ -96,6 +97,7 @@ const Comments = ({ videoId, type, photoId }) => {
   const dispatch = useDispatch();
 
   const { comments } = useSelector((state) => state.comments);
+  
   useEffect(() => {
     try {
       if (type === 'video') {
@@ -162,7 +164,7 @@ const Comments = ({ videoId, type, photoId }) => {
               {upArrow === true ? <KeyboardArrowUpIcon onClick={() => setUpArrow(!upArrow)} /> : <KeyboardArrowDownIcon onClick={() => setUpArrow(!upArrow)} />}
             </Arrow>
           </CommentsPara>
-          <CommentContainer style={{ height: upArrow === true ? '0vh' : 'auto' }}>
+          <CommentContainer style={{ height: upArrow === true ? 'auto' : '0vh'}}>
             
           <NewComment>
             <Avatar src={currentUser.img} />
@@ -194,7 +196,7 @@ const Comments = ({ videoId, type, photoId }) => {
                 {upArrow === true ? <KeyboardArrowUpIcon onClick={() => setUpArrow(!upArrow)} /> : <KeyboardArrowDownIcon onClick={() => setUpArrow(!upArrow)} />}
               </Arrow>
             </CommentsPara>
-            <CommentContainer style={{ height: upArrow === true ? '0vh' : 'auto' }}>
+            <CommentContainer style={{ height: upArrow === true ? 'auto' : '0vh' }}>
 
             <NewComment>
               <Avatar src={currentUser.img} />

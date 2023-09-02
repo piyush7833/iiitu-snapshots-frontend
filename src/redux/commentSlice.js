@@ -1,12 +1,18 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-
+import axios from 'axios';
 // Define async thunk for fetching comments
 export const fetchComment = createAsyncThunk(
   'comments',
   async (url) => {
-    const response = await fetch(url);
-    const data = await response.json();
-    return data;
+    const res=await axios.get(url);
+    console.log(url)  
+    console.log(res.data)  
+    // console.log(res.data)
+    // const response = await fetch(url);
+    // console.log(response)
+    // const data = await res.json();
+    // console.log(data)
+    return res.data;
   }
 );
 

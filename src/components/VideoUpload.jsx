@@ -11,7 +11,6 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import AlertModal from './modal/AlertModal';
-import Loader from './loader/Loader';
 
 const Container = styled.div`
   width: 100%;
@@ -23,7 +22,7 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index:5;
+  z-index:999;
 `;
 
 const Wrapper = styled.div`

@@ -6,7 +6,7 @@ import AlertModal from '../components/modal/AlertModal';
 import { useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { updateUserStart, updateUserSuccess, updateUserFailure, deleteUserFailure, deleteUserStart, deleteUserSuccess } from '../redux/userSlice'
+import { updateUserStart, updateUserSuccess, updateUserFailure, deleteUserFailure, deleteUserSuccess } from '../redux/userSlice'
 import { useDispatch } from 'react-redux';
 import {
   getStorage,
@@ -108,16 +108,17 @@ const Profile = () => {
   const navigate = useNavigate();
   const [showAlertModal, setShowAlertModal] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
-  const [loading, setLoading] = useState(false);
-  const handleOpenAlertModal = (message) => {
+  const [alertColor, setAlertColor] = useState('white');
+  const handleOpenAlertModal = (message, color) => {
     setAlertMessage(message);
+    setAlertColor(color)
     setShowAlertModal(true);
   };
 
   const handleCloseAlertModal = () => {
     setShowAlertModal(false);
     setAlertMessage('');
-  };
+  }
 
   const { currentUser } = useSelector((state) => state.user);
   // export currentUser;
@@ -134,7 +135,6 @@ const Profile = () => {
       deleteObject(desertRef).then(() => {
       }).catch((error) => {
         handleOpenAlertModal(error.message, "red");
-        setLoading(false)
       });
     }
   }
@@ -190,7 +190,6 @@ const Profile = () => {
     e.preventDefault()
     dispatch(updateUserStart);
     try {
-      //img && await uploadFile(img, "img");
       const res = await axios.put(`/users/${currentUser._id}`, { ...inputs, imgName })  //sending all inputs and tags
       handleCloseAlertModal("Profile uploaded successfully", "green");
       setEdit(false);
@@ -204,68 +203,8 @@ const Profile = () => {
 
   }
 
-  const [photos, setPhotos] = useState([]);
-  const [videos, setVideos] = useState([]);
-  const fetchPhotos = async () => {
-    setLoading(true);
-    const res = await axios.get(`/photos/myfiles`)
-    setPhotos(res.data)
-    setLoading(false);
-  }
-  const fetchVideos = async () => {
-    setLoading(true);
-    const res = await axios.get(`/videos/myfiles`);
-    setVideos(res.data);
-    setLoading(false);
-  };
-
-
-  const handleVideoDel = async (e) => {
-    await axios.delete(`/videos/${e}`);
-  }
-  const handlePhotoDel = async (e) => {
-     await axios.delete(`/photos/${e}`);
-  }
-
   const handleDelete = async () => {
-
     try {
-      dispatch(deleteUserStart)
-      fetchPhotos()
-      fetchVideos();
-      photos.forEach(element => {
-        const storage = getStorage(app);
-        const desertRef = ref(storage, `photo/${element.fileName}`);
-        deleteObject(desertRef).then(() => {
-
-        }).catch((error) => {
-          handleOpenAlertModal(error.message, "red");
-          setLoading(false)
-        });
-        handlePhotoDel(element._id);
-      });
-
-
-      videos.forEach(element => {
-
-        const storage = getStorage(app);
-        const desertRef = ref(storage, `video/${element.videofileName}`);
-        const desertRef2 = ref(storage, `video/${element.photofileName}`);
-
-        deleteObject(desertRef).then(() => {
-
-        }).catch((error) => {
-          handleOpenAlertModal(error.message, 'red')
-        });
-
-
-        deleteObject(desertRef2).then(() => {
-        }).catch((error) => {
-          handleOpenAlertModal(error.message, "red");
-        });
-        handleVideoDel(element._id)
-      });
-
       const res = await axios.delete(`users/${currentUser._id}`);  //todo delete users all videos
       handleOpenAlertModal("Your account is deleted", 'red')
       dispatch(deleteUserSuccess(res.data))
@@ -296,10 +235,11 @@ const Profile = () => {
 
   return (
     <Container>
-      <AlertModal
+            <AlertModal
         isOpen={showAlertModal}
         onClose={handleCloseAlertModal}
         message={alertMessage}
+        alertColor={alertColor}
       />
       <Photo>
         <Image src={currentUser.img} />
@@ -321,6 +261,7 @@ const Profile = () => {
         <Infos><Info>User Name :  </Info>{edit === true ? <Input name='name' placeholder={currentUser.name} onChange={handleChange} /> : <Info2>{currentUser.name}</Info2>}</Infos>
         <Infos><Info>Phone : </Info>{edit === true ? <Input name='phone' placeholder={currentUser.phone ? currentUser.phone : "Phone number"} onChange={handleChange} /> : <Info2>{currentUser.phone}</Info2>}</Infos>
         <Infos><Info>Email : </Info><Info2>{currentUser.email}</Info2></Infos>
+        <Infos><Info>Role : </Info><Info2>{currentUser.role}</Info2></Infos>
 
 
         {currentUser.role === "admin" ? <Infos><Info>Favourites:</Info><Info2>{currentUser.subscribers}</Info2></Infos> : ""}
@@ -331,7 +272,7 @@ const Profile = () => {
               <Button onClick={onCall2}>Cancel</Button>
             </>}
           <Button onClick={() => handleUpdatePassword(currentUser.name)}>Change Password</Button>
-          <Button onClick={handleDelete}>Delete</Button>
+          {currentUser.createdAt<currentUser.nextPayDate ?<Button onClick={()=>handleOpenAlertModal("Once you attain admin privileges, account deletion is not permitted, as it could result in the loss of someone else's cherished memories.","red")}>Delete</Button>:<Button onClick={handleDelete}>Delete</Button>}
         </Btn>
       </Details>
     </Container>

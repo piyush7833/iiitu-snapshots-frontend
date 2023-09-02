@@ -178,12 +178,8 @@ export default function Video() {
   };
   const [showAlertModal, setShowAlertModal] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
-  // const [showConfirmModal, setShowConfirmModal] = useState(false);
-  // const [showConfirmOpenModal, setShowConfirmOpenModal] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [alertColor, setAlertColor] = useState('white');
-  // const [confirmColor, setConfirmColor] = useState('white');
-  // const [confirmMessage, setConfirmMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const currentUrl = window.location.href;
   const handleOpenAlertModal = (message, color) => {

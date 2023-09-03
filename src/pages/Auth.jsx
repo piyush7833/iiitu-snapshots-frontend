@@ -175,6 +175,7 @@ const SignIn = () => {
        if(p!==true){handleOpenAlertModal("Use college email id",'red')} 
        if(p===true){
          setsigninLoader(true);
+         setsignupLoader(true);
           axios
             .post("/auth/google", {
               name: result.user.email.split('@')[0],
@@ -187,9 +188,11 @@ const SignIn = () => {
               if(p===true){
               dispatch(loginSuccess(res.data));
               setsigninLoader(false);
+              setsignupLoader(false);
               navigate('/')
             }
             else{
+              setsignupLoader(false);
               setsigninLoader(false);
               dispatch(loginFailure());
             }
@@ -212,7 +215,7 @@ const SignIn = () => {
     try {
       if(result2===true){
       if(password===confpassword){
-        setsignupLoader(true);
+      setsignupLoader(true);
       await axios.post(`/auth/signup`,{Normalname,name,password,email,phone});
       setsignupLoader(false);
       navigate('/verifyemail')
@@ -279,14 +282,14 @@ const SignIn = () => {
         <SubTitle>to continue to IIITU SnapShots</SubTitle>
         <I>
           <PersonIcon/>
-        <Input placeholder="username *" required onChange={e => setName(e.target.value)} />
+        <Input placeholder="Username*" required onChange={e => setName(e.target.value)} />
         </I>
         <I>
           <LockIcon/>
-        <Input type="password" required placeholder="password *" onChange={e => setPassword(e.target.value)} />
+        <Input type="password" required placeholder="Password*" onChange={e => setPassword(e.target.value)} />
         </I>
         <Button onClick={handleLogin}>Sign in</Button>
-        <Title>or signin with</Title>
+        <Title>or Sign in with</Title>
         <Btn>
         <Button onClick={signInWithGoogle}><GoogleIcon/>Google</Button>
         {/* <Button onClick={signInWithGit}><GitHubIcon/>Github</Button> */}
@@ -295,6 +298,8 @@ const SignIn = () => {
         
         <p>Not have an account ? <span onClick={toggleClass} style={{cursor:"pointer",color:"blue"}}>Create one</span></p>
         </Wrapper>:<Loader/>}
+
+
         {signuploader===false?<Wrapper style={isActive===false?{display:"none"}:{display:"flex"}} >
         <Title>Sign Up</Title>
         <SubTitle>to continue to IIITU SnapShots</SubTitle>
@@ -302,22 +307,22 @@ const SignIn = () => {
         <PersonIcon/><Input placeholder="Full name *" name="Normalname" required onChange={e => setNormalName(e.target.value)} />
         </I>
         <I>
-        <PersonIcon/><Input placeholder="username *" name="name" required onChange={e => setName(e.target.value)} />
+        <PersonIcon/><Input placeholder="Username*" name="name" required onChange={e => setName(e.target.value)} />
         </I>
         <I>
-        <ContactMailIcon/> <Input placeholder="email *" name="email" required onChange={e => setEmail(e.target.value)} />
+        <ContactMailIcon/> <Input placeholder="Email*" name="email" required onChange={e => setEmail(e.target.value)} />
         </I>
         <I>
-        <ContactPhoneIcon/><Input type="phone" placeholder="phone number (optional)" name="phone" required onChange={e => setPhone(e.target.value)} />
+        <ContactPhoneIcon/><Input type="phone" placeholder="Phone number (optional)" name="phone" required onChange={e => setPhone(e.target.value)} />
         </I>
         <I>
-        <LockIcon/><Input type="password" placeholder="password *" name="password" required onChange={e => setPassword(e.target.value)} />
+        <LockIcon/><Input type="password" placeholder="Password*" name="password" required onChange={e => setPassword(e.target.value)} />
         </I>
         <I>
-        <NoEncryptionIcon/><Input type="password" placeholder="Confirm password *" name="confpassword" required onChange={e => setconfPassword(e.target.value)} />
+        <NoEncryptionIcon/><Input type="password" placeholder="Confirm password*" name="confpassword" required onChange={e => setconfPassword(e.target.value)} />
         </I>
         <Button onClick={handleSignup}>Sign up</Button>
-        <Title>or signup with</Title>
+        <Title>or Sign up with</Title>
         <Btn>
         <Button onClick={signInWithGoogle}><GoogleIcon/>Google</Button>
         {/* <Button onClick={signInWithGoogle}><GitHubIcon/>Github</Button> */}

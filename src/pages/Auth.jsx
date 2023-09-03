@@ -172,31 +172,34 @@ const SignIn = () => {
     signInWithPopup(auth, gprovider)
       .then((result) => {
        let p=reg.test(result.user.email);
-       if(p!==true){handleOpenAlertModal("Use IIIT Una college email",'red')} 
-       setsigninLoader(true);
-        axios
-          .post("/auth/google", {
-            name: result.user.email.split('@')[0],
-            Normalname: result.user.displayName,
-            email: result.user.email,
-            img: result.user.photoURL,
-            verified: true,
-          })
-          .then((res) => {
-            if(p===true){
-            dispatch(loginSuccess(res.data));
-            setsigninLoader(false);
-            navigate('/')
-          }
-          else{
-            setsigninLoader(false);
-            dispatch(loginFailure());
-          }
-          });
+       if(p!==true){handleOpenAlertModal("Use college email id",'red')} 
+       if(p===true){
+         setsigninLoader(true);
+          axios
+            .post("/auth/google", {
+              name: result.user.email.split('@')[0],
+              Normalname: result.user.displayName,
+              email: result.user.email,
+              img: result.user.photoURL,
+              verified: true,
+            })
+            .then((res) => {
+              if(p===true){
+              dispatch(loginSuccess(res.data));
+              setsigninLoader(false);
+              navigate('/')
+            }
+            else{
+              setsigninLoader(false);
+              dispatch(loginFailure());
+            }
+            });
+       }
       })
       .catch((error) => {
         dispatch(loginFailure());
         setsigninLoader(false);
+        console.log(error.message)
         handleOpenAlertModal("Wrong credentials or user is not verified",'red')
       }); 
       

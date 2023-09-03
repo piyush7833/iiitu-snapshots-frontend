@@ -203,7 +203,8 @@ const Profile = () => {
 
   }
 
-  const handleDelete = async () => {
+  const handleDelete = async (e) => {
+    e.preventDefault()
     try {
       const res = await axios.delete(`users/${currentUser._id}`);  //todo delete users all videos
       handleOpenAlertModal("Your account is deleted", 'red')

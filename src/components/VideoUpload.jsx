@@ -43,6 +43,9 @@ const Close = styled.div`
   top: 10px;
   right: 10px;
   cursor: pointer;
+  &:disabled{
+  cursor: not-allowed;
+ }
 `;
 const Title = styled.h1`
   text-align: center;
@@ -69,9 +72,13 @@ const Button = styled.button`
   border: none;
   padding: 10px 20px;
   font-weight: 500;
+  background-color: ${({theme})=>theme.bg};
+  color: ${({ theme }) => theme.text};
   cursor: pointer;
-  background-color: ${({ theme }) => theme.soft};
-  color: ${({ theme }) => theme.textSoft};
+ &:disabled{
+  background-color: gray;
+  cursor: not-allowed;
+ }
 `;
 const Label = styled.label`
   font-size: 0.9rem;
@@ -79,10 +86,19 @@ const Label = styled.label`
 const VideoUpload = ({ setOpen }) => {
   const [showAlertModal, setShowAlertModal] = useState(false);
   const [alertMessage, setAlertMessage] = useState(" ");
+  const confirmationMessage = 'You have unsaved changes. Are you sure you want to leave?';
+  const [loading, setLoading] = useState(false);
+  window.addEventListener('beforeunload', (event) => {
+    if (loading) {
+      event.preventDefault();
+      event.returnValue = confirmationMessage;
+    }
+  });
   const [alertColor, setAlertColor] = useState('white');
 
-  const handleOpenAlertModal = (message) => {
+  const handleOpenAlertModal = (message, color) => {
     setAlertMessage(message);
+    setAlertColor(color);
     setShowAlertModal(true);
   };
 
@@ -91,17 +107,17 @@ const VideoUpload = ({ setOpen }) => {
     setAlertMessage('');
   };
 
-    //creating useState hooks
-  const [img, setImg] = useState(undefined); 
+  //creating useState hooks
+  const [img, setImg] = useState(undefined);
   const [video, setVideo] = useState(undefined);
   const [imgPerc, setImgPerc] = useState(0);  //upload percentage
   const [videoPerc, setVideoPerc] = useState(0);
-  const [inputs, setInputs] = useState({});  
+  const [inputs, setInputs] = useState({});
   const [tags, setTags] = useState([]);
-  const [photofileName,setPhotoFileName]=useState("");
-  const [videofileName,setVideoFileName]=useState("");
+  const [photofileName, setPhotoFileName] = useState("");
+  const [videofileName, setVideoFileName] = useState("");
   const { currentUser } = useSelector((state) => state.user);
-  let uploaderemail=currentUser.email;
+  let uploaderemail = currentUser.email;
   const navigate = useNavigate()
   const handleChange = (e) => {
     setInputs((prev) => {
@@ -112,13 +128,14 @@ const VideoUpload = ({ setOpen }) => {
   const handleTags = (e) => {
     setTags(e.target.value.split(","));
   };
-  
+
   const uploadFile = (file, urlType) => {
+    setLoading(true);
     const storage = getStorage(app);  //getting storage
-    const fileName=new Date().getTime() + file.name;  //we can also add it with folder which i will do with photos
-    let storageRef = ref(storage,'video/'+ fileName);   //giving storage reference
-    const uploadTask = uploadBytesResumable(storageRef, file);  
-    urlType=== "imgUrl" ? setPhotoFileName(fileName):setVideoFileName(fileName);
+    const fileName = new Date().getTime() + file.name;  //we can also add it with folder which i will do with photos
+    let storageRef = ref(storage, 'video/' + fileName);   //giving storage reference
+    const uploadTask = uploadBytesResumable(storageRef, file);
+    urlType === "imgUrl" ? setPhotoFileName(fileName) : setVideoFileName(fileName);
     uploadTask.on( //upload start
       "state_changed",
       (snapshot) => {
@@ -127,7 +144,7 @@ const VideoUpload = ({ setOpen }) => {
         urlType === "imgUrl" ? setImgPerc(Math.round(progress)) : setVideoPerc(Math.round(progress));  //firebase gives us upload percentage which we are using to set image and video percentage
         switch (snapshot.state) {
           case "paused":
-            handleOpenAlertModal("upload is paused","yellow")
+            handleOpenAlertModal("upload is paused", "yellow")
             break;
           case "running":
             break;
@@ -135,13 +152,12 @@ const VideoUpload = ({ setOpen }) => {
             break;
         }
       },
-      (error) => {handleOpenAlertModal(error.message,'red')}, //leaving error
+      (error) => { handleOpenAlertModal(error.message, 'red') }, //leaving error
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           setInputs((prev) => {
-            console.log([urlType]+ downloadURL);
-            console.log(photofileName);
-            console.log(videofileName)
+            console.log([urlType] + downloadURL);
+            setLoading(false);
             return { ...prev, [urlType]: downloadURL };  //changing imgUrl and videourl in mongodb
           });
         });
@@ -150,36 +166,40 @@ const VideoUpload = ({ setOpen }) => {
   };
 
   useEffect(() => {
-    video && uploadFile(video , "videoUrl");  //uploading videourl on firebase  //upload only if there is video
+    video && uploadFile(video, "videoUrl");  //uploading videourl on firebase  //upload only if there is video
   }, [video]);  //dependency is video
 
   useEffect(() => {
     img && uploadFile(img, "imgUrl");
   }, [img]);
 
-  const handleUpload = async (e)=>{ //sending data to db
+  const handleUpload = async (e) => { //sending data to db
+    setLoading(true);
     e.preventDefault();
-    handleOpenAlertModal("Video uploaded","green")
-    const res = await axios.post("/videos", {...inputs, tags,uploaderemail, videofileName ,photofileName})  //sending all inputs and tags
-    setOpen(false)  //closing popup
-    res.status===200 && navigate(`/video/${res.data._id}`)  //navigate to video page
-    
+    try {
+      const res = await axios.post("/videos", { ...inputs, tags, uploaderemail, videofileName, photofileName })  //sending all inputs and tags
+      setOpen(false)  //closing popup
+      setLoading(false);
+      res.status === 200 && navigate(`/video/${res.data._id}`)
+    } catch (error) {
+      handleOpenAlertModal(error.message,'red')
+    }
   }
 
   return (
     <Container>
-            <AlertModal
+      <AlertModal
         isOpen={showAlertModal}
         onClose={handleCloseAlertModal}
         message={alertMessage}
         color={alertColor}
       />
       <Wrapper>
-        <Close onClick={() => setOpen(false)}>X</Close>
+        <Close disabled={loading} onClick={() => setOpen(false)}>X</Close>
         <Title>Upload a New Video</Title>
         <Label>Video:</Label>
         {videoPerc > 0 ? (
-          "Uploading:" + videoPerc +"%"  //if video% is greater than 0 show uploading else show input
+          "Uploading:" + videoPerc + "%"  //if video% is greater than 0 show uploading else show input
         ) : (
           <Input
             type="file"
@@ -214,7 +234,7 @@ const VideoUpload = ({ setOpen }) => {
             onChange={(e) => setImg(e.target.files[0])}
           />
         )}
-        <Button onClick={handleUpload}>Upload</Button>
+        <Button disabled={loading} onClick={handleUpload}>Upload</Button>
       </Wrapper>
     </Container>
   );

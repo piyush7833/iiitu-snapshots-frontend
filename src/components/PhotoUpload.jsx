@@ -22,7 +22,6 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   z-index:999;
-  
 `;
 
 const Wrapper = styled.div`
@@ -43,6 +42,9 @@ const Close = styled.div`
   top: 10px;
   right: 10px;
   cursor: pointer;
+  &:disabled{
+  cursor: not-allowed;
+ }
 `;
 const Title = styled.h1`
   text-align: center;
@@ -69,17 +71,32 @@ const Button = styled.button`
   padding: 10px 20px;
   font-weight: 500;
   cursor: pointer;
-  background-color: ${({ theme }) => theme.soft};
-  color: ${({ theme }) => theme.textSoft};
+  background-color: ${({ theme }) => theme.bg};
+  color: ${({ theme }) => theme.text};
+  cursor: pointer;
+ &:disabled{
+  background-color: gray;
+  cursor: not-allowed;
+ }
 `;
 const Label = styled.label`
   font-size: 0.9rem;
 `;
 const PhotoUpload = ({ setOpen2 }) => {
+
   const [showAlertModal, setShowAlertModal] = useState(false);
   const [alertMessage, setAlertMessage] = useState(" ");
   const [alertColor, setAlertColor] = useState('white');
+  const [loading,setLoading]=useState(false);
   const { currentUser } = useSelector((state) => state.user);
+  const confirmationMessage = 'You have unsaved changes. Are you sure you want to leave?';
+  window.addEventListener('beforeunload', (event) => {
+    console.log(loading);
+    if (loading===true) {
+      event.preventDefault();
+      event.returnValue = confirmationMessage;
+    }
+  });
   let uploaderemail=currentUser.email;
   const handleOpenAlertModal = (message,color) => {
     setAlertMessage(message);
@@ -159,16 +176,9 @@ const PhotoUpload = ({ setOpen2 }) => {
   
     return Promise.all(promises);
   };
-//  const changeTitle=async(i)=>{
-//   console.log(i);
-//   let p=title + " " + i
-//   setTitle(p);
-//   console.log(p);
-//   console.log(title);
-//  }
-
   const handleUpload = async (e)=>{ //sending data to db
     e.preventDefault();
+    setLoading(true);
     try {
       for(let i=0;i<img.length;i++){
       await uploadFile(img[i], "imgUrl");
@@ -179,14 +189,23 @@ const PhotoUpload = ({ setOpen2 }) => {
         let fileName=await filename[i];
         let j=i+1;
         let title= t+" "+ j;
-        // await changeTitle(i);
-        // console.log(title);
         res = await axios.post("/photos", {...inputs,title,imgUrl, tags,uploaderemail,fileName})  //sending all inputs and tags
       }
+      
+      console.log("load1 "+loading);
       setOpen2(false);
-      res.status===200 && window.location.reload() && handleOpenAlertModal("Photo Uploaded suuccessfully",'grren');  //navigate to video page
+      setLoading(false);  
+      console.log("load2 "+loading);
+      setInterval(() => {
+        
+      }, 200);
+      setTimeout(() => {
+        res.status===200  && window.location.reload() ;  //navigate to video page
+      }, 200);
     } catch (error) {
-      console.log(error);
+      setLoading(false);
+      handleOpenAlertModal(error.message);
+      // console.log(error);
     }
 
   }
@@ -200,7 +219,7 @@ const PhotoUpload = ({ setOpen2 }) => {
         color={alertColor}
       />
       <Wrapper>
-        <Close onClick={() => setOpen2(false)}>X</Close>
+        <Close disabled={loading} onClick={() => setOpen2(false)}>X</Close>
         <Title>Upload Images</Title>
         <Label>Image:</Label>
         {imgPerc > 0 ? (
@@ -230,7 +249,7 @@ const PhotoUpload = ({ setOpen2 }) => {
           onChange={handleTags}
         />
 
-        <Button onClick={handleUpload}>Upload</Button>
+        <Button disabled={loading} onClick={handleUpload}>Upload</Button>
       </Wrapper>
     </Container>
   );

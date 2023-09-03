@@ -5,11 +5,12 @@ import PhotoCard from '../components/PhotoCard';
 import { useEffect, useState} from 'react';
 import axios from 'axios';
 import Loader from '../components/loader/Loader'
+
 const Container = styled.div`
 display:flex;
 justify-content:space-around;
 flex-wrap:wrap;
-height:37.5vh;
+height:40vh;
 overflow-x:hidden;
 overflow-y:scroll;
 @media (max-width: 500px) {
@@ -58,13 +59,13 @@ const Home=({type,show})=> {
 
     return (
       <Main>
-        {<p style={{textAlign:"center"}}>Videos</p>}
+        {<p style={{textAlign:"center",height:'2vh'}}>Videos</p>}
       {loading===false?<Container>
         {videos.map((video) => (
         <VideoCard key={video._id} video={video}/>
       ))}
       </Container>:<Loader/>}
-      <p style={{textAlign:"center"}}>Photos</p>
+      <p style={{textAlign:"center",height:'2vh'}}>Photos</p>
       {loading===false?<Container style={{paddingBottom:'2vh'}}>
         {photos.map((photo) => (
         <PhotoCard key={photo._id} photo={photo}/>

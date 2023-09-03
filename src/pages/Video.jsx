@@ -29,6 +29,7 @@ import DownloadIcon from '@mui/icons-material/Download';
 const Container = styled.div`
 display:flex;
 gap:24px;
+min-height: 90vh;
 @media (max-width: 800px) {
   flex-direction:column;
   gap:0px;

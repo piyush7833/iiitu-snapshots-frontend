@@ -97,6 +97,9 @@ const Search = styled.div`
    border:0.2px solid #cccc;
    border-radius:1.3em;
    cursor:pointer;
+   &:focus {
+    border: 1px green;
+  }
    @media (max-width: 700px) {
     width:60%;
   }
@@ -109,14 +112,14 @@ const Input = styled.input`
    width:98%;
    border:none;
    border-radius:1.3em;
-   enabled-border:none;
    background-color:transparent;
    color:white;
+   color:${({ theme }) => theme.text};
    &:focus {
     outline: none;
   }
   &::placeholder {
-    color: white; /* Change this color to your desired placeholder color */
+    color:${({ theme }) => theme.text}; /* Change this color to your desired placeholder color */
   }
 `;
 const Item = styled.div`
@@ -234,7 +237,7 @@ export default function Navbar({ showMenu, setShowMenu }) {
           <Wrapper>
             <SearchWrapper>
               <Search>
-                <Input placeholder='Search' onChange={(e) => { setQ(e.target.value) }} />
+                <Input placeholder='Search' onChange={(e) => { setQ(e.target.value) }} onSubmit={(e)=>(e.target.value.reset)} />
                 <SearchOutlinedIcon onClick={() => navigation(`/search?q=${q}`)} />
               </Search >
             </SearchWrapper>

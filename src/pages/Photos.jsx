@@ -8,6 +8,7 @@ const Container = styled.div`
 display:flex;
 justify-content:space-around;
 flex-wrap:wrap;
+min-height: 90vh;
 `;
 const Photos=({type,show})=> { 
   const[loading,setLoading]=useState(false);

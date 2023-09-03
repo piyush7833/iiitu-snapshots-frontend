@@ -44,8 +44,9 @@ display:${(props)=>props.type==="small" && "flex"};
 }
 `;
 const LoaderContainer=styled.div`
-height:35vh;
-width:20vw;
+cursor: progress;
+height:250px;
+width:300px;
 border:solid ${({theme})=>theme.soft}}
 display:flex;
 align-items:center;
@@ -84,7 +85,7 @@ display:${(props)=>props.type==="small" ?"none" :"flex"};
 }
 `;
 const Text=styled.div`
-disply:flex;
+overflow: hidden;
 margin-left:1vw;
 flex-direction:coloumn;
 color:${({theme})=>theme.text}};
@@ -136,7 +137,7 @@ const  PhotoCard = ({type,photo})=> {
           <FunctionImage src={channel.img} type={type}/>
           <Text>
               <Organizer>{channel.Normalname}</Organizer>
-              <FunctionName>{photo.title}</FunctionName>
+              <FunctionName>{photo.title.length>50?photo.title.slice(0,50):photo.title}{photo.title.length>50?"...":""}</FunctionName>
               <Info>{photo.views} views - {format(photo.createdAt)} </Info>
           </Text>
         </Details>

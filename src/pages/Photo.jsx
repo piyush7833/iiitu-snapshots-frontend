@@ -28,6 +28,7 @@ import DownloadIcon from '@mui/icons-material/Download';
 var FileSaver = require('file-saver');
 const Container = styled.div`
 display:flex;
+min-height: 90vh;
 gap:24px;
 @media (max-width: 800px) {
   flex-direction:column;
@@ -103,7 +104,7 @@ background-color:${({ theme }) => theme.soft}};
 border:1px solid ${({ theme }) => theme.soft}};
 border-radius:50%;
 @media (max-width: 500px) {
-  width:40px;
+width:40px;
 height:40px;
 }
 `;
@@ -331,7 +332,7 @@ export default function Photo() {
               </Info2>
             </Btn>
             <Btn  onClick={handleSave}>
-              {currentUser.photosaved.includes(currentPhoto._id)?(<><TaskAltIcon  /> <Info>Remove</Info></>):(<><AddTaskRoundedIcon  /> <Info2>Save</Info2></>)}
+              {currentUser.photosaved.includes(currentPhoto._id)?(<><TaskAltIcon  /> <Info2>Remove</Info2></>):(<><AddTaskRoundedIcon  /> <Info2>Save</Info2></>)}
             </Btn>
             {currentUser._id===currentPhoto.userId? 
            <Btn >

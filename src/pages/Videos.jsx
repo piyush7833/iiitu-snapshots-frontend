@@ -8,6 +8,7 @@ const Container = styled.div`
 display:flex;
 justify-content:space-around;
 flex-wrap:wrap;
+min-height: 90vh;
 `;
 const Videos=({type,show})=> {
     const [videos, setVideos] = useState([]);

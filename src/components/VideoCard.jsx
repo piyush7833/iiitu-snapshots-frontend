@@ -10,6 +10,7 @@ import {
      useNavigate
   } from "react-router-dom";
 import RecommendationLoader from './loader/RecommendationLoader';
+
 const Container=styled.div`
 height:${(props)=>props.type==="small" ? "15vh":"35vh"};
 width:${(props)=>props.type==="small" ? "22vw":"20vw"};
@@ -138,7 +139,7 @@ const  VideoCard = ({type,video})=> {
           <ChannelImage src={channel.img}type={type}/>
           <Text>
               <ChannelName>{channel.Normalname}</ChannelName>
-              <FunctionName>{video.title}</FunctionName>
+              <FunctionName>{video.title.length>50?video.title.slice(0,50):video.title}{video.title.length>50?"...":""}</FunctionName>
               <Info>{video.views} views - {format(video.createdAt)} </Info>
           </Text>
         </Details>

@@ -13,8 +13,6 @@ const FooterContainer = styled.footer`
   @media (max-width: 500px) {
     font-size:0.8rem;
   }
-  width: -webkit-fill-available;
-  position: sticky;
   bottom:0;
 `;
 

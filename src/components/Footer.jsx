@@ -10,6 +10,8 @@ const FooterContainer = styled.footer`
   color: ${({ theme }) => theme.text};
   text-align: center;
   padding:0vh 2vh;
+  position: sticky;
+  width: -webkit-fill-available;
   @media (max-width: 500px) {
     font-size:0.8rem;
   }

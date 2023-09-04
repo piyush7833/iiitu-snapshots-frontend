@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useState } from "react";
 import axios from "axios";
 import { loginFailure, loginStart, loginSuccess } from "../redux/userSlice";
 import { useDispatch } from "react-redux";
-import {auth,gprovider} from "../firebase.js";
-import {signInWithPopup} from "firebase/auth"
+import { auth, gprovider } from "../firebase.js";
+import { signInWithPopup } from "firebase/auth"
 import GoogleIcon from '@mui/icons-material/Google';
 import PersonIcon from '@mui/icons-material/Person';
 import LockIcon from '@mui/icons-material/Lock';
@@ -87,10 +87,14 @@ const Button = styled.button`
   padding-bottom:0.8em;
   font-weight: 500;
   cursor: pointer;
-  background-color: transparent;;
+  background-color: transparent;
   color: ${({ theme }) => theme.text};
-  // gap:4px;
+  gap:4px;
   // box-shadow: 15px 15px 20px rgba(0,0,0,.6);
+  &:disabled{
+    cursor: not-allowed;
+    background-color:${({ theme }) => theme.bg} ;
+  }
   @media (max-width: 500px) {
   padding-left:0.8rem;
   padding-right:0.8rem;
@@ -103,23 +107,26 @@ const Button = styled.button`
 const Link = styled.span`
   text-align:center
 `;
-const Btn=styled.div`
+const Btn = styled.div`
 width:100%;
 display:flex;
 align-items:center;
 justify-content:space-evenly;
 `;
-const I=styled.div`
+const I = styled.div`
 display:flex;
 width:100%;
 align-items:center;
 gap:1vw;
 `;
 
+const Error = styled.span`
+  color: red;
+`
 const SignIn = () => {
 
-  const navigate=useNavigate();
-  const dispatch=useDispatch();  //it comes from react redux  ///used to fire redux evets
+  const navigate = useNavigate();
+  const dispatch = useDispatch();  //it comes from react redux  ///used to fire redux evets
   const [Normalname, setNormalName] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -128,13 +135,17 @@ const SignIn = () => {
   const [phone, setPhone] = useState("");
   const [signinloader, setsigninLoader] = useState(false);
   const [signuploader, setsignupLoader] = useState(false);
-  let reg=/.ac.in/
+  const [isUser, setIsUser] = useState(false);
+  const [isUserEmail, setIsUserEmail] = useState(false);
+  const [invalid, setInvalid] = useState(false)
+  const [isInvalidEmail, setIsInvalidEmail] = useState(false)
+  let reg = /.ac.in/
 
 
   const [showAlertModal, setShowAlertModal] = useState(false);
   const [alertMessage, setAlertMessage] = useState(" ");
   const [alertColor, setAlertColor] = useState('white');
-  const handleOpenAlertModal = (message,color) => {
+  const handleOpenAlertModal = (message, color) => {
     setAlertMessage(message);
     setAlertColor(color)
     setShowAlertModal(true);
@@ -149,12 +160,12 @@ const SignIn = () => {
 
 
 
-  const handleLogin=async(e)=>{  //as soon as we login we have a cookie with us which include our acess token so we can do like, comment, subscribe functionalities
+  const handleLogin = async (e) => {  //as soon as we login we have a cookie with us which include our acess token so we can do like, comment, subscribe functionalities
     e.preventDefault();
     dispatch(loginStart());   //no payload passed
     try {
       setsigninLoader(true);
-      const res = await axios.post(`/auth/signin`,{name,password});
+      const res = await axios.post(`/auth/signin`, { name, password });
       dispatch(loginSuccess(res.data))
       setsigninLoader(false);
       navigate('/')
@@ -162,7 +173,7 @@ const SignIn = () => {
     } catch (error) {
       setsigninLoader(false);
       dispatch(loginFailure());  //we can also pass error as payload
-      handleOpenAlertModal("Wrong credentials or user is not verified",'red')
+      handleOpenAlertModal("Wrong credentials or user is not verified", 'red')
     }
   };
 
@@ -171,11 +182,15 @@ const SignIn = () => {
     dispatch(loginStart());
     signInWithPopup(auth, gprovider)
       .then((result) => {
-       let p=reg.test(result.user.email);
-       if(p!==true){handleOpenAlertModal("Use college email id",'red')} 
-       if(p===true){
-         setsigninLoader(true);
-         setsignupLoader(true);
+        let p = reg.test(result.user.email);
+        if (p !== true) {
+          handleOpenAlertModal("Use college email id", 'red')
+          setsigninLoader(false);
+          setsignupLoader(false);
+        }
+        if (p === true) {
+          setsigninLoader(true);
+          setsignupLoader(true);
           axios
             .post("/auth/google", {
               name: result.user.email.split('@')[0],
@@ -185,54 +200,55 @@ const SignIn = () => {
               verified: true,
             })
             .then((res) => {
-              if(p===true){
-              dispatch(loginSuccess(res.data));
-              setsigninLoader(false);
-              setsignupLoader(false);
-              navigate('/')
-            }
-            else{
-              setsignupLoader(false);
-              setsigninLoader(false);
-              dispatch(loginFailure());
-            }
+              if (p === true) {
+                dispatch(loginSuccess(res.data));
+                setsigninLoader(false);
+                setsignupLoader(false);
+                navigate('/')
+              }
+              else {
+                setsignupLoader(false);
+                setsigninLoader(false);
+                dispatch(loginFailure());
+              }
             });
-       }
+        }
       })
       .catch((error) => {
         dispatch(loginFailure());
+        setsignupLoader(false);
         setsigninLoader(false);
         console.log(error.message)
-        handleOpenAlertModal("Wrong credentials or user is not verified",'red')
-      }); 
-      
+        handleOpenAlertModal("Wrong credentials or user is not verified", 'red')
+      });
+
   };
 
-  const handleSignup=async(e)=>{  //as soon as we login we have a cookie with us which include our acess token so we can do like, comment, subscribe functionalities
+  const handleSignup = async (e) => {  //as soon as we login we have a cookie with us which include our acess token so we can do like, comment, subscribe functionalities
     e.preventDefault();
     dispatch(loginStart());   //no payload passed
-    let result2=reg.test(email);
+    let result2 = reg.test(email);
     try {
-      if(result2===true){
-      if(password===confpassword){
-      setsignupLoader(true);
-      await axios.post(`/auth/signup`,{Normalname,name,password,email,phone});
-      setsignupLoader(false);
-      navigate('/verifyemail')
-    }
-    else{
-      setsignupLoader(false);
-      handleOpenAlertModal('Password and correct password is not same','red')
-      // alert("password and correct password is not same")
-    }
+      if (result2 === true) {
+        if (password === confpassword) {
+          setsignupLoader(true);
+          await axios.post(`/auth/signup`, { Normalname, name, password, email, phone });
+          setsignupLoader(false);
+          navigate('/verifyemail')
+        }
+        else {
+          setsignupLoader(false);
+          handleOpenAlertModal('Password and correct password is not same', 'red')
+          // alert("password and correct password is not same")
+        }
       }
-      else{
-        let msg='Use IIIT Una college email id';
-        handleOpenAlertModal(msg,'red');
+      else {
+        let msg = 'Use IIIT Una college email id';
+        handleOpenAlertModal(msg, 'red');
       }
     } catch (error) {
       // console.log(error.message)
-      handleOpenAlertModal("Fill all the necessary fields or user already exist",'red')
+      handleOpenAlertModal("Fill all the necessary fields or user already exist", 'red')
     }
   };
   const [isActive, setActive] = useState(false);
@@ -241,7 +257,7 @@ const SignIn = () => {
     console.log(isActive);
   };
 
-  
+
   // const signInWithGit = async () => {
   //   dispatch(loginStart());
   //   signInWithPopup(auth, giprovider)
@@ -263,72 +279,111 @@ const SignIn = () => {
   //     // });
   // };
 
-//   onClick(event) {
-//     handleLogin();
-//     toggleClass();
-//  }
+  //   onClick(event) {
+  //     handleLogin();
+  //     toggleClass();
+  //  } 
+  const handleNameChange = async (n) => {
+    const res = await axios.post(`/users/findnameforsignup`, {
+      name: n
+    });
+    /* console.log(res) */
+    if (res.data === true) {
+      setIsUser(true);
+    }
+    else {
+      setIsUser(false);
+    }
+  }
 
+  const handleEmailChange = async (e) => {
+    let p = reg.test(e);
+    if (p) { setIsInvalidEmail(false) };
+    if (!p) { setIsInvalidEmail(true) };
+    const res = await axios.post(`/users/findemailforsignup`, {
+      email: e
+    });
+    /* console.log(res) */
+    if (res.data === true) {
+      setIsUserEmail(true);
+    }
+    else {
+      setIsUserEmail(false);
+    }
+  }
+
+  useEffect(() => {
+
+    if (isUserEmail || isUser || isInvalidEmail) {
+      setInvalid(true);
+    }
+  }, [isUser, isUserEmail, isInvalidEmail])
   return (
-    
+
     <Container>
-            <AlertModal
+      <AlertModal
         isOpen={showAlertModal}
         onClose={handleCloseAlertModal}
         message={alertMessage}
         color={alertColor}
       />
-      {signinloader===false?<Wrapper style={isActive===true?{display:"none"}:{display:"flex"}}>
+      {signinloader === false ? <Wrapper style={isActive === true ? { display: "none" } : { display: "flex" }}>
         <Title>Sign in</Title>
         <SubTitle>to continue to IIITU SnapShots</SubTitle>
         <I>
-          <PersonIcon/>
-        <Input placeholder="Username*" required onChange={e => setName(e.target.value)} />
+          <PersonIcon />
+          <Input placeholder="Username*" required onChange={e => setName(e.target.value)} />
         </I>
         <I>
-          <LockIcon/>
-        <Input type="password" required placeholder="Password*" onChange={e => setPassword(e.target.value)} />
+          <LockIcon />
+          <Input type="password" required placeholder="Password*" onChange={e => setPassword(e.target.value)} />
         </I>
         <Button onClick={handleLogin}>Sign in</Button>
         <Title>or Sign in with</Title>
         <Btn>
-        <Button onClick={signInWithGoogle}><GoogleIcon/>Google</Button>
-        {/* <Button onClick={signInWithGit}><GitHubIcon/>Github</Button> */}
+          <Button onClick={signInWithGoogle}><GoogleIcon />Google</Button>
+          {/* <Button onClick={signInWithGit}><GitHubIcon/>Github</Button> */}
         </Btn>
-        <Link style={{cursor:"pointer",color:"blue"}} onClick={()=>navigate('/recovery')} >Forget Password ?</Link>
-        
-        <p>Not have an account ? <span onClick={toggleClass} style={{cursor:"pointer",color:"blue"}}>Create one</span></p>
-        </Wrapper>:<Loader/>}
+        <Link style={{ cursor: "pointer", color: "blue" }} onClick={() => navigate('/recovery')} >Forget Password ?</Link>
+
+        <p>Not have an account ? <span onClick={toggleClass} style={{ cursor: "pointer", color: "blue" }}>Create one</span></p>
+      </Wrapper> : <Loader />}
 
 
-        {signuploader===false?<Wrapper style={isActive===false?{display:"none"}:{display:"flex"}} >
+      {signuploader === false ? <Wrapper style={isActive === false ? { display: "none" } : { display: "flex" }} >
         <Title>Sign Up</Title>
         <SubTitle>to continue to IIITU SnapShots</SubTitle>
         <I>
-        <PersonIcon/><Input placeholder="Full name *" name="Normalname" required onChange={e => setNormalName(e.target.value)} />
+          <PersonIcon /><Input placeholder="Full name *" name="Normalname" required onChange={e => setNormalName(e.target.value)} />
         </I>
         <I>
-        <PersonIcon/><Input placeholder="Username*" name="name" required onChange={e => setName(e.target.value)} />
+          <PersonIcon /><Input placeholder="Username*" name="name" required onChange={(e) => { setName(e.target.value); handleNameChange(e.target.value) }} />
         </I>
         <I>
-        <ContactMailIcon/> <Input placeholder="Email*" name="email" required onChange={e => setEmail(e.target.value)} />
+          <ContactMailIcon /> <Input placeholder="Email*" name="email" required onChange={(e) => { setEmail(e.target.value); handleEmailChange(e.target.value) }} />
         </I>
         <I>
-        <ContactPhoneIcon/><Input type="phone" placeholder="Phone number (optional)" name="phone" required onChange={e => setPhone(e.target.value)} />
+          <ContactPhoneIcon /><Input type="phone" placeholder="Phone number (optional)" name="phone" required onChange={e => setPhone(e.target.value)} />
         </I>
         <I>
-        <LockIcon/><Input type="password" placeholder="Password*" name="password" required onChange={e => setPassword(e.target.value)} />
+          <LockIcon /><Input type="password" placeholder="Password*" name="password" required onChange={e => setPassword(e.target.value)} />
         </I>
         <I>
-        <NoEncryptionIcon/><Input type="password" placeholder="Confirm password*" name="confpassword" required onChange={e => setconfPassword(e.target.value)} />
+          <NoEncryptionIcon /><Input type="password" placeholder="Confirm password*" name="confpassword" required onChange={e => setconfPassword(e.target.value)} />
         </I>
-        <Button onClick={handleSignup}>Sign up</Button>
+
+        {isUser && <Error>Username not availiable</Error>}
+        {isUserEmail && <Error>Email id already exist</Error>}
+        {isInvalidEmail && <Error>Use college email id only</Error>}
+
+        <Button disabled={invalid} onClick={handleSignup}>Sign up</Button>
         <Title>or Sign up with</Title>
         <Btn>
-        <Button onClick={signInWithGoogle}><GoogleIcon/>Google</Button>
-        {/* <Button onClick={signInWithGoogle}><GitHubIcon/>Github</Button> */}
+          <Button onClick={signInWithGoogle}><GoogleIcon />Google</Button>
+          {/* <Button onClick={signInWithGoogle}><GitHubIcon/>Github</Button> */}
         </Btn>
-        <p>Already have an account ?  <span onClick={toggleClass} style={{cursor:"pointer",color:"blue"}}>Log in</span></p>
-      </Wrapper>:<Loader/>}
+        <p>Already have an account ?  <span onClick={toggleClass} style={{ cursor: "pointer", color: "blue" }}>Log in</span></p>
+      </Wrapper> :  <Loader />}
     </Container>
   );
 };

@@ -8,8 +8,8 @@ import { PersistGate } from 'redux-persist/integration/react';
 import axios from 'axios'; 
 // const apiUrl = process.env.BACKEND_URL
 // axios.defaults.baseURL = apiUrl;
-// axios.defaults.baseURL = 'https://iiitusnapshotbackend.onrender.com/api';
-axios.defaults.baseURL = 'http://localhost:8800/api';
+axios.defaults.baseURL = 'https://iiitusnapshotbackend.onrender.com/api';
+// axios.defaults.baseURL = 'http://localhost:8800/api';
 axios.defaults.withCredentials = true;
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

@@ -317,6 +317,9 @@ const SignIn = () => {
     if (isUserEmail || isUser || isInvalidEmail) {
       setInvalid(true);
     }
+    else {
+      setInvalid(false);
+    }
   }, [isUser, isUserEmail, isInvalidEmail])
   return (
 

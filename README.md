@@ -34,7 +34,7 @@ _Purchase plans to become admin._
 
 ## Use
 
-For using it go to the deployment link :- https://iiitu-snapshots-frontend.vercel.app/
+For using it go to the deployment link :- https://iiitu-snapshots.vercel.app/
 
 ## Contributing
 

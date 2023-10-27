@@ -43,6 +43,8 @@ const Date = styled.span`
 const Text = styled.span`
   font-size: 0.8em;
 `;
+
+
 const Comment = ({ comment }) => {
   const [loading, setLoading] = useState(false);
 

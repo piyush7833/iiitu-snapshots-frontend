@@ -73,5 +73,6 @@ const Home=({type,show})=> {
       </Container>:<Loader/>}
       </Main>
     )
+
   }
 export default Home;
